@@ -18,16 +18,16 @@ add_action( 'plugins_loaded', function() {
             'version'       => '1.0.0',
             'type'          => 'plugin',
             'file'          => __FILE__,
-            'github_repo'   => 'cp-psource/my-plugin', // Format: owner/repo
-            'docs_url'      => 'https://docs.example.com',
-            'support_url'   => 'https://github.com/cp-psource/my-plugin/issues',
-            'changelog_url' => 'https://github.com/cp-psource/my-plugin/releases',
-            'description'   => 'Eine kurze Beschreibung deines Plugins',
+            'github_repo'   => 'Power-Source/ps-chat', // Format: owner/repo
+            'docs_url'      => 'https://power-source.github.io/ps-chat/',
+            'support_url'   => 'https://github.com/Power-Source/ps-chat/issues',
+            'changelog_url' => 'https://github.com/Power-Source/ps-chat/releases',
+            'description'   => 'Bietet Dir einen voll ausgestatteten Chat-Bereich entweder in einem Beitrag, einer Seite, einem Widget oder in der unteren Ecke Ihrer Website. Unterstützt BuddyPress Group-Chats und private Chats zwischen angemeldeten Benutzern. KEINE EXTERNEN SERVER/DIENSTE!',
         ) );
     }
 }, 5 );
 
-// Optional: Admin Notice wenn Update Manager nicht installiert
+// Admin Notice wenn Update Manager nicht installiert
 add_action( 'admin_notices', function() {
     if ( ! function_exists( 'ps_register_product' ) && current_user_can( 'install_plugins' ) ) {
         $screen = get_current_screen();
