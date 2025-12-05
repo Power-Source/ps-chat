@@ -1,0 +1,3799 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PS Chat\n"
+"POT-Creation-Date: 2023-09-29 23:10+0200\n"
+"PO-Revision-Date: 2023-09-29 23:09+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Generator: Poedit 3.3.2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: psource-chat.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+
+#: lib/buddypress/wpmudec_chat_buddypress_group_1.7.2.php:79
+msgid "Enable Group Chat"
+msgstr ""
+
+#: lib/buddypress/wpmudec_chat_buddypress_group_1.7.2.php:195
+msgid "There was an error saving, please try again"
+msgstr ""
+
+#: lib/buddypress/wpmudec_chat_buddypress_group_1.7.2.php:197
+msgid "Settings saved successfully"
+msgstr ""
+
+#: lib/buddypress/wpmudec_chat_buddypress_group_1.7.2.php:245
+msgid "You must be a member of this group to use Chat"
+msgstr ""
+
+#: lib/buddypress/wpmudec_chat_buddypress_group_1.8.php:49
+#: lib/cpcommunity/psource_chat_cpcommunitie_group.php:49
+msgid "Speichern"
+msgstr ""
+
+#: lib/buddypress/wpmudec_chat_buddypress_group_1.8.php:87
+#: lib/cpcommunity/psource_chat_cpcommunitie_group.php:87
+msgid "Gruppenchat aktivieren"
+msgstr ""
+
+#: lib/buddypress/wpmudec_chat_buddypress_group_1.8.php:122
+#: lib/cpcommunity/psource_chat_cpcommunitie_group.php:122
+msgid "Du musst Mitglied dieser Gruppe sein, um den Chat nutzen zu können"
+msgstr ""
+
+#: lib/buddypress/wpmudec_chat_buddypress_group_1.8.php:240
+#: lib/cpcommunity/psource_chat_cpcommunitie_group.php:240
+msgid "Fehler beim speichern. Bitte versuche es erneut"
+msgstr ""
+
+#: lib/buddypress/wpmudec_chat_buddypress_group_1.8.php:242
+#: lib/cpcommunity/psource_chat_cpcommunitie_group.php:242
+msgid "Einstellungen erfolgreich gespeichert"
+msgstr ""
+
+#: lib/class_wd_help_tooltips.php:296
+msgid "Help"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:42
+msgid "Chateinstellungen Seiten"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:46
+msgid ""
+"Die folgenden Einstellungen werden verwendet, um die Inline-Chat-Shortcodes "
+"zu steuern, die auf Posts, Seiten usw. angewendet werden. Hier kannst Du "
+"Standardoptionen einrichten. Überschreibe diese Standardoptionen nicht nur "
+"mit Shortcode-Parametern für den jeweiligen Beitrag, die Seite usw.."
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:51 lib/psource_chat_admin_panels.php:133
+#: lib/psource_chat_admin_panels.php:214 lib/psource_chat_admin_panels.php:290
+#: lib/psource_chat_admin_panels.php:595 lib/psource_chat_admin_panels.php:683
+msgid "Box Aussehen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:53 lib/psource_chat_admin_panels.php:137
+msgid "Nachrichten Darstellung"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:56
+msgid "Eingabebox"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:58 lib/psource_chat_admin_panels.php:142
+#: lib/psource_chat_admin_panels.php:221 lib/psource_chat_admin_panels.php:297
+#: lib/psource_chat_admin_panels.php:604 lib/psource_chat_admin_panels.php:690
+#: lib/psource_chat_admin_tinymce.php:207
+msgid "Benutzerliste"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:60
+msgid "Autentifizierung"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:62
+msgid "WYSIWYG Button"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:64 lib/psource_chat_admin_panels.php:146
+#: lib/psource_chat_admin_panels.php:225 lib/psource_chat_admin_panels.php:299
+#: lib/psource_chat_admin_panels.php:608 lib/psource_chat_admin_panels.php:698
+msgid "Erweitert"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:105 lib/psource_chat_admin_panels.php:190
+#: lib/psource_chat_admin_panels.php:263 lib/psource_chat_admin_panels.php:452
+#: lib/psource_chat_admin_panels.php:650 lib/psource_chat_admin_panels.php:735
+msgid "Änderungen speichern"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:119
+msgid "Chateinstellungen Webseite"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:123
+msgid ""
+"Die folgenden Einstellungen werden verwendet, um die Einstellungen für die "
+"untere Ecke und den privaten Chatbereich zu steuern."
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:126
+msgid ""
+"Unter Multisite kann der Chat in der unteren Ecke im Netzwerk aktiviert "
+"werden. In diesem Fall wird der Chat in der unteren Ecke der lokalen Site "
+"ersetzt."
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:131 lib/psource_chat_admin_panels.php:593
+msgid "Untere Ecke"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:135 lib/psource_chat_admin_panels.php:597
+msgid "Box Position"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:140 lib/psource_chat_admin_panels.php:219
+#: lib/psource_chat_admin_panels.php:295 lib/psource_chat_admin_panels.php:602
+#: lib/psource_chat_admin_panels.php:688 lib/psource_chat_admin_tinymce.php:202
+msgid "Nachrichteneingabe"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:144
+msgid "Autentifikation"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:205
+msgid "Chateinstellungen Widget"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:209
+msgid ""
+"Die folgenden Einstellungen werden verwendet, um alle Chat-Widgets zu "
+"steuern."
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:216 lib/psource_chat_admin_panels.php:599
+#: lib/psource_chat_admin_panels.php:685
+msgid "Nachricht Aussehen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:223 lib/psource_chat_admin_tinymce.php:212
+msgid "Authentication"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:276
+msgid "Gruppenchat Einstellungen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:292
+msgid "Nachrichten Aussehen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:368
+msgid "Chat-Einstellungen Netzwerk Allgemein"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:370
+msgid "Chat Einstellungen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:375
+msgid ""
+"Die folgenden Einstellungen werden für alle Chat-Sitzungstypen verwendet "
+"(Seite, Site, Privat, Support)."
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:381
+msgid "Abfrageintervalle"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:384 lib/psource_chat_form_sections.php:559
+msgid "Google+"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:386 lib/psource_chat_form_sections.php:567
+#: lib/psource_chat_form_sections.php:1573
+msgid "Facebook"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:388 lib/psource_chat_form_sections.php:551
+#: lib/psource_chat_form_sections.php:1376
+msgid "Twitter"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:391
+msgid "Blockiere IP/User"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:394
+#: lib/psource_chat_form_sections.php:1684
+msgid "Blockierte Wörter"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:396
+msgid "Blockierte URLs"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:398
+msgid "Dashboard"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:401
+msgid "BuddyPress"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:440
+msgid ""
+"In diesem Abschnitt wird gesteuert, wie der Chat im BuddyPress-System "
+"funktioniert. Dies sind globale Einstellungen, die sich auf alle Gruppen "
+"auswirken"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:475
+msgctxt "Page Title"
+msgid "Chat-Sitzung"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:478
+msgid "Return to Logs"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:516
+msgctxt "Page Title"
+msgid "Chat-Sitzungsnachrichten"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:519
+msgid "Zurück zu den Protokollen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:529
+msgid ""
+"Diese gesamte Chat-Sitzung ist als ausgeblendet markiert. Es wird nicht in "
+"öffentlichen Protokollen angezeigt. Du kannst weiterhin einzelne Nachrichten "
+"unten ein-/ausblenden oder löschen."
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:547
+msgid "Nachrichten suchen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:557
+msgctxt "Page Title"
+msgid "Chat-Sitzungsprotokolle"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:559
+msgctxt "page description"
+msgid ""
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:567
+msgid "Logs durchsuchen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:584
+msgid "Chat-Einstellungen Netzwerkseite"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:588
+msgid ""
+"Die folgenden Einstellungen werden verwendet, um die untere Ecke für alle "
+"Standorte in der Multisite-Umgebung zu steuern. Dieser Chat in der unteren "
+"Ecke ist global, dh, die Nachrichten sind auf allen Websites innerhalb der "
+"URLs des Multisite-Netzwerks gleich. Nach der Aktivierung ersetzt dieses "
+"Chatfeld in der unteren Ecke des Netzwerks das Chatfeld in der unteren Ecke "
+"der Site."
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:606 lib/psource_chat_admin_panels.php:694
+msgid "Authentifizierung"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:666
+msgid "Chat-Einstellungen Netzwerk-Dashboard-Widgets"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:668
+msgid "Chat-Einstellungen Dashboard-Widgets"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:673
+msgid ""
+"Dieser Abschnitt steuert die Sichtbarkeit von Netzwerk-Dashboard-Chat-Widgets"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:675
+msgid "Dieser Abschnitt steuert die Sichtbarkeit von Dashboard-Chat-Widgets"
+msgstr ""
+
+#: lib/psource_chat_admin_panels.php:680
+msgid "Widgets"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:11
+msgid "Dies ist die Seitenübersicht"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:14
+msgid "Übersicht über die Seiteneinstellungen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:19
+msgid "Dies ist die Seite-Übersicht"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:22
+#: lib/psource_chat_admin_panels_help.php:30
+#: lib/psource_chat_admin_panels_help.php:38
+#: lib/psource_chat_admin_panels_help.php:46
+msgid "Übersicht über die Seite-Einstellungen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:27
+msgid "Dies ist die Widget-Übersicht"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:35
+msgid "Dies ist die globale Übersicht"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:43
+msgid "Dies ist die Übersicht über die Sitzungsprotokolle"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:60
+msgid ""
+"Wenn diese Option aktiviert ist, können Chat-Nachrichten am Ende der Chat-"
+"Sitzung archiviert werden."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:64
+msgid ""
+"Wenn diese Option aktiviert ist, wird unter dem Chatfeld eine Liste der "
+"Protokolle für vergangene Chat-Sitzungen angezeigt."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:68
+msgid "Beschriftungstext wird über der Liste des Chat-Archivs angezeigt."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:71
+msgid ""
+"Maximale Anzahl von Archivsitzungen, die in der Liste angezeigt werden "
+"sollen."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:72
+msgid "z.B: 1, , 25, 100, leer für alle."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:75
+msgid ""
+"Ein-/Ausblenden der Haupt-Chat-Sitzung beim Anzeigen der Chat-Archivliste."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:79
+msgid ""
+"Wähle die Benutzerrollen der untersten Ebene aus, die zum Anzeigen der Chat-"
+"Protokollarchive zulässig sind. Bei Einstellung auf öffentlich werden "
+"Protokolle für alle Benutzer angezeigt. <br /> <br /> Vergleicht die "
+"Rollenstufen der WordPress-Benutzer (level_10, level_7, level_0 usw.)."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:83
+msgid ""
+"Wähle die niedrigsten BuddyPress-Gruppenrollen aus, die zum Anzeigen der "
+"Chat-Protokollarchive zulässig sind."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:87
+msgid ""
+"Wenn ein Benutzer zum ersten Mal in den Chat eintritt, wird nur die letzte "
+"Anzahl von Nachrichten angezeigt. Wenn neue Nachrichten hinzugefügt werden, "
+"werden ältere Nachrichten aus der Nachrichtenliste entfernt. Diese Option "
+"löscht die Datenbank nicht."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:91
+msgid ""
+"Wenn Du einen Chat über mehrere Stunden hostest, hilft diese Option, die "
+"ältere Nachrichten zu löschen, um Serverlast zu vermeiden"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:95
+msgid ""
+"Dies ist eine Nachricht, die Benutzern angezeigt wird, wenn die Chat-Sitzung "
+"vom Moderator geschlossen wurde."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:99
+msgid ""
+"Diese Nachricht wird kurz angezeigt, wenn der Moderator die aktuellen "
+"Sitzungsnachrichten archiviert oder löscht."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:107
+msgid "Horizontale Position des Seiten und des privaten Chats"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:112
+msgid "Vertikale Position des Seiten und des privaten Chats."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:118
+msgid ""
+"Diese Einstellung steuert die feste Position der Chatbox in der unteren "
+"Ecke. <br /> Die untere Ecke ist normalerweise eine feste Position. Bei der "
+"Anzeige unter dem Handy wird die Position in relativ geändert."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:124
+msgid "Vertikaler Pixelversatz vom linken/rechten Rand des Browsers"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:125
+#: lib/psource_chat_admin_panels_help.php:131
+#: lib/psource_chat_admin_panels_help.php:153
+#: lib/psource_chat_admin_panels_help.php:159
+#: lib/psource_chat_admin_panels_help.php:165
+#: lib/psource_chat_admin_panels_help.php:171
+msgid "zB. 3px, 10px, etc."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:130
+msgid "Vertikaler Pixelversatz vom oberen/unteren Rand des Browsers."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:135
+#: lib/psource_chat_admin_panels_help.php:136
+msgid "Pixelabstand zwischen Chatboxen."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:137
+msgid "Pixelabstand zwischen Chatboxen. zB. 3px, 10px, etc. "
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:141
+msgid ""
+"Dieses experimentielle Feature erlaubt Deinen Benutzern die Größenänderung "
+"der Chatboxen im Frontend. Bitte deaktiviere diese Option falls es Probleme "
+"mit Deinem Theme gibt."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:142
+msgid ""
+"Dieses experimentielle Feature erlaubt Deinen Benutzern die Größenänderung "
+"der Chatboxen im Frontend. Bitte deaktiviere diese Option falls es Probleme "
+"mit Deinem Theme gibt"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:146
+msgid "Aktiviere Schattenwurf in den unteren und privaten Chatboxen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:151
+msgid "Die Position des vertikalen Schattens. Negative Werte sind zulässig"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:157
+msgid "Die Position des horizontalen Schattens. Negative Werte sind zulässig"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:163
+msgid "Steuert, wie scharf/weich die Schattenkante ist. Die Unschärfedistanz"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:169
+msgid "Die Größe des Schattens"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:175
+msgid "Startfarbe des Schattenwurfs"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:181
+msgid ""
+"Der Titel der Chat-Sitzung. Wird in der Kopfzeile angezeigt. Dies "
+"unterscheidet sich vom Beitrags-/Seitentitel."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:183
+msgid "Der Titel der Chat-Sitzung"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:187
+#, no-php-format
+msgid ""
+"Hiermit wird die Breite der Chatbox festgelegt. Stelle dies für den Seiten-/"
+"Post-Chat auf 100% ein, um die gesamte Breite des Inhaltsbereichs zu nutzen. "
+"Stelle diesen Wert für Seiten-Chats auf einen bestimmten Wert wie 300 Pixel "
+"ein. <br /> Die Dropdown-Liste Für Mobil anpassen steuert, wie die "
+"Chatbreite behandelt wird, wenn der Bildschirm schmaler als das Chatfeld ist."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:189
+msgid "Breite der Chatbox"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:193
+msgid ""
+"Hiermit wird die Höhe der Chatbox festgelegt. Dies sollte ein bestimmter "
+"Wert wie 300px sein. <br /> Die Dropdown-Liste Für Mobil anpassen steuert, "
+"wie die Chat-Höhe behandelt wird, wenn der Bildschirm kürzer als das Chat-"
+"Feld ist."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:194
+msgid "Höhe der Chatbox"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:198
+msgid ""
+"Schriftfamilie für die Nachrichteneingabe. Wähle Erben, um die "
+"Standardschriftart Deines Themes zu verwenden"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:202
+#: lib/psource_chat_admin_panels_help.php:282
+#: lib/psource_chat_admin_panels_help.php:336
+msgid "Schriftgröße für die Nachrichteneingabe."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:203
+#: lib/psource_chat_admin_panels_help.php:283
+#: lib/psource_chat_admin_panels_help.php:337
+#: lib/psource_chat_admin_panels_help.php:500
+#: lib/psource_chat_admin_panels_help.php:522
+msgid "12px, 0.9em oder leer lassen, um vom Theme zu erben"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:207
+msgid ""
+"Textfarbe im Chatfeld. Dies entspricht nicht der Textfarbe der "
+"Nachrichtenzeile"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:211
+msgid ""
+"Hintergrundfarbe des Chatbox-Bereichs. Dies ist nicht die Farbe des "
+"Nachrichtenbereichs."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:215
+msgid ""
+"Rahmenfarbe für Chat-Elemente wie Nachrichtenbereich, Benutzerliste usw.. "
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:219
+msgid "Rahmenbreite für äußere Chatbox."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:220
+msgid "Rahmenbreite 1px, 3px usw.."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:224
+msgid ""
+"Der Abstand zwischen dem äußeren Containerrand und den Chat-Elementen wie "
+"Nachrichtenliste, Nachrichtenbereich usw."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:225
+msgid "Padding 1px, 3px, etc."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:229
+msgid ""
+"Ermöglicht die Wiedergabe von Ton, wenn eine neue Nachricht empfangen wird. "
+"Benutzer können dies ein- und ausschalten."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:233
+msgid ""
+"Ermöglicht Benutzern das Popout der Chat-Sitzung in einem neuen Fenster."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:236
+msgid ""
+"Aktiviert die Sichtbarkeit der Fußzeilenoptionen für Moderatoren, die in "
+"jeder Chatnachricht angezeigt werden."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:241
+msgid "Zeige Emoticons in der Chat-Sitzung an."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:245
+msgid "Textfarbe für Elemente der äußeren Chatbox."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:249
+msgid "Schaltflächenleiste über dem Nachrichteneintrag anzeigen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:253
+msgid "Hintergrundfarbe des Nachrichtenbereichs"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:257
+msgid "Hintergrundfarbe der Nachrichtenzeilenelemente"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:261
+msgid "Abstand zwischen Zeilenelementen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:265
+msgid "Rahmenfarbe der Nachrichtenzeilenelemente. Nur obere und untere Ränder."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:269
+msgid "Rahmenbreite der Nachrichtenzeilenelemente"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:273
+msgid "Hintergrundfarbe der Chatbox, wenn eine neue Nachricht vorliegt"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:278
+msgid ""
+"Schriftfamilie für die Nachrichteneingabe. Wähle Erben, um die "
+"Standardseitenfront Deines Themas zu verwenden"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:287
+msgid "Textfarbe der Chat-Nachrichtenzeile"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:291
+msgid "Zeigen Sie den Avatar des Benutzers mit der Nachricht an"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:295
+msgid "Hintergrundfarbe des Benutzernamens"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:299
+msgid "Hintergrundfarbe des Moderatornamens"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:303
+msgid ""
+"Der Avatar ist eine quadratische Grafik und repräsentiert den Benutzer. Gib "
+"einen Wert für die maximale Breite/Höhe der Grafik ein"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:308
+#: lib/psource_chat_admin_panels_help.php:312
+msgid "Zeige das Datum an, an dem die Nachricht gesendet wurde"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:316
+msgid "Datums-/Uhrzeitfarbe"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:320
+msgid "Datum/Uhrzeit Hintergrundfarbe"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:324
+msgid "Textfarbe für Quellcode"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:328
+msgid ""
+"Steuert die Position der Chat-Nachrichteneingabe. Wenn der Chat-"
+"Nachrichtenverlauf oben eingestellt ist, wird er oben am neuesten sortiert. "
+"Bei der Einstellung Unten wird der Verlauf der Chat-Nachricht unten als "
+"neueste Reihenfolge sortiert"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:332
+msgid ""
+"Schriftfamilie für die Nachrichteneingabe. Wähle Erben, um die "
+"Standardseitenfront Deines Themes zu verwenden"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:341
+msgid "Höhe des Nachrichteneingabebereichs"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:346
+#, no-php-format
+msgid ""
+"Steuere die Höhe der Textbereichseingabe. Ermögliche Benutzern, die Größe "
+"der Eingabe zu ändern oder sie zu sperren, um eine Größenänderung zu "
+"verhindern. Beachte dass der Textbereich immer 100% der Breite der Chatbox "
+"beträgt. <br /> <br /> Diese Option wird nicht von allen modernen Browsern "
+"unterstützt."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:351
+msgid ""
+"Maximale Anzahl von Zeichen, die ein Benutzer eingeben kann. Lasse das Feld "
+"für unbegrenzt leer."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:356
+msgid "Textfarbe für die Nachrichteneingabe"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:360
+msgid "Hintergrundfarbe für den Nachrichteneingabebereich"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:365
+msgid "Zeige eine Senden-Schaltfläche zum Senden von Chat-Nachrichten an."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:368
+msgid "Steuert die Anzeigeposition der Sendetaste."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:373
+msgid ""
+"Steuert, wie oft (Sekunden) nach neuen Nachrichten von anderen Chat-"
+"Teilnehmern gesucht werden soll. Der Wert kann Teilsekunden wie 1,5, 2,75 "
+"sein. etc."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:374
+msgid "1, 2, 1.5, etc. "
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:378
+msgid ""
+"Steuert, wie oft (Sekunden) die Benutzerlisten für die Chat-Sitzung "
+"aktualisiert werden sollen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:382
+msgid "Steuert die Abfragequelle für neue Nachrichten und Statusänderungen, verwende PS-Chat Ajax für Failsafe"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:386
+msgid "Speicherort für statische Abfragedateien."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:390
+msgid "Aktiviere die Filterung blockierter Wörter."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:394
+msgid "Ersetzt blockiertes Wort durch etwas anderes, zB: PIIIIEPS."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:398
+msgid ""
+"Blockierte Wörter sind in Chat-Sitzungen nicht zulässig. Dies gilt global "
+"für alle Sitzungen."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:402
+msgid ""
+"Blockliste wird von allen Chat-Sitzungen verwendet. Diese Option verbirgt "
+"den gesamten Chat vor bestimmten Benutzer-E-Mail-Adressen."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:411
+msgid ""
+"Diese Option blendet den Chat in der unteren Ecke basierend auf den "
+"angegebenen URLs aus."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:419
+msgid ""
+"Nachricht, die dem Benutzer angezeigt wird, wenn seine IP-Adresse gesperrt "
+"wurde."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:423
+msgid ""
+"Liste der blockierten IP-Adressen. Jede IP-Adresse sollte als gepunktetes "
+"Dezimalformat eingegeben werden. Beispiel: 123.123.123.123, 10.0.1.168"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:431
+msgid ""
+"Der Seitenkanten-Chat ist ein globales Gruppen-Chat-Feld, das auf ALLEN "
+"Seiten Ihrer Website angezeigt wird."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:434
+msgid ""
+"Steuert den Anfangsstatus des Chats in der unteren Ecke für neue Benutzer."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:437
+msgid ""
+"Wenn der Seitenkanten-Chat minimiert ist, wird gesteuert, ob der Server noch "
+"nach neuen Nachrichten abgefragt wird."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:440
+msgid "Zeige den Chat in der unteren Ecke in WP Admin an."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:444
+msgid ""
+"Wenn ein Benutzer einen privaten Chat beendet, können andere Benutzer, die "
+"noch verbunden sind, eine Nachricht posten, um die Chat-Konversation "
+"fortzusetzen. Diese Option steuert, ob dem Benutzer, der die Konversation "
+"verlassen hat, das Chat-Popup erneut angezeigt wird."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:449
+msgid "Steuert die Position der teilnehmenden Benutzer in der Chat-Sitzung"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:453
+msgid "Liste der Benutzer anzeigen, die an der Chat-Sitzung teilnehmen."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:457
+msgid ""
+"Listenmoderatoren und Benutzer in separaten Listen anzeigen oder kombinieren."
+"<br /><br />Bei Verwendung von Split und Oben/Unten befinden sich die "
+"Moderatoren links und die Benutzer rechts. Bei Verwendung von Split und "
+"Links/Rechts werden Moderatoren zuerst und dann Benutzer in einer neuen "
+"Zeile angezeigt."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:462
+#, no-php-format
+msgid ""
+"Breite/Höhe des Benutzerlistenbereichs. Das kann eine feste Größe 250px oder "
+"ein Prozentsatz von 25% sein. Der Benutzerlistenbereich wird bei Bedarf auf "
+"automatisches Scrollen (CSS: Überlauf) eingestellt, um alle Benutzer "
+"anzuzeigen."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:463
+msgid "Die Breite des Nachrichtenbereichs wird automatisch angepasst"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:467
+msgid "Größe der im Benutzerlistenbereich angezeigten Benutzeravatare."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:468
+msgid "30px, 40px usw. Muss eine feste Größe haben. "
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:472
+msgid ""
+"Wenn ein Benutzer den Chat verlässt, indem er zu einer anderen Stelle der "
+"Seite navigiert oder den Browser schließt, wird er nach diesem Schwellenwert "
+"von Sekunden entfernt. Mindestens 20 Sekunden."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:473
+msgid ""
+"Sekunden Verzögerung, wenn der Benutzer aus der Liste entfernt wird. "
+"Mindestens 20 Sekunden."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:478
+msgid "Hintergrundfarbe des Benutzerlistenbereichs."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:489
+msgid ""
+"Farbe des Benutzerlisten-Headers. Nicht verwendet wird die Anzeige von "
+"Avataren."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:494
+msgid "Schriftfamilie für die Elemente der Benutzernamenliste."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:499
+msgid "Schriftgröße für die Elemente der Benutzernamenliste."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:504
+msgid "Farbe für den oben gezeigten Kopfzeilentext Avatare/Namen."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:508
+msgid ""
+"Header werden über den Benutzerlisten angezeigt. Lasse das Feld leer, um die "
+"Kopfzeile nicht anzuzeigen. "
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:512
+msgid "Farbe für Moderatornamen in der Benutzerliste."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:515
+msgid "Farbe für Benutzernamen in der Benutzerliste."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:518
+msgid "Schriftfamilie für Moderator-/Benutzernamen in der Benutzerliste."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:521
+msgid "Schriftgröße für Moderator-/Benutzernamen in der Benutzerliste."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:526
+msgid "Rahmenbreite für Moderator-/Benutzeravatare in der Benutzerliste."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:529
+msgid "Rahmenfarbe für Moderator-Avatare in der Benutzerliste."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:533
+msgid "Rahmenfarbe für Benutzeravatare in der Benutzerliste."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:538
+msgid ""
+"Zeigt eine kurze Nachricht an, wenn ein Benutzer die Chat-Sitzung betritt/"
+"verlässt"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:542
+msgid ""
+"Steuert, wie lange der Hinweis auf dem Bildschirm angezeigt wird, wenn ein "
+"Benutzer den Chat betritt/verlässt."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:547
+msgid "Welche Benutzeranmeldeoptionen sind für die Chat-Sitzungen zulässig?"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:551
+msgid ""
+"Steuert, was der Benutzer sehen darf, wenn er sich nicht im Chat angemeldet "
+"hat."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:555
+msgid ""
+"Dies ist die Eingabeaufforderung, die dem Benutzer mitteilt, dass er sich "
+"anmelden muss, bevor er Chat-Nachrichten veröffentlicht."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:559
+msgid "Die Anmeldemeldung wird über dem Anmeldeformular angezeigt. "
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:563
+msgid ""
+"Steuert, welche Benutzer Nachrichten und andere Benutzer während der Chat-"
+"Sitzung moderieren können."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:567
+msgid ""
+"Steuert, welche WordPress-Benutzerrollen die Symbolleistenschaltfläche Chat "
+"WYSIWYG sehen."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:571
+msgid ""
+"Steuert, für welche Beitragstypen die Symbolleistenschaltfläche Chat WYSIWYG "
+"aktiviert ist"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:575
+msgid ""
+"Ermöglicht das Blockieren des Ladens von Chat auf bestimmten WordPress-Admin-"
+"Seiten."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:579
+msgid ""
+"Ausblenden/Anzeigen des Widgets auf Beiträgen/Seiten, die den Chat-Shortcode "
+"enthalten."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:583
+msgid ""
+"Der Titel der Registerkarte im BuddyPress-Gruppenabschnitt für den Zugriff "
+"auf den Chat"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:587
+msgid ""
+"Der Titel der Registerkarte im BuddyPress-Gruppenabschnitt für den Zugriff "
+"auf den Chat."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:591
+msgid ""
+"Der Titel der Kontakte im BuddyPress-Gruppenabschnitt für den Zugriff auf "
+"den Chat"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:595
+msgid ""
+"Steuert die Anzeige von Chats in der unteren Ecke im BuddyPress Group Admin-"
+"Bereich"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:599
+msgid "Steuert die Anzeige von Widget-Chats im Bereich BuddyPress Gruppen"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:603
+msgid ""
+"Steuert die Anzeige des unteren Widgets im Bereich BuddyPress Gruppen Admin"
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:607
+msgid "Steuert die Hintergrundfarbe im BuddyPress Gruppen Admin Chat-Formular."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:611
+msgid ""
+"Steuert die Textfarbe für Beschriftungen im BuddyPress Gruppen Admin Chat-"
+"Formular."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:616
+msgid ""
+"Der globale Chat in der unteren Ecke bedeutet, dass die Chat-Nachricht von "
+"allen Sites innerhalb des Multisite-Systems stammt. Beim Wechseln zwischen "
+"Standorten bleiben die Nachrichten erhalten."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:620
+msgid ""
+"Diese Benutzeroption steuert den öffentlichen Chat-Status für andere "
+"Benutzer in Deinem Netzwerk. Auf diese Weise kannst Du steuern, wann andere "
+"Personen private Chat-Sitzungen initiieren können. Beachte dass dies private "
+"Chats während bestehender Chat-Sitzungen, an denen man teilnehmen, nicht "
+"verhindern."
+msgstr ""
+
+#: lib/psource_chat_admin_panels_help.php:627
+#: lib/psource_chat_form_sections.php:2761
+msgid ""
+"Dadurch werden alle Chat-Funktionen einschließlich des WordPress-"
+"Symbolleistenmenüs deaktiviert"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:35
+#: lib/psource_chat_admin_session_messages.php:43
+msgid "Ausblenden"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:36
+#: lib/psource_chat_admin_session_messages.php:44
+msgid "Einblenden"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:37
+#: lib/psource_chat_admin_session_messages.php:48
+msgid "Löschen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:139
+msgid "Alle anzeigen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:143
+#: lib/psource_chat_admin_session_logs.php:334
+#: lib/psource_chat_admin_session_messages.php:390 psource-chat.php:4607
+msgid "Offen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:147
+#: lib/psource_chat_admin_session_logs.php:331
+#: lib/psource_chat_admin_session_messages.php:176
+#: lib/psource_chat_admin_session_messages.php:387
+msgid "Archiviert"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:151
+#: lib/psource_chat_admin_session_logs.php:329
+#: lib/psource_chat_admin_session_messages.php:180
+#: lib/psource_chat_admin_session_messages.php:385
+msgid "Versteckt"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:177
+msgid "Alle Chats anzeigen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:209
+msgid "Alle Typen anzeigen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:231
+msgid "Anfangsdatum"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:233
+msgid "Enddatum"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:296
+#: lib/psource_chat_admin_session_messages.php:291
+msgid "Zeit"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:301
+msgid "Sitzung"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:302
+#: lib/psource_chat_admin_session_messages.php:292
+msgid "Status"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:303
+msgid "Typ"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:304
+msgid "Moderatoren"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:305
+#: lib/psource_chat_admin_session_messages.php:293
+msgid "Benutzer"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:306
+msgid "Nachrichten"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:315 psource-chat.php:3176
+msgid "Privat"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:343
+#: lib/psource_chat_buddypress.php:127 lib/psource_chat_cpcommunitie.php:122
+#: lib/psource_chat_widget.php:841 lib/psource_chat_widget.php:871
+#: lib/psource_chat_wpadminbar.php:111 lib/psource_chat_wpadminbar.php:145
+#: psource-chat.php:1000
+msgid "Chat"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:388
+msgid "Details"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:389
+msgid "Details zu dieser Chat-Sitzung anzeigen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:403 psource-chat.php:1174
+#: psource-chat.php:4853
+msgid "ausblenden"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:404
+msgid ""
+"Blende die gesamte Chat-Sitzung aus, um die öffentliche Ansicht zu blockieren"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:410 psource-chat.php:1175
+#: psource-chat.php:4854
+msgid "einblenden"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:411
+msgid ""
+"Blende die gesamte Chat-Sitzung ein, um die öffentliche Ansicht zu "
+"ermöglichen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:418
+msgid "löschen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:419
+msgid "Lösche die gesamte Chat-Sitzung dauerhaft"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:433
+msgid "Chat anzeigen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:434
+msgid "Live-Chat-Sitzung anzeigen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_logs.php:564
+#, php-format
+msgid " (%s Sekunde zuvor)"
+msgid_plural " (%s Sekunden zuvor)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/psource_chat_admin_session_logs.php:601
+#, php-format
+msgid "%s Sekunde"
+msgid_plural "%s Sekunden"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: min=minute
+#: lib/psource_chat_admin_session_logs.php:608
+#, php-format
+msgid "%s Minute"
+msgid_plural "%s Minuten"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/psource_chat_admin_session_logs.php:614
+#, php-format
+msgid "%s Stunde"
+msgid_plural "%s Stunden"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/psource_chat_admin_session_logs.php:620
+#, php-format
+msgid "%s Tag"
+msgid_plural "%s Tage"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/psource_chat_admin_session_logs.php:626
+#, php-format
+msgid "%s Woche"
+msgid_plural "%s Wochen"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/psource_chat_admin_session_logs.php:632
+#, php-format
+msgid "%s Monat"
+msgid_plural "%s Monate"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/psource_chat_admin_session_logs.php:638
+#, php-format
+msgid "%s Jahr"
+msgid_plural "%s Jahre"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/psource_chat_admin_session_messages.php:172
+msgid "Zeige jeden Status"
+msgstr ""
+
+#: lib/psource_chat_admin_session_messages.php:191
+msgid "Alle Moderatoren anzeigen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_messages.php:193
+msgid "Keine Moderatoren anzeigen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_messages.php:213
+msgid "Alle Benutzer anzeigen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_messages.php:215
+msgid "Keine Benutzer anzeigen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_messages.php:294
+msgid "Nachricht"
+msgstr ""
+
+#: lib/psource_chat_admin_session_messages.php:334
+msgid "hide"
+msgstr ""
+
+#: lib/psource_chat_admin_session_messages.php:335
+msgid "Blende diese Chat-Nachricht aus der Öffentlichkeit aus"
+msgstr ""
+
+#: lib/psource_chat_admin_session_messages.php:341
+msgid "unhide"
+msgstr ""
+
+#: lib/psource_chat_admin_session_messages.php:342
+msgid ""
+"Blende diese Chat-Nachricht ein, um die öffentliche Ansicht zu ermöglichen"
+msgstr ""
+
+#: lib/psource_chat_admin_session_messages.php:350
+msgid "delete"
+msgstr ""
+
+#: lib/psource_chat_admin_session_messages.php:351
+msgid "Lösche diese Chat-Nachricht dauerhaft"
+msgstr ""
+
+#: lib/psource_chat_admin_tinymce.php:183 lib/psource_chat_widget.php:965
+#: lib/psource_chat_widget.php:983
+msgid "WordPress Chat"
+msgstr ""
+
+#: lib/psource_chat_admin_tinymce.php:192
+msgid "Box Darstellung"
+msgstr ""
+
+#: lib/psource_chat_admin_tinymce.php:197
+msgid "Nachricht Darstellung"
+msgstr ""
+
+#: lib/psource_chat_admin_tinymce.php:217
+msgid "Fortgeschritten"
+msgstr ""
+
+#: lib/psource_chat_admin_tinymce.php:261 psource-chat.php:4937
+msgid "Abbrechen"
+msgstr ""
+
+#: lib/psource_chat_admin_tinymce.php:262
+msgid "Änderung abbrechen und Popup schließen"
+msgstr ""
+
+#: lib/psource_chat_admin_tinymce.php:268
+msgid "Standards"
+msgstr ""
+
+#: lib/psource_chat_admin_tinymce.php:269
+msgid "Setze den Shortcode auf die Standardwerte zurück"
+msgstr ""
+
+#: lib/psource_chat_admin_tinymce.php:271
+msgid "Einfügen"
+msgstr ""
+
+#: lib/psource_chat_admin_tinymce.php:272
+msgid "Speichere die Einstellungen und füge den Shortcode am Cursor ein"
+msgstr ""
+
+#: lib/psource_chat_buddypress.php:166 lib/psource_chat_cpcommunitie.php:161
+msgid "Einstellungen gespeichert."
+msgstr ""
+
+#: lib/psource_chat_buddypress.php:179 lib/psource_chat_cpcommunitie.php:174
+msgid "Chat Einstellungen"
+msgstr ""
+
+#: lib/psource_chat_buddypress.php:200 lib/psource_chat_cpcommunitie.php:195
+msgid "Chat-Status festlegen"
+msgstr ""
+
+#: lib/psource_chat_buddypress.php:202 lib/psource_chat_cpcommunitie.php:197
+msgid ""
+"Diese Benutzeroption steuert Deinen öffentlichen Chat-Status für andere "
+"Benutzer in Deinem Netzwerk. Auf diese Weise kannst Du steuern, wann andere "
+"Personen private Chat-Sitzungen mit Dir initiieren können. Beachte dass dies "
+"private Chats während bestehender Chat-Sitzungen, an denen Du teilnimmst, "
+"nicht verhindert."
+msgstr ""
+
+#: lib/psource_chat_buddypress.php:223 lib/psource_chat_cpcommunitie.php:218
+msgid "In Chat-Sitzungen wird der Name als angezeigt"
+msgstr ""
+
+#: lib/psource_chat_buddypress.php:225 lib/psource_chat_cpcommunitie.php:220
+msgid ""
+"Während Chat-Sitzungen, an denen Du teilnimmst, wird festgelegt, wie Du "
+"anderen Benutzern angezeigt wirst. Standard ist der Anzeigename."
+msgstr ""
+
+#: lib/psource_chat_buddypress.php:229 lib/psource_chat_cpcommunitie.php:224
+#: lib/psource_chat_form_sections.php:2737 psource-chat.php:2733
+msgid "Anzeigename"
+msgstr ""
+
+#: lib/psource_chat_buddypress.php:232 lib/psource_chat_cpcommunitie.php:227
+#: lib/psource_chat_form_sections.php:2740
+msgid "Benutzername"
+msgstr ""
+
+#: lib/psource_chat_buddypress.php:238 lib/psource_chat_cpcommunitie.php:233
+#: psource-chat.php:2789
+msgid "Chat WordPress Symbolleistenmenü anzeigen?"
+msgstr ""
+
+#: lib/psource_chat_buddypress.php:243 lib/psource_chat_cpcommunitie.php:238
+#: lib/psource_chat_form_sections.php:16 lib/psource_chat_form_sections.php:318
+#: lib/psource_chat_form_sections.php:386
+#: lib/psource_chat_form_sections.php:408
+#: lib/psource_chat_form_sections.php:738
+#: lib/psource_chat_form_sections.php:753
+#: lib/psource_chat_form_sections.php:767
+#: lib/psource_chat_form_sections.php:979
+#: lib/psource_chat_form_sections.php:992
+#: lib/psource_chat_form_sections.php:1161
+#: lib/psource_chat_form_sections.php:1191
+#: lib/psource_chat_form_sections.php:1288
+#: lib/psource_chat_form_sections.php:1542
+#: lib/psource_chat_form_sections.php:1720
+#: lib/psource_chat_form_sections.php:1788
+#: lib/psource_chat_form_sections.php:1855
+#: lib/psource_chat_form_sections.php:1911
+#: lib/psource_chat_form_sections.php:1970
+#: lib/psource_chat_form_sections.php:2018
+#: lib/psource_chat_form_sections.php:2032
+#: lib/psource_chat_form_sections.php:2074
+#: lib/psource_chat_form_sections.php:2099
+#: lib/psource_chat_form_sections.php:2596
+#: lib/psource_chat_form_sections.php:2610
+#: lib/psource_chat_form_sections.php:2636
+#: lib/psource_chat_form_sections.php:2650
+#: lib/psource_chat_form_sections.php:2754
+#: lib/psource_chat_form_sections.php:2774
+#: lib/psource_chat_form_sections.php:2792
+#: lib/psource_chat_form_sections.php:2813
+#: lib/psource_chat_form_sections.php:2832
+#: lib/psource_chat_form_sections.php:2850
+#: lib/psource_chat_form_sections.php:2872
+#: lib/psource_chat_form_sections.php:2902
+#: lib/psource_chat_form_sections.php:2958
+#: lib/psource_chat_form_sections.php:3005
+#: lib/psource_chat_form_sections.php:3041
+#: lib/psource_chat_form_sections.php:3090 lib/psource_chat_widget.php:91
+#: lib/psource_chat_widget.php:114 lib/psource_chat_widget.php:124
+#: lib/psource_chat_widget.php:134 lib/psource_chat_widget.php:512
+#: psource-chat.php:2754 psource-chat.php:2796 psource-chat.php:2813
+#: psource-chat.php:2829 psource-chat.php:2869 psource-chat.php:2927
+#: psource-chat.php:2971
+msgid "Aktiviert"
+msgstr ""
+
+#: lib/psource_chat_buddypress.php:247 lib/psource_chat_cpcommunitie.php:242
+#: lib/psource_chat_form_sections.php:29 lib/psource_chat_form_sections.php:319
+#: lib/psource_chat_form_sections.php:388
+#: lib/psource_chat_form_sections.php:410
+#: lib/psource_chat_form_sections.php:740
+#: lib/psource_chat_form_sections.php:755
+#: lib/psource_chat_form_sections.php:769
+#: lib/psource_chat_form_sections.php:980
+#: lib/psource_chat_form_sections.php:993
+#: lib/psource_chat_form_sections.php:1148
+#: lib/psource_chat_form_sections.php:1163
+#: lib/psource_chat_form_sections.php:1193
+#: lib/psource_chat_form_sections.php:1543
+#: lib/psource_chat_form_sections.php:1722
+#: lib/psource_chat_form_sections.php:1790
+#: lib/psource_chat_form_sections.php:1857
+#: lib/psource_chat_form_sections.php:1913
+#: lib/psource_chat_form_sections.php:1972
+#: lib/psource_chat_form_sections.php:2020
+#: lib/psource_chat_form_sections.php:2034
+#: lib/psource_chat_form_sections.php:2077
+#: lib/psource_chat_form_sections.php:2102
+#: lib/psource_chat_form_sections.php:2598
+#: lib/psource_chat_form_sections.php:2612
+#: lib/psource_chat_form_sections.php:2638
+#: lib/psource_chat_form_sections.php:2652
+#: lib/psource_chat_form_sections.php:2796
+#: lib/psource_chat_form_sections.php:2817
+#: lib/psource_chat_form_sections.php:2854
+#: lib/psource_chat_form_sections.php:2873
+#: lib/psource_chat_form_sections.php:2904
+#: lib/psource_chat_form_sections.php:2960
+#: lib/psource_chat_form_sections.php:3007
+#: lib/psource_chat_form_sections.php:3043
+#: lib/psource_chat_form_sections.php:3092 lib/psource_chat_widget.php:93
+#: lib/psource_chat_widget.php:116 lib/psource_chat_widget.php:136
+#: lib/psource_chat_widget.php:514 psource-chat.php:2758 psource-chat.php:2778
+#: psource-chat.php:2800 psource-chat.php:2817 psource-chat.php:2833
+#: psource-chat.php:2873 psource-chat.php:2931 psource-chat.php:2975
+msgid "Deaktiviert"
+msgstr ""
+
+#: lib/psource_chat_buddypress.php:252 lib/psource_chat_cpcommunitie.php:247
+msgid "Einstellungen speichern"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:7
+msgid "Chatprotokolle"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:12
+msgid "Protokollerstellung"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:17
+#: lib/psource_chat_form_sections.php:1290
+#: lib/psource_chat_form_sections.php:2758
+#: lib/psource_chat_form_sections.php:2778
+#: lib/psource_chat_form_sections.php:2836 lib/psource_chat_widget.php:126
+msgid "Deaktivert"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:25
+msgid "Protokollanzeige"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:30
+msgid "Link zur Protokollseite."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:31 lib/psource_chat_form_sections.php:35
+msgid "Aktiviert - Auflistung über dem Chat"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:32 lib/psource_chat_form_sections.php:36
+msgid "Aktiviert - Auflistung unter dem Chat"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:34
+msgid "Links shown on chat page"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:44
+msgid "Chatprotokoll Label"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:54
+msgid "Anzahl der Archiveinträge, die in der Liste angezeigt werden sollen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:64
+msgid "Beim Anzeigen von Archivdetails. Hauptchat ein-/ausblenden?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:68
+msgid "Zeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:69
+msgid "Verbergen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:78
+msgid "Gruppenmitglieder"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:79
+msgid "Gruppenmods und Admins"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:80
+msgid "Nur Gruppenadmins"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:86
+msgid "Beschränke die Anzeige nach Gruppenmitgliedsebene"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:128
+msgid "Beschränke die Anzeige nach Benutzerrollenebene"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:132
+msgid "WordPress-Benutzerrollenebenen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:146
+msgid "Öffentlich, Facebook, Twitter, Google"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:168
+msgid "Nachrichten Anzeigelimit"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:172
+msgid "Begrenzt Nachrichten anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:177
+msgid "Standard 100. Für alle leer lassen."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:191
+msgid "Sitzungsnachricht"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:195
+msgid "Sitzung geschlossen Nachricht"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:205
+msgid "Sitzung gelöscht Nachricht"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:217
+msgid "Wird automatisch geschlossen, wenn kein Moderator anwesend ist."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:221
+#: lib/psource_chat_form_sections.php:1589
+msgid "JA"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:222
+#: lib/psource_chat_form_sections.php:1592
+msgid "NEIN"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:240
+msgid "Schriften"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:246
+#: lib/psource_chat_form_sections.php:650
+#: lib/psource_chat_form_sections.php:879
+#: lib/psource_chat_form_sections.php:1094
+msgid "Schrift"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:249
+#: lib/psource_chat_form_sections.php:654
+msgid "-- Vererbt vom Thema --"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:260
+#: lib/psource_chat_form_sections.php:665
+#: lib/psource_chat_form_sections.php:894
+#: lib/psource_chat_form_sections.php:1109
+#: lib/psource_chat_form_sections.php:2416
+msgid "Schriftgröße"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:281
+msgid "Chat Box Position"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:282
+msgid ""
+"Steuert die Position der Seiten-Chat-Felder. Diese Felder enthalten den Chat "
+"in der unteren Ecke sowie private Chats. Wenn Du rechts auswählst, werden "
+"die einzelnen Chat-Felder von rechts nach links angezeigt."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:286
+msgid "Position Horizontal"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:291
+msgid "Rechts"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:293
+msgid "Links"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:300
+msgid "Position Vertikal"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:305
+msgid "Oben"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:307
+msgid "Unten"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:314
+msgid "Position für Mobile Endgeräte"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:328
+msgid "Positionsversatz der Chatbox"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:329
+msgid ""
+"Ermöglicht das Bereitstellen von Offsets, um die Chat-Boxen vom Standardrand "
+"des Bildschirms zu entfernen. Wenn Du beispielsweise die Position oben nach "
+"unten/rechts setzt, kann dies zu Konflikten mit anderen Fußzeilenleisten mit "
+"fester Position führen. Du kannst also den vertikalen Versatz unten auf 20 "
+"Pixel oder einen bestimmten Wert einstellen, um zu verhindern, dass andere "
+"feste Elemente ausgeblendet werden. "
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:333
+msgid "Position für linke oder rechte Ecke"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:344
+msgid "Position zu der Ober-/Unterkante"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:358
+msgid "Chat Box Abstand"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:359
+#: lib/psource_chat_form_sections.php:399
+msgid "Steuert den horizontalen Abstand zwischen mehreren Chat-Feldern"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:363
+msgid "Abstand"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:376
+msgid "Chat Box Größe veränderbar"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:377
+msgid ""
+"Ermöglicht Benutzern das Ändern der Größe der Seiten-Chat-Felder. Dadurch "
+"werden die JavaScript-Bibliotheken der jQuery-Benutzeroberfläche geladen, "
+"was sich auf die Ladezeit der Seite und/oder auf Konflikte mit Deinem Theme "
+"auswirken kann."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:381
+msgid "Die Größe des Chat-Fensters kann geändert werden"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:398
+msgid "Chat Box Schatten"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:403
+msgid "Anzeige Box Schatten"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:417
+msgid "Vertikale rechte Ecke"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:428
+msgid "Horizontale Unterkante"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:439
+msgid "Schattenschärfe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:450
+msgid "Schattenausbreitung"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:461
+msgid "Schattenfarbe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:481
+msgid "Anmeldeoptionen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:482
+msgid "Authentifizierungsmethoden, die Benutzer verwenden können"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:488
+msgid ""
+"Für WordPress-Benutzer anzeigen. Schließt automatisch Admin- und SuperAdmin-"
+"Benutzer ein. Der Benutzer muss bereits authentifiziert sein."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:522
+msgid ""
+"Für Netzwerkbenutzer anzeigen. Wenn das Kontrollkästchen deaktiviert ist, "
+"können nur WordPress-Benutzer mit Zugriff auf den aktuellen Blog die Chat-"
+"Sitzung sehen."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:529
+msgid "Netzwerkbenutzer"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:536
+msgid "Andere Anmeldeoptionen:"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:543
+msgid "Öffentliche Benutzer"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:553
+#: lib/psource_chat_form_sections.php:561
+#: lib/psource_chat_form_sections.php:569
+msgid "Setup"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:586
+msgid "Chat Box Information"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:590
+#: lib/psource_chat_form_sections.php:2041
+#: lib/psource_chat_form_sections.php:2969
+#: lib/psource_chat_form_sections.php:3016
+#: lib/psource_chat_form_sections.php:3052
+msgid "Titel"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:608
+msgid "Chat Box Container"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:612
+msgid "Breite"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:620
+#: lib/psource_chat_form_sections.php:638
+msgid "-- Anpassen für Mobile Endgeräte --"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:621
+msgid "Fensterbreite"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:622
+msgid "Gesamtbreite"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:630
+#: lib/psource_chat_form_sections.php:2979
+#: lib/psource_chat_form_sections.php:3061
+msgid "Höhe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:639
+msgid "Fensterhöhe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:640
+msgid "Volle Höhe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:678
+msgid "Text"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:689
+msgid "Hintergrund"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:700
+msgid "Rahmenfarbe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:710
+msgid "Rahmenbreite"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:734
+msgid "Sound"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:748
+msgid "Erlaube Chat Pop out/in"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:762
+msgid "Moderator-Nachricht in der Fußzeile anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:797
+msgid "Chatfenster Darstellung"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:802
+msgid "Chatfenster Hintergrund"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:812
+msgid "Nachrichten Hintergrund"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:823
+msgid "Abstand zwischen Nachrichten"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:833
+msgid "Farbe des Nachrichtenrahmens"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:844
+msgid "Breite des Nachrichtenrahmens"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:874
+msgid "Chat-Nachrichtenelemente"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:883
+msgid "-- Vererbt vom Theme --"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:908
+msgid "Nachrichtentextfarbe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:920 lib/psource_chat_widget.php:97
+msgid "Zeige Avatar/Name"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:925 lib/psource_chat_widget.php:100
+#: lib/psource_chat_widget.php:292
+msgid "Avatar"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:927 lib/psource_chat_widget.php:102
+#: lib/psource_chat_widget.php:294 psource-chat.php:4934
+msgid "Name"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:929 lib/psource_chat_widget.php:104
+#: lib/psource_chat_widget.php:296
+msgid "Avatar und Name"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:931 lib/psource_chat_widget.php:106
+msgid "Nichts"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:940
+#: lib/psource_chat_form_sections.php:2387
+msgid "Benutzername Farbe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:953
+#: lib/psource_chat_form_sections.php:2374
+msgid "Moderator Name Farbe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:965
+#: lib/psource_chat_form_sections.php:2322
+msgid "Benutzer-Avatar-Breite"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:975
+msgid "Datum anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:988
+msgid "Zeitstempel anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1002
+msgid "Datum/Uhrzeit Textfarbe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1013
+msgid "Datum/Uhrzeit Text Hintergrund"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1024
+msgid "CODE Text Farbe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1044
+msgid "Chat-Nachrichteneingabe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1048
+msgid "Platzierung der Nachrichteneingabe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1053
+msgid "Oben - Neueste Nachrichten oben"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1055
+msgid "Unten - Neueste Nachrichten unten"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1062
+msgid "Eingabefenster Höhe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1072
+msgid "Verhindere dass Benutzer die Höhe ändern"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1076
+msgid ""
+"Vertikal - Ermöglicht dem Benutzer, nur die Höhe des Textbereichs zu ändern"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1077
+msgid "Keine - Höhe der Textbereichseingabe sperren"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1084
+msgid "Max Zeichen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1098
+#: lib/psource_chat_form_sections.php:2267
+#: lib/psource_chat_form_sections.php:2404
+msgid "-- vererbt vom Theme --"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1119
+msgid "Textfarbe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1130
+#: lib/psource_chat_form_sections.php:2229
+#: lib/psource_chat_form_sections.php:2670
+msgid "Hintergrundfarbe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1141
+msgid "Emoticons"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1146 psource-chat.php:2774
+msgid "Aktviert"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1157
+msgid "Buttonleiste"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1182
+msgid "Nachricht Sendenschaltfläche"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1186
+msgid "Sendenschaltfläche anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1195
+msgid "Nur mobile Endgeräte"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1202
+msgid "Sendenschaltfläche Position"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1207
+msgid "Keine - Vom Theme erben"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1209
+msgid ""
+"Rechts - Die Schaltfläche befindet sich rechts neben der Nachrichteneingabe."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1211
+msgid "Unten - Die Schaltfläche befindet sich unterhalb der Nachrichteneingabe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1218
+msgid "Sendenschaltfläche Beschriftung"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1238
+msgid "Moderatoren Rollen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1239
+msgid "Wähle aus, welche Rollen Moderatoren sind"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1246
+msgid "Schließt automatisch Admin- und SuperAdmin-Benutzer ein"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1284
+msgid "Nachrichteneingabe ausblenden, wenn kein Moderator vorhanden ist"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1300
+msgid ""
+"Nachricht welche Benutzern angezeigt wird, wenn kein Moderator anwesend ist"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1320
+msgid "Standard - Chat-Nachrichten und Benutzerlisten."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1321
+msgid "Anmeldeformular - Nur Chat-Anmeldeformular"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1322
+msgid "Keine Anmeldung - Chat-Nachricht anzeigen, aber keine Anmeldeoption"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1327
+msgid "Was wird nicht authentifizierten Benutzern angezeigt?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1346
+msgid ""
+"Im Hauptchatbereich angezeigte Nachricht zur Aufforderung zur "
+"Benutzeranmeldung"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1357
+msgid ""
+"Anmeldeformular Nachricht wird über den Anmeldefeldern und der Facebook-"
+"Schaltfläche angezeigt"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1382
+msgid "Consumer Key"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1386
+msgid "Consumer Secret"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1398
+msgid "Fill in the form with values for your website:"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1400
+msgid "<strong>Name</strong>: Sollte der Name Deiner Webseite sein."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1401
+msgid ""
+"<strong>Description</strong>: Sollte eine kurze Beschreibung Deiner Webseite "
+"sein."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1402
+msgid ""
+"<strong>Website</strong>: Should be the home URL of your website. "
+"<strong>Not the page where Chat is displayed</strong>"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1403
+msgid "<strong>Callback URL</strong>: Sollte die Home-URL Deiner Website sein"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1407
+msgid ""
+"Nachdem Du das App-Formular gesendet hast, werden auf der nächsten Seite die "
+"Details für Deine neue Twitter-App angezeigt. Kopiere die Werte für den "
+"<strong>Verbraucherschlüssel</strong> und das <strong>Verbrauchergeheimnis</"
+"strong> in die Formularfelder auf dieser Seite."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1421
+msgid "Abfrageintervall für Chat-Sitzungen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1422
+msgid ""
+"Jedes Chat-Feld (Seite, untere Ecke) ruft über AJAX zum Server zurück, um "
+"nach neuen Nachrichten und Statusänderungen zu suchen. Die folgenden "
+"Optionen steuern Optionen für diese AJAX-Abfrage"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1425
+msgid ""
+"Vorschlag: Die Abfrage neuer Nachrichten ist die Hauptschleife. Die "
+"Abfragewerte für Invites und Meta sollten ein Vielfaches des Werts für neue "
+"Nachrichten sein. Zum Beispiel, wenn die Abfrage neuer Nachrichten 2 "
+"Sekunden beträgt. Peile einen Einladungswert von 4 Sekunden und Metawert von "
+"6 Sekunden an."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1431
+msgid "Abfrage-Intervall für neue Nachrichten"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1437
+msgid ""
+"<strong>Empfohlen 1 oder 2 Sekunden</strong>. Nachrichtenlisten sind "
+"Hauptelemente des Chats und sollten so oft wie möglich aktualisiert werden. "
+"Sekundenbruchteile sind z.B: 1.02, 0.5, 5.35."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1443
+msgid "Abfrage-Intervall für neue Einladungen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1449
+msgid ""
+"<strong>Empfohlen 3 Sekunden</strong>. Chat-Einladungen sind Einladungen "
+"anderer Benutzer, an privaten Chats teilzunehmen. Sekundenbruchteile sind z."
+"B: 1.02, 0.5, 5.35"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1456
+msgid "Abfrage-Intervall für Meta-Daten"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1462
+msgid ""
+"<strong>Empfohlen 5 Sekunden</strong>. Metalisten sind sekundäre Elemente "
+"des Chats, einschließlich der aktiven Benutzerlisten für alle offenen Chats, "
+"Chatstatus und blockierten Benutzer. Sekundenbruchteile sind z.B: 1.02, 0.5, "
+"5.35"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1483
+msgid "Abfrageinhalt von Chat-Sitzungen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1484
+msgid ""
+"Standardmäßig rufen die Chat-Sitzungen eine spezielle AJAX-Datei ab, die "
+"sich im Plugin-Verzeichnis befindet (psource-chat-ajax.php). Manchmal ist "
+"dies aus Sicherheitsgründen auf dem Server nicht zulässig. In diesen Fällen "
+"setze den Abfragetyp auf System-Ajax."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1486
+msgid ""
+"<strong>Das System AJAX ist viel langsamer und verwendet mehr "
+"Serverressourcen als das Plugin AJAX.</strong>"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1490
+msgid ""
+"Das Chat-Plugin-Verzeichnis muss während der Aktivierung beschreibbar sein, "
+"um die schnellere Option 'Plugin AJAX' verwenden zu können."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1496
+msgid "Wählen für die Abfrage verwendete AJAX-Variante (PS-Chat AJAX empfohlen)"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1501
+msgid "System AJAX"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1503
+msgid "PS-Chat AJAX"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1533
+msgid "Chat Performance/Debug Information"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1534
+msgid ""
+"Wird diese Option aktiviert, wird ein statischer Fußzeilenabschnitt "
+"angezeigt, in dem Metriken für die AJAX-Abfrage angezeigt werden. Zu den "
+"Metriken gehören die Anzahl der Abfragen, der verwendete Speicher und die "
+"Ausführungszeit."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1538
+msgid "Aktiviere Performace/Debug Anzeige"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1577
+msgid "App ID"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1581
+msgid "App Geheimnis"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1586
+msgid "Lade Facebook JavaScript ( all.js ) Bibliothek?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1594
+msgid "Wähle NEIN, wenn Du bereits andere Facebook-Plugins ausführst."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1600
+#, php-format
+msgid ""
+"Registriere diese Seite als Anwendung auf Facebook <a target=\"_blank\" "
+"href=\"%s\">App-Registrierungsseite</a>"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1601
+msgid ""
+"Wenn Du nicht angemeldet bist, kannst Du Deinen Facebook-Benutzernamen und "
+"Passwort verwenden"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1602
+msgid "Die Seiten-URL sollte sein"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1604
+msgid ""
+"Sobald Du Deine Website als Anwendung registriert hast, erhältst Du eine App-"
+"ID und ein App-Geheimnis."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1605
+msgid "Kopiere sie und füge sie in die Felder links ein"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1618
+msgid "Google"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1619
+msgid ""
+"Um eine Client-ID und ein Client-Geheimnis zu erstellen, erstelle ein Google "
+"Developers Console-Projekt, aktiviere die Google API, erstelle eine OAuth "
+"2.0-Client-ID und registriere Deine JavaScript-Ursprünge"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1623
+msgid "Client ID"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1629
+msgid "Melde Dich zuerst in Deinem Google Konto an"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1630
+#, php-format
+msgid ""
+"In der <a target=\"_blank\" href=\"%s\">Google Developers Console</a>, "
+"klicke auf <strong>Create Project</strong>, und gib einen Projektnamen ein "
+"(wie \"Seitenname Chat\")."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1632
+#, php-format
+msgid ""
+"Nach der Projekterstellung wirst Du zum Projekt-Dashboard weitergeleitet. "
+"Gehe zu <a target=\"_blank\" href=\"%s\">Enable and Manage APIs</a>, "
+"aktiviere <strong>Google API</strong>."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1634
+#, php-format
+msgid ""
+"Gehe zu <a target=\"_blank\" href=\"%s\">Credentials</a> Tab zur linken, "
+"klicke auf New Credentials und wähle <strong>OAuth client ID</strong>. Du "
+"wirst aufgefordert, zuerst den Einwilligungsbildschirm zu konfigurieren."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1636
+msgid ""
+"In das <strong>Produkt Name</strong> Feld, gibst Du einen Namen für Deine "
+"Anwendung ein (z. B. \"Wordpress Chat\"). Alle anderen Felder sind optional. "
+"Klicke auf <strong>Speichern</strong>."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1637
+msgid "Gehe im Abschnitt Client-ID-Einstellungen wie folgt vor:\t"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1639
+msgid "Wähle <em>Webanwendung</em> als <strong>Anwendungstyp</strong> aus."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1640
+msgid ""
+"Gib einen Namen für die Anmeldeinformationen an und unterscheide ihn vom "
+"Projektnamen."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1641
+msgid ""
+"Gib die vollständige Domain Deiner Seite in die <strong>autorisierten "
+"JavaScript-Ursprünge</strong> und <strong>autorisierte Weiterleitungs-URIs</"
+"strong> ein."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1643
+msgid "Klicke abschließend auf die Schaltfläche <strong>Erstellen</strong>."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1648
+msgid ""
+"Auf der nächsten Seite findest Du den Abschnitt <strong>Client-ID für "
+"Webanwendungen</strong>."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1650
+msgid ""
+"Vergewissere Dich, dass die <em>JavaScript-Ursprünge</em> mit der URL Deiner "
+"Website übereinstimmen."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1651
+msgid "Kopiere den Wert <strong>Client ID</strong> in das Feld links."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1668
+msgid "Filterung verbotener Wörter"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1669
+msgid ""
+"Steuert den Filter für gesperrte Wörter, der für ALLE Chat-Sitzungen "
+"verwendet wird. Nach der Aktivierung kannst Du einzelne Chat-Sitzungen über "
+"die Registerkarte Erweitert steuern."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1673
+msgid "Ersetze blockierte Wörter durch"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1678
+msgid "Zum Entfernen leer lassen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1686
+msgid "Ein Wort pro Zeile. Teilwortübereinstimmungen werden eingeschlossen."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1710
+msgid "Blockierte Wörter in dieser Sitzung filtern"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1714
+#: lib/psource_chat_form_sections.php:1965
+msgid "Aktiv für diese Chat-Sitzung?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1737
+msgid "Blockierte Benutzer nach E-Mail-Adresse"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1741
+msgid "Benutzer (nur E-Mail-Adresse)"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1743
+msgid ""
+"Eine Benutzer-E-Mail pro Zeile. Muster oder Bereiche werden nicht "
+"unterstützt. Wirkt sich nur auf öffentliche Benutzer aus. Unterstützt nicht "
+"das Blockieren von Facebook- oder Twitter Nutzern."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1776
+msgid "Den Seitenrand Chat auf URLs ausblenden"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1778
+msgid ""
+"Diese Einstellung steuert, wo der Chat in der unteren Ecke auf Deiner Site "
+"angezeigt wird. Diese Einstellungen wirken sich nicht auf das Chat-Menü der "
+"WP-Symbolleiste, den Seiten-Chat, private Chats oder Widget-Chats aus."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1783
+#: lib/psource_chat_form_sections.php:1850
+msgid "Blockiere URLs mit Shortcode"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1797
+msgid ""
+"Darüber hinaus kannst Du den Seitenrand-Chat für bestimmte URLs mithilfe der "
+"folgenden Optionen ausschließen/einschließen. Die URLs können Front- oder "
+"Dashboard-URLs sein."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1803
+#: lib/psource_chat_form_sections.php:1870
+#: lib/psource_chat_form_sections.php:2450
+#: lib/psource_chat_form_sections.php:2516
+msgid "Aktion auswählen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1807
+#: lib/psource_chat_form_sections.php:1874
+msgid "NUR auf URLs anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1808
+msgid "Blende auf URLs aus"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1815
+#: lib/psource_chat_form_sections.php:1882
+msgid "URLs"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1817
+#: lib/psource_chat_form_sections.php:1884
+#: lib/psource_chat_form_sections.php:2464
+#: lib/psource_chat_form_sections.php:2532
+msgid ""
+"Eine URL pro Zeile. <br /> URL kann relativ oder absolut sein und Parameter "
+"enthalten"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1843
+msgid "Widget-Chat auf URLs ausblenden"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1845
+msgid ""
+"Diese Einstellung steuert, wo Widget-Chats auf Deiner Site angezeigt werden. "
+"Diese Einstellungen wirken sich nicht auf das Chat-Menü der WP-Symbolleiste, "
+"den Seiten-Chat, die privaten Chats oder den Chat in der unteren Ecke aus."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1864
+msgid ""
+"Darüber hinaus kannst Du Widget-Chats für bestimmte URLs mithilfe der "
+"folgenden Optionen ausschließen/einschließen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1875
+msgid "Auf URLs ausblenden"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1902
+#: lib/psource_chat_form_sections.php:1934
+#: lib/psource_chat_form_sections.php:1961
+msgid "Blockierte IP Addressen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1906
+msgid "Aktiv für ALLE Chat-Sitzungen?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1920
+msgid "Dem Benutzer angezeigte Nachricht"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1923
+msgid ""
+"Wenn der Benutzer gesperrt ist, wird diese Nachricht anstelle aller anderen "
+"Chat-Nachrichten und Informationen angezeigt"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1937
+msgid ""
+"Eine IP-Adresse pro Zeile. Muster oder Bereiche werden nicht unterstützt"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1989
+#: lib/psource_chat_form_sections.php:2891
+msgid "Seitenkanten Chat"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1991
+msgid ""
+"Der Seitenkanten Chat ist ein Gruppenchat, der auf allen Seiten der Website "
+"angezeigt wird. Mit den folgenden Einstellungen kannst Du die Anzeige und "
+"Funktionalität fein einstellen."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:1998
+msgid ""
+"Der Seitenkanten Chat wurde vom Super Admin netzwerkaktiviert. Dies "
+"bedeutet, dass die Sichtbarkeit des Seitenkanten Chats Deiner lokalen Seite "
+"ausgeschlossen ist."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2005
+msgid ""
+"Der Dashboard-Chat in der unteren Ecke wurde vom Superadministrator für das "
+"Netzwerk aktiviert. Dies bedeutet, dass die Dashboard-Chat-Sichtbarkeit "
+"Deiner lokalen Seite ausgeschlossen wird."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2013
+msgid "Zeige Seitenkanten Chat im Frontend?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2027
+msgid "Seitenkanten Chat im Dashboard anzeigen?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2052
+msgid "Seitenkantenchat Initialansicht"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2058
+msgid "Maximiert"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2061
+msgid "Minimiert"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2068
+msgid "Wenn Minimiert benachrichtige für neue Nachrichten?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2087
+msgid "Privater Chat"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2089
+msgid ""
+"Die privaten Chats funktionieren ähnlich wie die Chat-Sitzung in der unteren "
+"Ecke. Ein privater Chat ist eine Eins-zu-Eins-Chat-Sitzung zwischen zwei "
+"Benutzern. Mit den folgenden Einstellungen können Sie die Optionen für "
+"Private und deren Auswirkungen auf Benutzer steuern."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2093
+msgid "Privates Chat-Popup nach dem Vorhandensein wieder öffnen lassen?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2118
+msgid "WYSIWYG Chat-Schaltfläche Benutzerrollen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2120
+msgid ""
+"Wähle mit der Schaltfläche Rollen aus welche die Chat WYSIWYG Schaltfläche, "
+"verwenden dürfen. Beachte, dass der Benutzer auch über "
+"Bearbeitungsfunktionen für den Beitragstyp verfügen muss."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2144
+msgid "WYSIWYG Chat Button Beitragstypen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2145
+msgid ""
+"Wähle aus, für welche Beitragstypen die Schaltfläche Chat WYSIWYG verfügbar "
+"sein soll."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2176
+msgid "Liste der Chat-Benutzer anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2177
+msgid ""
+"Mit dieser Option kannst Du eine Liste der Benutzer anzeigen, die an der "
+"Chat-Sitzung teilnehmen. Du kannst die Benutzerliste auf beiden Seiten des "
+"Chat-Fensters positionieren. Du kannst auch den Benutzer-Avatar oder -Namen "
+"anzeigen."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2179
+msgid ""
+"Für Positionen von links nach rechts funktioniert die Avatar-Option am "
+"besten. Für Positionen über oder unter funktioniert das Namensformat am "
+"besten."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2184
+msgid "Position der Benutzerliste anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2189
+msgid "Benutzerliste nicht anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2191
+msgid "Rechts von der Nachrichtenliste"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2193
+msgid "Links von der Nachrichtenliste"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2195
+msgid "Oben in der Nachrichtenliste"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2197
+msgid "Unterhalb der Nachrichtenliste"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2204
+msgid "Moderatoren und Benutzer anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2209
+msgid "Teilen - Moderator und Benutzer als separate Listen anzeigen. "
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2211
+msgid "Kombiniert - Zeigt zuerst Moderatoren und dann Benutzer an."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2218
+msgid "Listenbreite/-höhe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2240
+msgid "Inaktiven Benutzer entfernen nach (Sekunden)"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2252
+msgid "Kopfzeile über Listen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2263
+msgid "Kopfzeile-Schriftart"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2278
+msgid "Schriftgröße der Kopfzeile"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2292
+msgid "Kopfzeilentextfarbe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2306
+msgid "Benutzerliste anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2311
+msgid "Avatare"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2313
+msgid "Namen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2335
+msgid "Benutzer-Avatar-Rahmenbreite"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2348
+msgid "Moderator-Avatar-Rahmenfarbe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2360
+msgid "Benutzer-Avatar-Rahmenfarbe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2400
+msgid "Schriftart"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2445
+msgid "Chat auf WP Admin-URLs ausblenden"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2446
+msgid ""
+"Dieser Abschnitt steuert, wie der Chat im WordPress-Administrationsbereich "
+"funktioniert. Dies sind globale Einstellungen, die sich auf alle Benutzer "
+"auswirken"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2454
+msgid "NUR auf Admin-URLs anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2455
+msgid "Auf Admin-URLs ausblenden"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2462
+msgid "WP Admin URLs"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2491
+msgid ""
+"Standardmäßig lädt PS-Chat das erforderliche JS/CSS auf alle Front-URLs. "
+"Dies dient dazu, private Chat-Einladungen sowie Interaktionen mit dem Chat-"
+"Bereich der WP-Symbolleiste zu erleichtern. Wenn deaktiviert, werden die JS/"
+"CSS-Dateien nicht geladen. Auch das Chat-Menü der WP-Symbolleiste sowie "
+"private Chats werden nicht angezeigt."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2493
+#, php-format
+msgid ""
+"Beachte dass dies NUR URLs betrifft, bei denen der Seiten-Chat (Shortcode), "
+"der Widget-Chat oder der Bottom Corner-Chat noch nicht angezeigt werden. Du "
+"kannst den Chat %s und %s im Abschnitt Einstellungen deaktivieren."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2494
+msgid "Seitenkanten-Chat"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2495
+msgid "Widget"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2498
+msgid "Chat auf WP Front-URLs ausblenden"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2502
+msgid "Lade JS/CSS auf ALLEN URLs"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2506
+msgid "Ja, alle URLs"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2507
+msgid "Nein, nur URLs, die für Shortcode, Widgets usw. benötigt werden."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2520
+msgid "NUR auf Front-URLs anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2521
+msgid "Auf Front-URLs ausblenden"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2530
+msgid "WP Front URLs"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2550
+msgid "Gruppen Information"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2551
+msgid ""
+"Steuert die Gruppenmenübezeichnung und den URL-Slug auf den BuddyPress "
+"Gruppen-Seiten."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2555
+msgid "Menü Label"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2566
+msgid "Seitenslug"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2585
+msgid "Verberge Seitenkanten Chats"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2586
+msgid ""
+"Steuert die Anzeige des Chats in der unteren Ecke auf den Seiten der "
+"BuddyPress-Gruppe. Diese Einstellung überschreibt die blockierten URLs, die "
+"auf der Registerkarte \"Einstellungssite\" festgelegt wurden."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2591
+#: lib/psource_chat_form_sections.php:2631
+msgid "Auf Gruppenseiten anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2605
+#: lib/psource_chat_form_sections.php:2645
+msgid "Auf Gruppen-Administrationsseiten anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2626
+msgid "Verberge Widget Chats"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2627
+msgid ""
+"Steuert die Anzeige des Widget-Chats auf den Seiten der BuddyPress-Gruppe. "
+"Diese Einstellung überschreibt die blockierten URLs, die auf der "
+"Registerkarte \"Widget\" festgelegt wurden."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2666
+msgid "Farben für das BuddyPress Gruppen Admin Chat-Formular"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2681
+msgid "Etikettenfarbe"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2703
+msgid "Die Standardeinstellungen für das Benutzerprofil"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2704
+msgid ""
+"Mit den folgenden Optionen kannst Du Standardeinstellungen für Benutzer auf "
+"Deiner Seite definieren. Diese Einstellungen sind nur Standardeinstellungen, "
+"wenn der Benutzer noch keine eigenen Werte über sein Profil gespeichert hat."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2709
+msgid "Benutzer-Chat-Status"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2731
+msgid "In Chat Sessions zeige Name als\t"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2747 psource-chat.php:2767
+msgid "Chats im Dashboard anzeigen\t"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2767
+msgid "Chat Adminleistenmenü anzeigen?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2785
+msgid "Chat-Statusspalte in der Liste Benutzer> Alle Benutzer anzeigen?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2799
+msgid ""
+"Der Benutzer muss über die Rollenfunktion <strong>list_users</strong> "
+"verfügen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2806 psource-chat.php:2855
+msgid "Chat-Widget im Dashboard anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2825 psource-chat.php:2913
+msgid "Chat-Status-Widget im Dashboard anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2843 psource-chat.php:2956
+msgid "Chat-Freunde-Widget im Dashboard anzeigen"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2863
+msgid "Benutzerverwaltung"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2868
+msgid "Entferne Chat-Nachrichten, wenn der Benutzer gelöscht wird"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2896
+msgid "Aktiviere den globalen Chat in der unteren Ecke?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2899
+msgid ""
+"Wenn Du den globalen Chat in der unteren Ecke aktivierst, werden "
+"Nachrichten, die von einer Seite gesendet wurden, allen Sites in Deinem "
+"Multisite-System angezeigt. Lokale Seiten-Moderatoren können weiterhin "
+"Nachrichten usw. löschen/ moderieren. Auch lokale Administratoren können "
+"weiterhin verhindern, dass der Chat in der unteren Ecke auf ihrer Seite "
+"angezeigt wird."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2918
+msgid "pc"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2919
+msgid "pt"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2920
+msgid "px"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2921
+msgid "em"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2922
+msgid "%"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2945
+msgid "Chat Widget im Dashboard"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2950
+msgid "Aktiviere das Chat-Widget im Netzwerk-Dashboard?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2952
+msgid "Aktiviere das Chat-Widget im Dashboard?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2963
+#: lib/psource_chat_form_sections.php:3010
+#: lib/psource_chat_form_sections.php:3046
+msgid ""
+"Wenn diese Option aktiviert ist, können Benutzer die Sichtbarkeit über ihr "
+"Profil steuern."
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2992
+msgid "Chat-Status-Widget im Dashboard"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2997
+msgid "Chat-Status-Widget im Netzwerk-Dashboard aktivieren?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:2999
+msgid "Chat-Status-Widget im Dashboard aktivieren?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:3027
+msgid "Chat Freunde Widget im Dashboard"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:3028
+msgid ""
+"Erfordert entweder das PS-Buddy-Plugins oder BuddyPress mit aktivierter "
+"Freunde-Option"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:3033
+msgid "Widget für Chat-Freunde im Netzwerk-Dashboard aktivieren?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:3035
+msgid "Chat-Freunde-Widget im Dashboard aktivieren?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:3081
+msgid "Benutzer hat Chat betreten/verlassen Hinweis"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:3085
+msgid "Zeige betreten/verlassen Hinweis?"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:3099
+msgid "Benachrichtigungszeit anzeigen <br /> <em>(Sekunden)</em>"
+msgstr ""
+
+#: lib/psource_chat_form_sections.php:3106
+msgid "Sekundenbruchteile sind z. 1,02, 0,5, 5,35."
+msgstr ""
+
+#: lib/psource_chat_widget.php:26
+msgid "PSC-Chat Widget, fügt der Seitenleiste einen Chat hinzu."
+msgstr ""
+
+#: lib/psource_chat_widget.php:27
+msgid "PSC-Chat Widget"
+msgstr ""
+
+#: lib/psource_chat_widget.php:73
+msgid "Title:"
+msgstr ""
+
+#: lib/psource_chat_widget.php:80
+msgid "Höhe des Widgets:"
+msgstr ""
+
+#: lib/psource_chat_widget.php:84
+#, no-php-format
+msgid "Die Breite beträgt 100% des Widget-Bereichs"
+msgstr ""
+
+#: lib/psource_chat_widget.php:88
+msgid "Aktiviere Sound"
+msgstr ""
+
+#: lib/psource_chat_widget.php:111
+msgid "Zeige Emoticons"
+msgstr ""
+
+#: lib/psource_chat_widget.php:121
+msgid "Zeige Datum"
+msgstr ""
+
+#: lib/psource_chat_widget.php:131
+msgid "Zeige Uhrzeit"
+msgstr ""
+
+#: lib/psource_chat_widget.php:139
+msgid "Mehr Kontrolle über Widgets-Optionen über"
+msgstr ""
+
+#: lib/psource_chat_widget.php:140
+msgid "Widget Einstellungen"
+msgstr ""
+
+#: lib/psource_chat_widget.php:250
+msgid ""
+"Für dieses Widget sind entweder BuddyPress Friends aktiviert oder PS Freunde "
+"Plugin."
+msgstr ""
+
+#: lib/psource_chat_widget.php:254
+msgid "Zeigt Chat-Freunde und Status an. (PS Freunde Plugin erforderlich)"
+msgstr ""
+
+#: lib/psource_chat_widget.php:255
+msgid "PSC-Chat Freunde"
+msgstr ""
+
+#: lib/psource_chat_widget.php:272 lib/psource_chat_widget.php:716
+msgid ""
+"Dieses Widget zeigt Informationen an, die für den von WordPress "
+"authentifizierten Benutzer spezifisch sind. Wenn der Benutzer nicht "
+"authentifiziert ist, gibt das Widget nichts aus."
+msgstr ""
+
+#: lib/psource_chat_widget.php:276
+msgid "widgettitel:"
+msgstr ""
+
+#: lib/psource_chat_widget.php:282
+msgid "Höhe für Widget:"
+msgstr ""
+
+#: lib/psource_chat_widget.php:286 lib/psource_chat_widget.php:505
+msgid "Das Widget scrollt bei Bedarf durch die Ausgabe."
+msgstr ""
+
+#: lib/psource_chat_widget.php:289
+msgid "Avatar/Name anzeigen"
+msgstr ""
+
+#: lib/psource_chat_widget.php:301
+msgid "Avatar Breite/Höhe:"
+msgstr ""
+
+#: lib/psource_chat_widget.php:389
+msgid "Klicken, um Chat-Sitzung zu starten"
+msgstr ""
+
+#: lib/psource_chat_widget.php:420 lib/psource_chat_widget.php:1174
+msgid "Keine Freunde online."
+msgstr ""
+
+#: lib/psource_chat_widget.php:449
+msgid "Chat-Räume"
+msgstr ""
+
+#: lib/psource_chat_widget.php:457
+msgid "Seite"
+msgstr ""
+
+#: lib/psource_chat_widget.php:463
+msgid "BuddyPress Gruppe"
+msgstr ""
+
+#: lib/psource_chat_widget.php:467
+msgid ""
+"Für dieses Widget sind entweder BuddyPress Friends aktiviert oder Friends "
+"Plugins."
+msgstr ""
+
+#: lib/psource_chat_widget.php:471
+msgid "Zeigt aktive Chatsitzungen der gesamten Seite an."
+msgstr ""
+
+#: lib/psource_chat_widget.php:472
+msgid "PSC-Chat Räume"
+msgstr ""
+
+#: lib/psource_chat_widget.php:491
+msgid "Dieses Widget zeigt alle aktiven Chat-Sitzungen auf der Webseite an."
+msgstr ""
+
+#: lib/psource_chat_widget.php:495 lib/psource_chat_widget.php:721
+msgid "Widgettitel:"
+msgstr ""
+
+#: lib/psource_chat_widget.php:501
+msgid "Height for widget:"
+msgstr ""
+
+#: lib/psource_chat_widget.php:509
+msgid "Anzahl aktiver Benutzer anzeigen"
+msgstr ""
+
+#: lib/psource_chat_widget.php:519
+msgid "Sitzungstypen einschließen - mindestens einen auswählen"
+msgstr ""
+
+#: lib/psource_chat_widget.php:549
+msgid "Link-Titel aus der Chat-Sitzung oder der Seite/Gruppe anzeigen"
+msgstr ""
+
+#: lib/psource_chat_widget.php:552
+msgid "Seite/Gruppe"
+msgstr ""
+
+#: lib/psource_chat_widget.php:554
+msgid "Chat-Sitzung"
+msgstr ""
+
+#: lib/psource_chat_widget.php:701
+msgid ""
+"Mit diesem Widget können Benutzer ihren Chat-Status über ein Seitenleisten-"
+"Widget festlegen."
+msgstr ""
+
+#: lib/psource_chat_widget.php:702
+msgid "PSC-Chat Status"
+msgstr ""
+
+#: lib/psource_chat_widget.php:919
+msgid "Aktiviert - Chat-Nachricht archivieren"
+msgstr ""
+
+#: lib/psource_chat_widget.php:1072 lib/psource_chat_widget.php:1097
+msgid "Chat Freunde"
+msgstr ""
+
+#: lib/psource_chat_wpadminbar.php:119 psource-chat.php:1003
+#: psource-chat.php:3086
+msgid "Chat Status"
+msgstr ""
+
+#: lib/psource_chat_wpadminbar.php:129
+msgid "Wechsle Chat Status auf"
+msgstr ""
+
+#: lib/psource_chat_wpadminbar.php:202 lib/psource_chat_wpadminbar.php:240
+msgid "Freunde Online"
+msgstr ""
+
+#: lib/psource_chat_wpadminbar.php:231 lib/psource_chat_wpadminbar.php:246
+msgid "Keine"
+msgstr ""
+
+#: lib/psource_chat_wpadminbar.php:346
+msgid "Einladungen"
+msgstr ""
+
+#: lib/psource_chat_wpadminbar.php:355
+msgid "Von"
+msgstr ""
+
+#: lib/psource_chat_wpadminbar.php:372
+msgid "To"
+msgstr ""
+
+#: psource-chat.php:845
+msgid "Der Moderator hat diese Chat-Sitzung geschlossen"
+msgstr ""
+
+#: psource-chat.php:846
+msgid "Der Moderator hat die Chat-Nachrichten gelöscht"
+msgstr ""
+
+#: psource-chat.php:900
+msgid "Chat Verlauf"
+msgstr ""
+
+#: psource-chat.php:920
+msgid "Aktive Teilnehmer"
+msgstr ""
+
+#: psource-chat.php:930
+msgid "Gib einfach Deine E-Mail-Adresse und den gewünschten Benutzernamen ein:"
+msgstr ""
+
+#: psource-chat.php:931
+msgid "Du musst Dich anmelden, um am Chat teilnehmen zu können"
+msgstr ""
+
+#: psource-chat.php:933
+msgid "Warte auf Moderator"
+msgstr ""
+
+#: psource-chat.php:1006
+msgid "Chat Friends"
+msgstr ""
+
+#: psource-chat.php:1035
+msgid "Online"
+msgstr ""
+
+#: psource-chat.php:1036
+msgid "Abwesend"
+msgstr ""
+
+#: psource-chat.php:1037
+msgid "Offline"
+msgstr ""
+
+#: psource-chat.php:1062
+msgid ""
+"Dein Konto wurde von der Teilnahme an dieser Chat-Sitzung ausgeschlossen. "
+"Bitte wende Dich an den Site-Administrator, um weitere Informationen zu "
+"diesem Verbot zu erhalten."
+msgstr ""
+
+#: psource-chat.php:1063
+msgid "Gruppen Chat"
+msgstr ""
+
+#: psource-chat.php:1169
+msgid "Google abmelden"
+msgstr ""
+
+#: psource-chat.php:1170
+msgid "Facebook abmelden"
+msgstr ""
+
+#: psource-chat.php:1171
+msgid "Twitter abmelden"
+msgstr ""
+
+#: psource-chat.php:1173
+msgid "Bitte warte..."
+msgstr ""
+
+#: psource-chat.php:1177
+msgid "Chat betreten"
+msgstr ""
+
+#: psource-chat.php:1178 psource-chat.php:4669
+msgid "Chat verlassen"
+msgstr ""
+
+#: psource-chat.php:1179
+msgid "Ausstehend"
+msgstr ""
+
+#: psource-chat.php:1180
+msgid "Abgelehnt"
+msgstr ""
+
+#: psource-chat.php:1855
+#, php-format
+msgid ""
+"Du hast das PS-Chat Plugin installiert. <strong>Bitte überprüfe die <a "
+"href=\"%s\">Abfrageintervall</a> Einstellungen bevor Du den Chat benutzt</"
+"strong>. In den meisten Fällen funktionieren die Standardoptionen für Deine "
+"Hostkonfiguration. In einigen Einzelfällen ist das Abfrageintervall jedoch "
+"zu häufig und kann dazu führen, dass Dein Hosting Dein Konto schließt. "
+"Nachdem Du die Chat-Einstellungen überprüft und gespeichert hast, wird diese "
+"Meldung nicht mehr angezeigt."
+msgstr ""
+
+#: psource-chat.php:1860
+#, php-format
+msgid ""
+"Das PS-Chat Plugin wurde auf Deiner Webseite aktualisiert. <strong>Bitte "
+"überprüfe vor der Verwendung die Einstellungen für das <a "
+"href=\"%s\">Abfrageintervall</a></strong>. In den meisten Fällen "
+"funktionieren die Standardoptionen für Deine Hostkonfiguration. In einigen "
+"Einzelfällen ist das Abfrageintervall jedoch zu häufig und kann dazu führen, "
+"dass Dein Hosting Dein Konto schließt. Nachdem Du die Chat-Einstellungen "
+"überprüft und gespeichert hast, wird diese Meldung nicht mehr angezeigt."
+msgstr ""
+
+#: psource-chat.php:1917 psource-chat.php:4703
+msgid "Autoscroll aus"
+msgstr ""
+
+#: psource-chat.php:1918
+msgid "Autoscroll an"
+msgstr ""
+
+#: psource-chat.php:1957
+msgctxt "page label"
+msgid "Chat"
+msgstr ""
+
+#: psource-chat.php:1958
+msgctxt "menu label"
+msgid "Chat"
+msgstr ""
+
+#: psource-chat.php:1967 psource-chat.php:2051
+msgctxt "page label"
+msgid "Frontendchat"
+msgstr ""
+
+#: psource-chat.php:1968 psource-chat.php:2052
+msgctxt "menu label"
+msgid "Frontendchat"
+msgstr ""
+
+#: psource-chat.php:1974 psource-chat.php:2068
+msgctxt "page label"
+msgid "Dashboardchat"
+msgstr ""
+
+#: psource-chat.php:1975 psource-chat.php:2069
+msgctxt "menu label"
+msgid "Dashboardchat"
+msgstr ""
+
+#: psource-chat.php:1982 psource-chat.php:2076
+msgctxt "page label"
+msgid "Einstellungen"
+msgstr ""
+
+#: psource-chat.php:1983 psource-chat.php:2077
+msgctxt "menu label"
+msgid "Einstellungen"
+msgstr ""
+
+#: psource-chat.php:1990 psource-chat.php:2084
+msgctxt "page label"
+msgid "Session Logs"
+msgstr ""
+
+#: psource-chat.php:1991 psource-chat.php:2085
+msgctxt "menu label"
+msgid "Session Logs"
+msgstr ""
+
+#: psource-chat.php:2031
+msgctxt "page label"
+msgid "PS-Chat"
+msgstr ""
+
+#: psource-chat.php:2032
+msgctxt "menu label"
+msgid "PS-Chat"
+msgstr ""
+
+#: psource-chat.php:2041
+msgctxt "page label"
+msgid "Beitragschat"
+msgstr ""
+
+#: psource-chat.php:2042
+msgctxt "menu label"
+msgid "Beitragschat"
+msgstr ""
+
+#: psource-chat.php:2060
+msgctxt "page label"
+msgid "Widgetchat"
+msgstr ""
+
+#: psource-chat.php:2061
+msgctxt "menu label"
+msgid "Widgetchat"
+msgstr ""
+
+#: psource-chat.php:2117
+msgid "Die Einstellungen wurden aktualisiert."
+msgstr ""
+
+#: psource-chat.php:2119
+msgid "Das Chat-Sitzungsprotokoll wurde gelöscht."
+msgstr ""
+
+#: psource-chat.php:2120
+msgid "Chat-Sitzungsprotokolle wurden gelöscht."
+msgstr ""
+
+#: psource-chat.php:2121
+msgid "Das Chat-Sitzungsprotokoll wurde ausgeblendet."
+msgstr ""
+
+#: psource-chat.php:2122
+msgid "Chat-Sitzungsprotokolle wurden ausgeblendet."
+msgstr ""
+
+#: psource-chat.php:2123
+msgid "Das Chat-Sitzungsprotokoll wurde nicht ausgeblendet."
+msgstr ""
+
+#: psource-chat.php:2124
+msgid "Chat-Sitzungsprotokolle wurden nicht ausgeblendet."
+msgstr ""
+
+#: psource-chat.php:2126
+msgid "Chat Session Log Message wurde gelöscht."
+msgstr ""
+
+#: psource-chat.php:2127
+msgid "Chat-Sitzungsprotokollnachrichten wurden gelöscht."
+msgstr ""
+
+#: psource-chat.php:2128
+msgid "Die Chat-Sitzungsprotokollnachricht wurde ausgeblendet."
+msgstr ""
+
+#: psource-chat.php:2129
+msgid "Chat-Sitzungsprotokollnachrichten wurden ausgeblendet."
+msgstr ""
+
+#: psource-chat.php:2130
+msgid "Die Chat-Sitzungsprotokollnachricht wurde nicht ausgeblendet."
+msgstr ""
+
+#: psource-chat.php:2131
+msgid "Chat-Sitzungsprotokollnachrichten wurden nicht ausgeblendet."
+msgstr ""
+
+#: psource-chat.php:2257 psource-chat.php:2393
+msgid "per Page"
+msgstr ""
+
+#: psource-chat.php:2693
+msgid "Chat Settings"
+msgstr ""
+
+#: psource-chat.php:2699
+msgid "Set Chat status"
+msgstr ""
+
+#: psource-chat.php:2726
+msgid "In Chat-Sitzungen wird der Name angezeigt als"
+msgstr ""
+
+#: psource-chat.php:2736
+msgid "Benutzer-Anmeldung"
+msgstr ""
+
+#: psource-chat.php:2746
+msgid ""
+"Spalte \"Chat-Status anzeigen\" in der Liste <br />\"Benutzer > Alle "
+"Benutzer\"?"
+msgstr ""
+
+#: psource-chat.php:2781
+msgid ""
+"Dadurch werden alle Chat-Funktionen deaktiviert, einschließlich des "
+"WordPress-Symbolleistenmenüs, der Dashboard-Widgets usw."
+msgstr ""
+
+#: psource-chat.php:2820
+msgid "Zeige Deinen Chat-Status im WordPress-Symbolleistenmenü an?"
+msgstr ""
+
+#: psource-chat.php:2836
+msgid "Zeige Deine Chat-Freunde im WordPress-Symbolleistenmenü?"
+msgstr ""
+
+#: psource-chat.php:2890
+msgid "Höhe des Chat-Widgets"
+msgstr ""
+
+#: psource-chat.php:2893 psource-chat.php:2995
+msgid "Standard ist"
+msgstr ""
+
+#: psource-chat.php:2992
+msgid "Min. Höhe des Chat-Freunde-Widgets"
+msgstr ""
+
+#: psource-chat.php:3185
+msgid "Netzwerk"
+msgstr ""
+
+#: psource-chat.php:3659 psource-chat.php:4609
+msgid "Geschlossen"
+msgstr ""
+
+#: psource-chat.php:3690
+msgid "Für diese Sitzung wurden keine Chat-Protokolle gefunden"
+msgstr ""
+
+#: psource-chat.php:3716
+msgid "Zurück zum Chat"
+msgstr ""
+
+#: psource-chat.php:4102 psource-chat.php:4665
+msgid "Abmelden"
+msgstr ""
+
+#: psource-chat.php:4134
+msgid "Tippe Deine Chatnachricht hier"
+msgstr ""
+
+#: psource-chat.php:4154
+msgid "Schalte Chat-Sound aus"
+msgstr ""
+
+#: psource-chat.php:4157
+msgid "Schalte Chat-Sound ein"
+msgstr ""
+
+#: psource-chat.php:4217
+msgid "Melde Dich an mit:"
+msgstr ""
+
+#: psource-chat.php:4272
+msgid "möchte Gespräch beginnen"
+msgstr ""
+
+#: psource-chat.php:4273
+msgid "Annehmen"
+msgstr ""
+
+#: psource-chat.php:4273
+msgid "Ablehnen"
+msgstr ""
+
+#: psource-chat.php:4275
+msgid "Du wurdest zu einem privaten Chat eingeladen"
+msgstr ""
+
+#: psource-chat.php:4568
+msgid "Minimiere Chat"
+msgstr ""
+
+#: psource-chat.php:4569
+msgid "Maximiere Chat"
+msgstr ""
+
+#: psource-chat.php:4584
+msgid "Eigenes Fenster"
+msgstr ""
+
+#: psource-chat.php:4588
+msgid "Original-Chat"
+msgstr ""
+
+#: psource-chat.php:4615
+msgid "Privatchat"
+msgstr ""
+
+#: psource-chat.php:4617
+msgid "Gruppenchat"
+msgstr ""
+
+#: psource-chat.php:4619
+msgid "Netzwerkgruppen-Chat"
+msgstr ""
+
+#: psource-chat.php:4663
+msgid "Anmelden"
+msgstr ""
+
+#: psource-chat.php:4673
+msgid "Chat-Sound ausschalten"
+msgstr ""
+
+#: psource-chat.php:4674
+msgid "Sound Aus"
+msgstr ""
+
+#: psource-chat.php:4675
+msgid "Chat-Sound einschalten"
+msgstr ""
+
+#: psource-chat.php:4676
+msgid "Sound An"
+msgstr ""
+
+#: psource-chat.php:4686
+msgid "Chat öffnen"
+msgstr ""
+
+#: psource-chat.php:4687
+msgid "Chat schliessen"
+msgstr ""
+
+#: psource-chat.php:4692
+msgid "Chat löschen"
+msgstr ""
+
+#: psource-chat.php:4698
+msgid "Archiviere Chat"
+msgstr ""
+
+#: psource-chat.php:4859
+msgid "Zu privaten Chat einladen:"
+msgstr ""
+
+#: psource-chat.php:4861
+msgid "moderiere diese Nachricht"
+msgstr ""
+
+#: psource-chat.php:4868
+msgid "moderiere IP-Adresse:"
+msgstr ""
+
+#: psource-chat.php:4934
+msgid "Name eingeben"
+msgstr ""
+
+#: psource-chat.php:4935
+msgid "Email"
+msgstr ""
+
+#: psource-chat.php:4935
+msgid "Email eingeben"
+msgstr ""
+
+#: psource-chat.php:4937
+msgid "Login"
+msgstr ""
+
+#: psource-chat.php:5290
+msgid "missing POST user_info"
+msgstr ""
+
+#: psource-chat.php:5301 psource-chat.php:5311
+msgid "Bitte gültigen Namen und eine gültige E-Mail-Adresse angeben."
+msgstr ""
+
+#: psource-chat.php:5321
+msgid "Name bereits vergeben"
+msgstr ""
+
+#: psource-chat.php:5330
+msgid "Email bereits registriert."
+msgstr ""
+
+#: psource-chat.php:5432
+msgid "Der Benutzer hat die Einladung zum privaten Chat abgelehnt."
+msgstr ""
+
+#: psource-chat.php:5514
+msgid "Invalid auth_hash"
+msgstr ""
+
+#: psource-chat.php:5539 psource-chat.php:5545 psource-chat.php:5553
+#: psource-chat.php:5588 psource-chat.php:5595 psource-chat.php:5603
+#: psource-chat.php:5665 psource-chat.php:5671 psource-chat.php:5680
+msgid "Invalid chat_auth [type]"
+msgstr ""
+
+#: psource-chat.php:5572
+msgid "Not moderator"
+msgstr ""
+
+#: psource-chat.php:5630
+msgid "Invalid chat_session"
+msgstr ""
+
+#: psource-chat.php:5639
+msgid "Invalid chat_id"
+msgstr ""
+
+#: psource-chat.php:5647 psource-chat.php:5656
+msgid "Invalid chat_session_status"
+msgstr ""
+
+#: psource-chat.php:5689
+msgid "not moderator"
+msgstr ""
+
+#: psource-chat.php:6334
+msgid "(P)"
+msgstr ""
+
+#: psource/psource-plugin-update/Puc/v5p0/Plugin/Ui.php:56
+msgid "View details"
+msgstr ""
+
+#: psource/psource-plugin-update/Puc/v5p0/Plugin/Ui.php:79
+#, php-format
+msgid "Weitere Informationen zu %s"
+msgstr ""
+
+#: psource/psource-plugin-update/Puc/v5p0/Plugin/Ui.php:130
+msgid "Auf neuere Version prüfen"
+msgstr ""
+
+#: psource/psource-plugin-update/Puc/v5p0/Plugin/Ui.php:217
+#, php-format
+msgctxt "the plugin title"
+msgid "Keine neuere Version von %s im PSOURCE REPO gefunden."
+msgstr ""
+
+#: psource/psource-plugin-update/Puc/v5p0/Plugin/Ui.php:219
+#, php-format
+msgctxt "the plugin title"
+msgid "Im PSOURCE REPO ist eine <b>neuere Version von %s</b> verfügbar!."
+msgstr ""
+
+#: psource/psource-plugin-update/Puc/v5p0/Plugin/Ui.php:221
+#, php-format
+msgctxt "the plugin title"
+msgid ""
+"Entschuldige, es konnte nicht festgestellt werden, ob Updates für %s "
+"verfügbar sind."
+msgstr ""
+
+#: psource/psource-plugin-update/Puc/v5p0/Plugin/Ui.php:227
+#, php-format
+msgid "Unbekannter PSOURCE-UPDATTER-Status \"%s\""
+msgstr ""
+
+#: psource/psource-plugin-update/Puc/v5p0/Vcs/PluginUpdateChecker.php:98
+msgid "There is no changelog available."
+msgstr ""
+
+#: templates/psource-chat-pop-twitter-auth.php:38
+msgid "ERROR:"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "PS Chat"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://n3rds.work/piestingtal_source/ps-chat-wordpress-livechatsystem/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Bietet Dir einen voll ausgestatteten Chat-Bereich entweder in einem Beitrag, "
+"einer Seite, einem Widget oder in der unteren Ecke Ihrer Website. "
+"Unterstützt BuddyPress Group-Chats und private Chats zwischen angemeldeten "
+"Benutzern. KEINE EXTERNEN SERVER/DIENSTE!"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Webmasterservice N3rds@Work"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://n3rds.work"
+msgstr ""
