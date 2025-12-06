@@ -3200,20 +3200,15 @@ jQuery(document).ready(function () {
         jQuery(document).off('click.emoji', '.psource-chat-emoticons-menu').on('click.emoji', '.psource-chat-emoticons-menu', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            
-            console.log('Emoji button clicked'); // DEBUG
 
             // Find the parent chat box container
             var chatBox = jQuery(this).closest('.psource-chat-box');
-            console.log('Chat box found:', chatBox.length); // DEBUG
             
             var picker = chatBox.find('.psource-chat-emoji-picker');
-            console.log('Picker in chat box:', picker.length); // DEBUG
             
             // If not found in chat box, search globally
             if (!picker.length) {
                 picker = jQuery('.psource-chat-emoji-picker').first();
-                console.log('Picker (global search):', picker.length); // DEBUG
             }
             
             // Close all other emoji pickers
@@ -3221,7 +3216,6 @@ jQuery(document).ready(function () {
             
             // Toggle current picker
             picker.toggleClass('active');
-            console.log('Picker now active:', picker.hasClass('active')); // DEBUG
             
             // Position picker to stay within chat box bounds after toggling
             if (picker.hasClass('active')) {
@@ -3237,7 +3231,6 @@ jQuery(document).ready(function () {
                     'width': chatBoxWidth + 'px',
                     'height': chatBoxHeight + 'px'
                 });
-                console.log('Picker positioned:', {top: chatBoxOffset.top, left: chatBoxOffset.left, width: chatBoxWidth, height: chatBoxHeight}); // DEBUG
             } else {
                 picker.css({'position': 'fixed', 'top': 'auto', 'left': 'auto', 'width': 'auto', 'height': 'auto'});
             }
@@ -3247,7 +3240,6 @@ jQuery(document).ready(function () {
                 var searchInput = picker.find('.psource-chat-emoji-search');
                 if (searchInput.length) {
                     searchInput.focus();
-                    console.log('Search input focused'); // DEBUG
                 }
             }
         });
