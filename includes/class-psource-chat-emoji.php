@@ -245,11 +245,15 @@ class PSource_Chat_Emoji {
      * @return string
      */
     public function generate_emoji_picker( $chat_session = array() ) {
-        if ( empty( $chat_session ) || $chat_session['box_emoticons'] !== 'enabled' ) {
-            return '';
-        }
-        
-        $content = '';
+        return $this->generate_emoji_button();
+    }
+    
+    /**
+     * Generate only the emoji button (for use in the menu list)
+     * 
+     * @return string
+     */
+    public function generate_emoji_button() {
         $categories = $this->get_categories();
         
         if ( empty( $categories ) ) {
@@ -260,20 +264,46 @@ class PSource_Chat_Emoji {
         $first_category = reset( $categories );
         $first_emoji = isset( $first_category['emojis'][0] ) ? $first_category['emojis'][0] : '😀';
         
-        $content .= '<li class="psource-chat-send-input-emoticons">';
+        // Only the button inside the list
+        $content = '<li class="psource-chat-send-input-emoticons">';
         $content .= '<a class="psource-chat-emoticons-menu" href="#" title="' . __( 'Emoji auswählen', 'psource-chat' ) . '">';
         $content .= '<span class="psource-chat-emoji-trigger">' . $first_emoji . '</span>';
         $content .= '</a>';
+        $content .= '</li>';
         
-        // Modern emoji picker container
+        return $content;
+    }
+    
+    /**
+     * Generate emoji picker modal HTML
+     * 
+     * @return string
+     */
+    public function generate_emoji_picker_modal() {
+        $categories = $this->get_categories();
+        
+        if ( empty( $categories ) ) {
+            return '';
+        }
+        
+        $content = '';
+        
+        // Modern emoji picker container - positioned absolutely over chatbox
         $content .= '<div class="psource-chat-emoji-picker">';
+        $content .= '<div>'; // Inner container for flexbox centering
+        
+        // Suchfeld und Schließen-Button
+        $content .= '<div class="psource-chat-emoji-header">';
+        $content .= '<input type="text" class="psource-chat-emoji-search" placeholder="' . __( 'Emoji suchen...', 'psource-chat' ) . '" autocomplete="off" />';
+        $content .= '<button class="psource-chat-emoji-close" type="button" title="' . __( 'Schließen', 'psource-chat' ) . '">×</button>';
+        $content .= '</div>';
         
         // Category tabs
         $content .= '<div class="psource-chat-emoji-categories">';
         $is_first = true;
         foreach ( $categories as $key => $category ) {
             $active_class = $is_first ? ' active' : '';
-            $content .= '<button class="psource-chat-emoji-category-tab' . $active_class . '" data-category="' . esc_attr( $key ) . '" title="' . esc_attr( $category['label'] ) . '">';
+            $content .= '<button type="button" class="psource-chat-emoji-category-tab' . $active_class . '" data-category="' . esc_attr( $key ) . '" title="' . esc_attr( $category['label'] ) . '">';
             $content .= '<span class="psource-chat-emoji-category-icon">' . $category['icon'] . '</span>';
             $content .= '</button>';
             $is_first = false;
@@ -288,7 +318,7 @@ class PSource_Chat_Emoji {
             $content .= '<div class="psource-chat-emoji-grid' . $active_class . '" data-category="' . esc_attr( $key ) . '">';
             
             foreach ( $category['emojis'] as $emoji ) {
-                $content .= '<button class="psource-chat-emoji-item" data-emoji="' . esc_attr( $emoji ) . '" title="' . esc_attr( $emoji ) . '">';
+                $content .= '<button type="button" class="psource-chat-emoji-item" data-emoji="' . esc_attr( $emoji ) . '" data-label="' . esc_attr( $category['label'] ) . '" title="' . esc_attr( $emoji ) . '">';
                 $content .= $emoji;
                 $content .= '</button>';
             }
@@ -296,10 +326,10 @@ class PSource_Chat_Emoji {
             $content .= '</div>';
             $is_first = false;
         }
-        $content .= '</div>';
+        $content .= '</div>'; // .psource-chat-emoji-grid-container
         
+        $content .= '</div>'; // Inner container
         $content .= '</div>'; // .psource-chat-emoji-picker
-        $content .= '</li>';
         
         return $content;
     }
@@ -311,45 +341,114 @@ class PSource_Chat_Emoji {
      */
     public function get_emoji_picker_styles() {
         return "
-        /* Modern Emoji Picker Styles */
+        /* Modern Emoji Picker Styles - Modal Overlay */
         .psource-chat-emoji-picker {
-            position: absolute;
-            bottom: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
             right: 0;
-            width: 280px;
-            max-height: 320px;
-            background: #ffffff;
-            border: 1px solid #e1e1e1;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
             display: none;
-            z-index: 1000;
+            z-index: 10000;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            align-items: center;
+            justify-content: center;
+            padding: 0px;
+            box-sizing: border-box;
         }
         
         .psource-chat-emoji-picker.active {
-            display: block;
+            display: flex !important;
+        }
+        
+        .psource-chat-emoji-picker > div {
+            position: relative;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            max-width: none;
+            max-height: none;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-sizing: border-box;
+            margin: 10px;
+        }
+        
+        .psource-chat-emoji-header {
+            padding: 12px;
+            border-bottom: 1px solid #e1e1e1;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .psource-chat-emoji-search {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease;
+            box-sizing: border-box;
+            max-width: 80%;
+        }
+        
+        .psource-chat-emoji-search:focus {
+            border-color: #007cba;
+        }
+        
+        .psource-chat-emoji-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            color: #dc3545;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+        
+        .psource-chat-emoji-close:hover {
+            background: #ffe0e6;
+            color: #a02830;
+            transform: scale(1.1);
         }
         
         .psource-chat-emoji-categories {
             display: flex;
             border-bottom: 1px solid #e1e1e1;
             background: #f8f9fa;
-            border-radius: 8px 8px 0 0;
             padding: 4px;
             gap: 2px;
+            flex-shrink: 0;
+            overflow-x: auto;
         }
         
         .psource-chat-emoji-category-tab {
-            flex: 1;
+            flex-shrink: 0;
             background: none;
             border: none;
-            padding: 8px 4px;
+            padding: 6px 8px;
             cursor: pointer;
             border-radius: 4px;
             transition: all 0.2s ease;
             font-size: 16px;
             line-height: 1;
+            min-width: 32px;
+            text-align: center;
         }
         
         .psource-chat-emoji-category-tab:hover {
@@ -366,15 +465,16 @@ class PSource_Chat_Emoji {
         }
         
         .psource-chat-emoji-grid-container {
-            max-height: 240px;
+            flex: 1;
             overflow-y: auto;
             position: relative;
+            padding: 6px;
+            box-sizing: border-box;
         }
         
         .psource-chat-emoji-grid {
             display: none;
-            padding: 8px;
-            grid-template-columns: repeat(8, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(32px, 1fr));
             gap: 2px;
         }
         
@@ -385,16 +485,17 @@ class PSource_Chat_Emoji {
         .psource-chat-emoji-item {
             background: none;
             border: none;
-            padding: 6px;
+            padding: 2px;
             cursor: pointer;
-            border-radius: 4px;
-            font-size: 18px;
+            border-radius: 3px;
+            font-size: clamp(16px, 5vw, 22px);
             line-height: 1;
             transition: all 0.2s ease;
             aspect-ratio: 1;
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 32px;
         }
         
         .psource-chat-emoji-item:hover {
@@ -406,51 +507,31 @@ class PSource_Chat_Emoji {
             transform: scale(0.95);
         }
         
-        /* Custom scrollbar for emoji grid */
         .psource-chat-emoji-grid-container::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
         
         .psource-chat-emoji-grid-container::-webkit-scrollbar-track {
             background: #f1f1f1;
-            border-radius: 3px;
+            border-radius: 4px;
         }
         
         .psource-chat-emoji-grid-container::-webkit-scrollbar-thumb {
             background: #c1c1c1;
-            border-radius: 3px;
+            border-radius: 4px;
         }
         
         .psource-chat-emoji-grid-container::-webkit-scrollbar-thumb:hover {
             background: #a8a8a8;
         }
         
-        /* Emoji trigger button */
         .psource-chat-emoji-trigger {
             font-size: 16px;
             line-height: 1;
         }
         
-        /* Position adjustment for emoji picker */
         .psource-chat-send-input-emoticons {
             position: relative;
-        }
-        
-        /* Mobile responsive */
-        @media (max-width: 480px) {
-            .psource-chat-emoji-picker {
-                width: 260px;
-                max-height: 280px;
-            }
-            
-            .psource-chat-emoji-grid {
-                grid-template-columns: repeat(6, 1fr);
-            }
-            
-            .psource-chat-emoji-item {
-                font-size: 16px;
-                padding: 4px;
-            }
         }
         ";
     }

@@ -19,19 +19,19 @@ class PSource_Chat_Media {
 	 * Cache für Media-Metadaten
 	 * @var array
 	 */
-	private static $cache = array();
+	private static $cache = [];
 
 	/**
 	 * Unterstützte Bild-Formate
 	 * @var array
 	 */
-	private static $image_extensions = array( 'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp' );
+	private static $image_extensions = [ 'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp' ];
 
 	/**
 	 * Unterstützte Video-Formate
 	 * @var array
 	 */
-	private static $video_extensions = array( 'mp4', 'webm', 'ogg', 'avi', 'mov' );
+	private static $video_extensions = [ 'mp4', 'webm', 'ogg', 'avi', 'mov' ];
 
 	/**
 	 * Media-Handler initialisieren
@@ -53,7 +53,7 @@ class PSource_Chat_Media {
 	 * @param array $chat_session Chat-Session-Daten
 	 * @return string Verarbeitete Nachricht
 	 */
-	public static function process_message_media( $message, $chat_session ) {
+	public static function process_message_media( string $message, array $chat_session ): string {
 		// URLs in der Nachricht finden
 		$urls = self::extract_urls( $message );
 		
@@ -61,7 +61,7 @@ class PSource_Chat_Media {
 			return $message;
 		}
 
-		$media_data = array();
+		$media_data = [];
 		
 		foreach ( $urls as $url ) {
 			$media_info = self::analyze_url( $url );
@@ -85,7 +85,7 @@ class PSource_Chat_Media {
 	 * @param array $message_data Nachrichtendaten aus der DB
 	 * @return string Gerenderte Nachricht mit Media
 	 */
-	public static function render_message_media( $message, $message_data ) {
+	public static function render_message_media( string $message, array $message_data ): string {
 		// Media-Daten aus verstecktem HTML-Kommentar extrahieren
 		if ( preg_match( '/<!--PSOURCE_CHAT_MEDIA:(.*?)-->/', $message, $matches ) ) {
 			$media_data = json_decode( base64_decode( $matches[1] ), true );
@@ -107,10 +107,10 @@ class PSource_Chat_Media {
 	 * @param string $message
 	 * @return array Array von URLs
 	 */
-	private static function extract_urls( $message ) {
+	private static function extract_urls( string $message ): array {
 		$pattern = '/(https?:\/\/[^\s<>"{}|\\^`\[\]]+)/i';
 		preg_match_all( $pattern, $message, $matches );
-		return isset( $matches[1] ) ? array_unique( $matches[1] ) : array();
+		return isset( $matches[1] ) ? array_unique( $matches[1] ) : [];
 	}
 
 	/**
@@ -119,7 +119,7 @@ class PSource_Chat_Media {
 	 * @param string $url
 	 * @return array|false Media-Informationen oder false
 	 */
-	private static function analyze_url( $url ) {
+	private static function analyze_url( string $url ): array|false {
 		// Cache prüfen
 		$cache_key = md5( $url );
 		if ( isset( self::$cache[ $cache_key ] ) ) {
@@ -131,14 +131,14 @@ class PSource_Chat_Media {
 			return false;
 		}
 
-		$media_info = array(
+		$media_info = [
 			'url' => $url,
 			'type' => 'link',
 			'title' => '',
 			'description' => '',
 			'image' => '',
 			'site_name' => $parsed_url['host']
-		);
+		];
 
 		// YouTube-Video erkennen
 		if ( self::is_youtube_url( $url ) ) {
@@ -164,7 +164,7 @@ class PSource_Chat_Media {
 		else {
 			$preview_data = self::get_link_preview( $url );
 			if ( $preview_data ) {
-				$media_info = array_merge( $media_info, $preview_data );
+				$media_info = array_merge( $media_info, $preview_data ); // array_merge bleibt, da $preview_data [] ist
 			}
 		}
 
@@ -180,7 +180,7 @@ class PSource_Chat_Media {
 	 * @param string $url
 	 * @return bool
 	 */
-	private static function is_youtube_url( $url ) {
+	private static function is_youtube_url( string $url ): bool {
 		return preg_match( '/(?:youtube\.com|youtu\.be)/', $url );
 	}
 
@@ -190,12 +190,12 @@ class PSource_Chat_Media {
 	 * @param string $url
 	 * @return string|false
 	 */
-	private static function extract_youtube_id( $url ) {
-		$patterns = array(
+	private static function extract_youtube_id( string $url ): string|false {
+		$patterns = [
 			'/youtube\.com\/watch\?v=([^&\n?#]+)/',
 			'/youtube\.com\/embed\/([^&\n?#]+)/',
 			'/youtu\.be\/([^&\n?#]+)/'
-		);
+		];
 
 		foreach ( $patterns as $pattern ) {
 			if ( preg_match( $pattern, $url, $matches ) ) {
@@ -212,10 +212,10 @@ class PSource_Chat_Media {
 	 * @param string $video_id
 	 * @return string
 	 */
-	private static function get_youtube_title( $video_id ) {
+	private static function get_youtube_title( string $video_id ): string {
 		$oembed_url = "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v={$video_id}&format=json";
 		
-		$response = wp_remote_get( $oembed_url, array( 'timeout' => 5 ) );
+		$response = wp_remote_get( $oembed_url, [ 'timeout' => 5 ] );
 		
 		if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
 			$data = json_decode( wp_remote_retrieve_body( $response ), true );
@@ -231,9 +231,9 @@ class PSource_Chat_Media {
 	 * @param string $url
 	 * @return bool
 	 */
-	private static function is_image_url( $url ) {
+	private static function is_image_url( string $url ): bool {
 		$extension = strtolower( pathinfo( parse_url( $url, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
-		return in_array( $extension, self::$image_extensions );
+		return in_array( $extension, self::$image_extensions ); // keine Änderung nötig
 	}
 
 	/**
@@ -242,9 +242,9 @@ class PSource_Chat_Media {
 	 * @param string $url
 	 * @return bool
 	 */
-	private static function is_video_url( $url ) {
+	private static function is_video_url( string $url ): bool {
 		$extension = strtolower( pathinfo( parse_url( $url, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
-		return in_array( $extension, self::$video_extensions );
+		return in_array( $extension, self::$video_extensions ); // keine Änderung nötig
 	}
 
 	/**
@@ -253,7 +253,7 @@ class PSource_Chat_Media {
 	 * @param string $url
 	 * @return array|false
 	 */
-	private static function get_link_preview( $url ) {
+	private static function get_link_preview( string $url ): array|false {
 		// Transient für Caching prüfen
 		$cache_key = 'psource_chat_preview_' . md5( $url );
 		$cached = get_transient( $cache_key );
@@ -261,17 +261,17 @@ class PSource_Chat_Media {
 			return $cached;
 		}
 
-		$response = wp_remote_get( $url, array(
+		$response = wp_remote_get( $url, [
 			'timeout' => 10,
 			'user-agent' => 'Mozilla/5.0 (compatible; PSChat-LinkPreview/1.0)'
-		) );
+		] );
 
 		if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) !== 200 ) {
 			return false;
 		}
 
 		$html = wp_remote_retrieve_body( $response );
-		$preview_data = array();
+		$preview_data = [];
 
 		// Open Graph Meta-Tags parsen
 		$preview_data = array_merge( $preview_data, self::parse_open_graph( $html ) );
@@ -300,8 +300,8 @@ class PSource_Chat_Media {
 	 * @param string $html
 	 * @return array
 	 */
-	private static function parse_open_graph( $html ) {
-		$data = array();
+	private static function parse_open_graph( string $html ): array {
+		$data = [];
 		
 		// Open Graph Meta-Tags extrahieren
 		if ( preg_match( '/<meta[^>]+property=["\']og:title["\'][^>]+content=["\']([^"\']+)["\'][^>]*>/i', $html, $matches ) ) {
@@ -329,8 +329,8 @@ class PSource_Chat_Media {
 	 * @param string $html
 	 * @return array
 	 */
-	private static function parse_twitter_cards( $html ) {
-		$data = array();
+	private static function parse_twitter_cards( string $html ): array {
+		$data = [];
 		
 		if ( preg_match( '/<meta[^>]+name=["\']twitter:title["\'][^>]+content=["\']([^"\']+)["\'][^>]*>/i', $html, $matches ) ) {
 			$data['title'] = html_entity_decode( $matches[1], ENT_QUOTES, 'UTF-8' );
@@ -353,8 +353,8 @@ class PSource_Chat_Media {
 	 * @param string $html
 	 * @return array
 	 */
-	private static function parse_html_meta( $html ) {
-		$data = array();
+	private static function parse_html_meta( string $html ): array {
+		$data = [];
 		
 		// Title-Tag
 		if ( preg_match( '/<title[^>]*>([^<]+)<\/title>/i', $html, $matches ) ) {
@@ -375,7 +375,7 @@ class PSource_Chat_Media {
 	 * @param array $media_data
 	 * @return string
 	 */
-	private static function render_media_content( $media_data ) {
+	private static function render_media_content( array $media_data ): string {
 		$html = '';
 		
 		foreach ( $media_data as $media ) {
@@ -412,7 +412,7 @@ class PSource_Chat_Media {
 	 * @param array $media
 	 * @return string
 	 */
-	private static function render_youtube_embed( $media ) {
+	private static function render_youtube_embed( array $media ): string {
 		$video_id = esc_attr( $media['video_id'] );
 		$title = ! empty( $media['title'] ) ? esc_html( $media['title'] ) : 'YouTube Video';
 		
@@ -440,7 +440,7 @@ class PSource_Chat_Media {
 	 * @param array $media
 	 * @return string
 	 */
-	private static function render_image( $media ) {
+	private static function render_image( array $media ): string {
 		return '
 		<div class="psource-chat-image">
 			<img src="' . esc_url( $media['image'] ) . '" alt="Geteiltes Bild" loading="lazy">
@@ -453,7 +453,7 @@ class PSource_Chat_Media {
 	 * @param array $media
 	 * @return string
 	 */
-	private static function render_video( $media ) {
+	private static function render_video( array $media ): string {
 		return '
 		<div class="psource-chat-video">
 			<video controls preload="metadata">
@@ -469,7 +469,7 @@ class PSource_Chat_Media {
 	 * @param array $media
 	 * @return string
 	 */
-	private static function render_link_preview( $media ) {
+	private static function render_link_preview( array $media ): string {
 		$title = ! empty( $media['title'] ) ? esc_html( $media['title'] ) : esc_html( $media['url'] );
 		$description = ! empty( $media['description'] ) ? esc_html( wp_trim_words( $media['description'], 20 ) ) : '';
 		$site_name = ! empty( $media['site_name'] ) ? esc_html( $media['site_name'] ) : '';

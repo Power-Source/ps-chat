@@ -105,6 +105,131 @@ add_filter('psource_chat_display_message', function($msg, $row) {
 **Extend AJAX endpoints** (modern approach):
 Add route in `PSource_Chat_AJAX::register_rest_routes()` with validation callbacks
 
+## Developer Tooling & Modernization
+
+### Current State Analysis
+- **Codebase**: ~10K LOC (includes/), 249 functions/classes
+- **PHP Support**: 7.0+ (legacy patterns present: `var $property`, `global $`, mixed public/private)
+- **Setup**: Modern REST API alongside legacy `wp_ajax_chatProcess`; comprehensive tooling now in place
+
+### Setup & Configuration Files
+- **DEVELOPER-SETUP.md** - Quick start guide for developers
+- **CONTRIBUTING.md** - Contribution guidelines & workflow
+- **composer.json** - PHP dependencies (PHPUnit, PHPStan, PHPCS)
+- **.phpstanrc.neon** - Static analysis (Level 8, strict typing)
+- **.phpcsrc.xml** - Code style (WordPress + PSR-2)
+- **.editorconfig** - IDE standardization (tabs, line endings)
+- **.github/workflows/quality.yml** - CI/CD: PHPStan, PHPCS, PHPUnit on PHP 7.4-8.1
+- **.github/workflows/release.yml** - Release automation
+
+### Recommended Modernization Path
+
+#### Phase 1: Developer Infrastructure (Immediate)
+These tools help AI agents AND human developers maintain code quality:
+
+**1. Static Analysis** (catch bugs before runtime)
+- **PHPStan** (`composer require --dev phpstan/phpstan`)
+  - Level 8 (strict): Type safety, undefined variables
+  - Config: Create `.phpstanrc.neon` excluding wp-content, vendor
+  - Goal: Eliminate `global $` patterns, improve type hints
+  
+- **PHP_CodeSniffer** (`composer require --dev squizlabs/php_codesniffer`)
+  - Standard: WordPress (with PSR-12 baseline)
+  - Enforces: Property declarations (`public`, not `var`), spacing, naming
+  - Pre-commit hook: `phpcs includes/ lib/`
+
+**2. Dependency Management**
+```bash
+# Initialize PHP tooling
+composer init --name="cp-psource/ps-chat" --type=wordpress-plugin
+composer require --dev phpunit/phpunit phpstan/phpstan squizlabs/php_codesniffer
+```
+
+**3. Git Workflows** (create `.github/workflows/`)
+```yaml
+# .github/workflows/quality.yml
+name: Code Quality
+on: [push, pull_request]
+jobs:
+  static-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse includes/ lib/
+      - name: PHPCS
+        run: vendor/bin/phpcs includes/ lib/
+```
+
+#### Phase 2: PHP 8.x Migration (Next Sprint)
+Target: PHP 8.0+ (typed properties, match expressions, named arguments)
+
+**Quick Wins**:
+- Replace `var $property` → `public $property` (PSR-2 compliance)
+- Add typed function parameters to Media, Avatar, Upload classes
+- Convert legacy `isset($_GET)` patterns → proper nonce + `sanitize_*()` with type hints
+
+**Example refactor**:
+```php
+// Before (legacy)
+var $chat_sessions = array();
+function chat_session_add($session) {
+    global $wpdb;
+    // ...
+}
+
+// After (PHP 8)
+public array $chat_sessions = [];
+public function chat_session_add(array $session): bool {
+    global $wpdb;
+    // ...
+}
+```
+
+#### Phase 3: Architecture Improvements (Later)
+- **Dependency Injection**: Replace `global $psource_chat` with constructor injection in AJAX/Media classes
+- **Interfaces**: Create `ChatSessionInterface`, `MediaHandlerInterface` for testability
+- **Namespace**: Move `includes/class-*` → `src/Chat/Session/`, `src/Media/Handler/`
+
+### Testing Strategy
+- **PHPUnit**: Unit tests for Media URL extraction, Avatar resolution logic
+- **Integration**: Test message flow through filters (`psource_chat_before_save_message`)
+- **config**: `phpunit.xml` in root, test bootstrap loads WordPress
+
+### ESLint for JavaScript (Frontend Quality)
+```json
+// .eslintrc.json
+{
+  "env": { "browser": true, "es2021": true },
+  "extends": ["eslint:recommended"],
+  "rules": {
+    "no-var": "error",
+    "prefer-const": "error",
+    "strict": ["error", "function"]
+  }
+}
+```
+Run: `eslint js/ --fix` to auto-fix modern JS patterns in chat UI.
+
+### Actionable Checklist for AI Agents
+When implementing features in this codebase:
+1. ✅ Add `@param` and `@return` type hints (PHPStan will validate)
+2. ✅ Use `$this->property` instead of `var $property` (PSR-2)
+3. ✅ Avoid `global $` – pass dependencies as constructor params (where possible)
+4. ✅ Sanitize user input with `sanitize_*()`, verify nonces before save
+5. ✅ Add hooks/filters instead of modifying core message logic
+6. ✅ Test complex logic (URL extraction, emoji handling) with PHPUnit
+
+### Performance Monitoring
+- **Query Analysis**: Log slow DB queries via `SAVEQUERIES` constant (enable in debug)
+- **Caching Strategy**: Transients already in place; document TTLs in code comments
+- **AJAX Polling**: Configurable intervals; avoid hammering `wp_ajax_psource_chat_poll` below 3s
+
+### Documentation for New Developers
+- **DEVELOPER-GUIDE.md**: Already exists; add "Getting Started" section with `composer install && vendor/bin/phpstan analyse`
+- **CONTRIBUTING.md**: Branch strategy (feature/*, bugfix/*), PR checklist (PHPStan pass, PHPCS pass)
+- **.editorconfig**: Standardize indent (tabs vs spaces), line endings across team
+
 ---
 
-**Version**: 1.0.0 | **PHP**: 7.0+ | **WP**: 4.9+ | **Last Updated**: Dec 2025
+**Version**: 1.0.0 | **PHP**: 7.0+ (target 8.0+) | **WP**: 4.9+ | **Last Updated**: Dec 2025

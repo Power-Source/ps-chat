@@ -1,0 +1,44 @@
+{
+    "name": "cp-psource/ps-chat",
+    "description": "Self-hosted WordPress chat plugin with BuddyPress support, media embedding, and modern REST API",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "PSOURCE",
+            "email": "info@psource.de",
+            "homepage": "https://github.com/cp-psource"
+        }
+    ],
+    "homepage": "https://github.com/cp-psource/ps-chat",
+    "support": {
+        "issues": "https://github.com/cp-psource/ps-chat/issues",
+        "docs": "https://cp-psource.github.io/ps-chat/"
+    },
+    "require": {
+        "php": ">=7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "phpstan/phpstan": "^1.10",
+        "squizlabs/php_codesniffer": "^3.7",
+        "wp-coding-standards/wpcs": "^2.3",
+        "phpstan/phpstan-wordpress": "^1.1"
+    },
+    "scripts": {
+        "test": "phpunit",
+        "lint": "phpcs includes/ lib/ js/",
+        "lint:fix": "phpcbf includes/ lib/",
+        "analyze": "phpstan analyse includes/ lib/",
+        "quality": [
+            "@lint",
+            "@analyze",
+            "@test"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
+}

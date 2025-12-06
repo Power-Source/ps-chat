@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    name: Create Release Package
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Get tag version
+        id: tag_name
+        run: echo "::set-output name=version::${GITHUB_REF#refs/tags/v}"
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer
+      
+      - name: Install dependencies
+        run: |
+          composer install --prefer-dist --no-dev --no-progress
+          npm install --production 2>/dev/null || true
+      
+      - name: Run quality checks
+        run: |
+          composer run analyze
+          composer run lint
+      
+      - name: Create release package
+        run: |
+          mkdir -p ps-chat-${{ steps.tag_name.outputs.version }}
+          rsync -r --exclude='.git' --exclude='node_modules' --exclude='vendor' --exclude='tests' --exclude='.github' --exclude='.gitignore' --exclude='.editorconfig' --exclude='composer.json' --exclude='composer.lock' --exclude='package.json' --exclude='package-lock.json' --exclude='.phpstanrc.neon' --exclude='.phpcsrc.xml' ./ ps-chat-${{ steps.tag_name.outputs.version }}/
+          zip -r ps-chat-${{ steps.tag_name.outputs.version }}.zip ps-chat-${{ steps.tag_name.outputs.version }}/
+          rm -rf ps-chat-${{ steps.tag_name.outputs.version }}
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ps-chat-${{ steps.tag_name.outputs.version }}.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Update WordPress.org plugin (optional)
+        run: |
+          echo "Add WordPress.org SVN deployment here if needed"

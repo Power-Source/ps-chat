@@ -4150,36 +4150,45 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 					$content .= '<li class="psource-chat-action-menu-item-sound-on"><a href="#" class="psource-chat-action-sound" title="' .
 					            __( 'Schalte Chat-Sound aus', 'psource-chat' ) . '"><img height="16" width="16" src="' . $this->get_plugin_url( '/images/sound-on.png' ) . '" alt="' . __( 'Schalte Chat-Sound aus', 'psource-chat' ) . '" class="psource-chat-sound-on" title="' . __( 'Schalte Chat-Sound aus', 'psource-chat' ) . '" /></a></li>';
 
-					$content .= '<li class="psource-chat-action-menu-item-sound-off"><a href="#" class="psource-chat-action-sound" title="' .
-					            __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '"><img height="16" width="16" src="' . $this->get_plugin_url( '/images/sound-off.png' ) . '" alt="' . __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '" class="psource-chat-sound-off" title="' . __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '" /></a></li>';
-				}
-				// Modern emoji picker using the new modular system
-				if ( $chat_session['box_emoticons'] == "enabled" ) {
-					// Use the new emoji system
-					if ( ! isset( $this->emoji_system ) ) {
-						require_once plugin_dir_path( __FILE__ ) . 'class-psource-chat-emoji.php';
-						$this->emoji_system = new PSource_Chat_Emoji( $this->get_plugin_url() );
-					}
-					
-					$content .= $this->emoji_system->generate_emoji_picker( $chat_session );
-				}
-
-				// File upload button
-				if ( $chat_session['file_uploads_enabled'] == "enabled" && $this->get_option( 'file_uploads_enabled', 'global' ) == 'enabled' ) {
-					$content .= '<li class="psource-chat-action-menu-item-file-upload">';
-					$content .= '<a href="#" class="psource-chat-upload-button" title="' . __( 'Datei hochladen', 'psource-chat' ) . '">';
-					$content .= '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">';
-					$content .= '<path d="M16.5,6V17.5A4,4 0 0,1 12.5,21.5A4,4 0 0,1 8.5,17.5V5A2.5,2.5 0 0,1 11,2.5A2.5,2.5 0 0,1 13.5,5V15.5A1,1 0 0,1 12.5,16.5A1,1 0 0,1 11.5,15.5V6H10V15.5A2.5,2.5 0 0,0 12.5,18A2.5,2.5 0 0,0 15,15.5V5A4,4 0 0,0 11,1A4,4 0 0,0 7,5V17.5A5.5,5.5 0 0,0 12.5,23A5.5,5.5 0 0,0 18,17.5V6H16.5Z"/>';
-					$content .= '</svg>';
-					$content .= '</a>';
-					$content .= '<input type="file" id="psource-chat-file-input-' . $chat_session['id'] . '" class="psource-chat-file-input" style="display: none;" multiple>';
-					$content .= '</li>';
-				}
-
-				$content .= '</ul>';
+				$content .= '<li class="psource-chat-action-menu-item-sound-off"><a href="#" class="psource-chat-action-sound" title="' .
+				            __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '"><img height="16" width="16" src="' . $this->get_plugin_url( '/images/sound-off.png' ) . '" alt="' . __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '" class="psource-chat-sound-off" title="' . __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '" /></a></li>';
 			}
 
-			$container_style = '';
+			// File upload button
+			if ( $chat_session['file_uploads_enabled'] == "enabled" && $this->get_option( 'file_uploads_enabled', 'global' ) == 'enabled' ) {
+				$content .= '<li class="psource-chat-action-menu-item-file-upload">';
+				$content .= '<a href="#" class="psource-chat-upload-button" title="' . __( 'Datei hochladen', 'psource-chat' ) . '">';
+				$content .= '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">';
+				$content .= '<path d="M16.5,6V17.5A4,4 0 0,1 12.5,21.5A4,4 0 0,1 8.5,17.5V5A2.5,2.5 0 0,1 11,2.5A2.5,2.5 0 0,1 13.5,5V15.5A1,1 0 0,1 12.5,16.5A1,1 0 0,1 11.5,15.5V6H10V15.5A2.5,2.5 0 0,0 12.5,18A2.5,2.5 0 0,0 15,15.5V5A4,4 0 0,0 11,1A4,4 0 0,0 7,5V17.5A5.5,5.5 0 0,0 12.5,23A5.5,5.5 0 0,0 18,17.5V6H16.5Z"/>';
+				$content .= '</svg>';
+				$content .= '</a>';
+				$content .= '<input type="file" id="psource-chat-file-input-' . $chat_session['id'] . '" class="psource-chat-file-input" style="display: none;" multiple>';
+				$content .= '</li>';
+			}
+
+			// Modern emoji picker button
+			if ( $chat_session['box_emoticons'] == "enabled" ) {
+				// Use the new emoji system
+				if ( ! isset( $this->emoji_system ) ) {
+					require_once plugin_dir_path( __FILE__ ) . 'class-psource-chat-emoji.php';
+					$this->emoji_system = new PSource_Chat_Emoji( $this->get_plugin_url() );
+				}
+				
+				$content .= $this->emoji_system->generate_emoji_picker( $chat_session );
+			}
+
+			$content .= '</ul>';
+			
+			// Emoji picker modal added after message-area module closes
+			if ( $chat_session['box_emoticons'] == "enabled" ) {
+				if ( ! isset( $this->emoji_system ) ) {
+					require_once plugin_dir_path( __FILE__ ) . 'class-psource-chat-emoji.php';
+					$this->emoji_system = new PSource_Chat_Emoji( $this->get_plugin_url() );
+				}
+				
+				$content .= $this->emoji_system->generate_emoji_picker_modal( $chat_session );
+			}
+		}			$container_style = '';
 			$content         = $this->chat_session_module_wrap( $chat_session, $content, 'psource-chat-module-message-area', $container_style );
 
 			return $content;
