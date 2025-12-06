@@ -322,8 +322,15 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                         if (reply_data != undefined) {
                             psource_chat.errors['chat_session_message_update'] = 0;
 
-                            if (reply_data['performance'] != undefined) {
-                                console.log('performance: chat_messages_update: %o', reply_data['performance']);
+                            // Debug: Log row counts per session to diagnose empty message lists
+                            if (reply_data['sessions'] != undefined) {
+                                try {
+                                    Object.keys(reply_data['sessions']).forEach(function(cid){
+                                        var rows = reply_data['sessions'][cid] && reply_data['sessions'][cid]['rows'];
+                                        var count = (rows && rows !== "__EMPTY__") ? Object.keys(rows).length : 0;
+                                        console.log('poll rows count for chat', cid, count);
+                                    });
+                                } catch(e) {}
                             }
 
                             //Check for new invites
