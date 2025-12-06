@@ -322,16 +322,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                         if (reply_data != undefined) {
                             psource_chat.errors['chat_session_message_update'] = 0;
 
-                            // Debug: Log row counts per session to diagnose empty message lists
-                            if (reply_data['sessions'] != undefined) {
-                                try {
-                                    Object.keys(reply_data['sessions']).forEach(function(cid){
-                                        var rows = reply_data['sessions'][cid] && reply_data['sessions'][cid]['rows'];
-                                        var count = (rows && rows !== "__EMPTY__") ? Object.keys(rows).length : 0;
-                                        console.log('poll rows count for chat', cid, count);
-                                    });
-                                } catch(e) {}
-                            }
+                            // Poll diagnostics removed after fix
 
                             //Check for new invites
                             if (reply_data['invites'] != undefined) {
