@@ -4921,8 +4921,8 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				$row_date_time = "<br />" . $row_date_time;
 			}
 
-			// Apply media content filter for display
-			$message = apply_filters( 'psource_chat_display_message', $message, $row );
+			// Apply media content filter for display (cast row to array for media filter)
+			$message = apply_filters( 'psource_chat_display_message', $message, (array) $row );
 			
 			$row_text .= '<p class="psource-chat-message">' . $row_avatar_name . ' ' . convert_smilies( $message ) . $row_date_time . '</p>';
 
