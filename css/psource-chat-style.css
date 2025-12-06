@@ -32,6 +32,10 @@
     font-size: 15px;
     outline: none;
     margin-right: 8px;
+    max-width: 80%;
+}
+input.psource-chat-emoji-search {
+    max-width: 80%;
 }
 .psource-chat-emoji-close {
     background: none;

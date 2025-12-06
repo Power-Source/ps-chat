@@ -3219,13 +3219,17 @@ jQuery(document).ready(function () {
             // Close all other emoji pickers
             jQuery('.psource-chat-emoji-picker').not(picker).removeClass('active');
             
-            // Position picker to cover the chat box
+            // Toggle current picker
+            picker.toggleClass('active');
+            console.log('Picker now active:', picker.hasClass('active')); // DEBUG
+            
+            // Position picker to stay within chat box bounds after toggling
             if (picker.hasClass('active')) {
                 var chatBoxOffset = chatBox.offset();
                 var chatBoxWidth = chatBox.outerWidth();
                 var chatBoxHeight = chatBox.outerHeight();
                 
-                // Set picker position to cover chat box
+                // Set picker position and size to fit within chat box
                 picker.css({
                     'position': 'fixed',
                     'top': chatBoxOffset.top + 'px',
@@ -3237,10 +3241,6 @@ jQuery(document).ready(function () {
             } else {
                 picker.css({'position': 'fixed', 'top': 'auto', 'left': 'auto', 'width': 'auto', 'height': 'auto'});
             }
-            
-            // Toggle current picker
-            picker.toggleClass('active');
-            console.log('Picker now active:', picker.hasClass('active')); // DEBUG
             
             // Focus search field if visible
             if (picker.hasClass('active')) {

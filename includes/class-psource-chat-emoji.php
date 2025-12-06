@@ -341,21 +341,18 @@ class PSource_Chat_Emoji {
      */
     public function get_emoji_picker_styles() {
         return "
-        /* Modern Emoji Picker Styles - Modal Overlay */
+        /* Modern Emoji Picker Styles - Overlay innerhalb Chatbox */
         .psource-chat-emoji-picker {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
+            background: #ffffff;
             display: none;
             z-index: 10000;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            align-items: center;
-            justify-content: center;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
             padding: 0px;
             box-sizing: border-box;
+            flex-direction: column;
         }
         
         .psource-chat-emoji-picker.active {
@@ -364,18 +361,18 @@ class PSource_Chat_Emoji {
         
         .psource-chat-emoji-picker > div {
             position: relative;
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            width: calc(100% - 20px);
-            height: calc(100% - 20px);
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            width: 100%;
+            height: 100%;
             max-width: none;
             max-height: none;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             box-sizing: border-box;
-            margin: 10px;
+            margin: 0;
         }
         
         .psource-chat-emoji-header {
@@ -396,7 +393,7 @@ class PSource_Chat_Emoji {
             outline: none;
             transition: border-color 0.2s ease;
             box-sizing: border-box;
-            max-width: 80%;
+            max-width: none;
         }
         
         .psource-chat-emoji-search:focus {
@@ -468,14 +465,14 @@ class PSource_Chat_Emoji {
             flex: 1;
             overflow-y: auto;
             position: relative;
-            padding: 6px;
+            padding: 2px;
             box-sizing: border-box;
         }
         
         .psource-chat-emoji-grid {
             display: none;
-            grid-template-columns: repeat(auto-fit, minmax(32px, 1fr));
-            gap: 2px;
+            grid-template-columns: repeat(auto-fit, minmax(18px, 1fr));
+            gap: 0px;
         }
         
         .psource-chat-emoji-grid.active {
@@ -485,17 +482,17 @@ class PSource_Chat_Emoji {
         .psource-chat-emoji-item {
             background: none;
             border: none;
-            padding: 2px;
+            padding: 0px;
             cursor: pointer;
-            border-radius: 3px;
-            font-size: clamp(16px, 5vw, 22px);
+            border-radius: 2px;
+            font-size: clamp(11px, 2.5vw, 14px);
             line-height: 1;
             transition: all 0.2s ease;
             aspect-ratio: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 32px;
+            min-height: 18px;
         }
         
         .psource-chat-emoji-item:hover {
