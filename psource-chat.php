@@ -42,7 +42,7 @@ add_action( 'admin_notices', function() {
 
 
 // Needs to be set BEFORE loading psource_chat_utilities.php!
-//define('CHAT_DEBUG_LOG', 1);
+define('CHAT_DEBUG_LOG', 1);
 
 include_once( dirname( __FILE__ ) . '/lib/psource_chat_utilities.php' );
 include_once( dirname( __FILE__ ) . '/lib/psource_chat_wpadminbar.php' );
