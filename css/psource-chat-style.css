@@ -170,11 +170,6 @@ div.psource-chat-box div.psource-chat-module-message-area textarea.psource-chat-
     width: 100%;
 }
 
-div.psource-chat-box div.psource-chat-module-message-area button.psource-chat-send-button {
-    padding: 2px 3px;
-    float: right;
-}
-
 div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta {
     list-style: none;
     margin: 0;
