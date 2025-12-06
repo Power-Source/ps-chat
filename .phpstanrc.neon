@@ -1,0 +1,21 @@
+parameters:
+    level: 8
+    paths:
+        - includes/
+        - lib/
+    excludePaths:
+        - vendor/
+        - tests/
+        - node_modules/
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        # WordPress specific patterns that are valid but hard to type-hint
+        - '#Function apply_filters invoked with [0-9]+ parameters, [0-9]+ required#'
+        - '#Parameter \$\w+ of function \w+ expects#'
+        # Global $wpdb usage (common in WordPress plugins)
+        - '#Access to an undefined static property#'
+    checkMissingIterableValueType: false
+    treatPhpDocTypesAsCertain: false
+
+includes:
+    - vendor/phpstan/phpstan-wordpress/extension.neon

@@ -3191,26 +3191,79 @@ jQuery(document).ready(function () {
     });
 
     // ============================================================================
-    // MODERN EMOJI PICKER FUNCTIONALITY
+    // MODERN EMOJI PICKER FUNCTIONALITY (Global Overlay)
     // ============================================================================
     
-    // Emoji picker functionality
+    // Emoji picker functionality with overlay support
     function initEmojiPicker() {
-        // Toggle emoji picker
+        // Toggle emoji picker as global overlay
         jQuery(document).off('click.emoji', '.psource-chat-emoticons-menu').on('click.emoji', '.psource-chat-emoticons-menu', function(e) {
             e.preventDefault();
             e.stopPropagation();
+
+            // Find the parent chat box container
+            var chatBox = jQuery(this).closest('.psource-chat-box');
             
-            var picker = jQuery(this).siblings('.psource-chat-emoji-picker');
-            var wasVisible = picker.hasClass('active');
+            var picker = chatBox.find('.psource-chat-emoji-picker');
+            
+            // If not found in chat box, search globally
+            if (!picker.length) {
+                picker = jQuery('.psource-chat-emoji-picker').first();
+            }
             
             // Close all other emoji pickers
-            jQuery('.psource-chat-emoji-picker').removeClass('active');
+            jQuery('.psource-chat-emoji-picker').not(picker).removeClass('active');
             
             // Toggle current picker
-            if (!wasVisible) {
-                picker.addClass('active');
+            picker.toggleClass('active');
+            
+            // Position picker to stay within chat box bounds after toggling
+            if (picker.hasClass('active')) {
+                var chatBoxOffset = chatBox.offset();
+                var chatBoxWidth = chatBox.outerWidth();
+                var chatBoxHeight = chatBox.outerHeight();
+                
+                // Set picker position and size to fit within chat box
+                picker.css({
+                    'position': 'fixed',
+                    'top': chatBoxOffset.top + 'px',
+                    'left': chatBoxOffset.left + 'px',
+                    'width': chatBoxWidth + 'px',
+                    'height': chatBoxHeight + 'px'
+                });
+            } else {
+                picker.css({'position': 'fixed', 'top': 'auto', 'left': 'auto', 'width': 'auto', 'height': 'auto'});
             }
+            
+            // Focus search field if visible
+            if (picker.hasClass('active')) {
+                var searchInput = picker.find('.psource-chat-emoji-search');
+                if (searchInput.length) {
+                    searchInput.focus();
+                }
+            }
+        });
+        
+        // Add close button logic
+        jQuery(document).off('click.emoji', '.psource-chat-emoji-close').on('click.emoji', '.psource-chat-emoji-close', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            jQuery(this).closest('.psource-chat-emoji-picker').removeClass('active');
+        });
+        
+        // Emoji search logic
+        jQuery(document).off('input.emoji', '.psource-chat-emoji-search').on('input.emoji', '.psource-chat-emoji-search', function(e) {
+            var query = jQuery(this).val().toLowerCase();
+            var picker = jQuery(this).closest('.psource-chat-emoji-picker');
+            picker.find('.psource-chat-emoji-item').each(function() {
+                var label = jQuery(this).attr('data-label') || '';
+                var emoji = jQuery(this).attr('data-emoji') || '';
+                if (label.toLowerCase().indexOf(query) !== -1 || emoji.indexOf(query) !== -1) {
+                    jQuery(this).show();
+                } else {
+                    jQuery(this).hide();
+                }
+            });
         });
         
         // Category tab switching
@@ -3236,14 +3289,10 @@ jQuery(document).ready(function () {
             e.stopPropagation();
             
             var emoji = jQuery(this).data('emoji');
-            console.log('Emoji clicked:', emoji); // Debug
             
-            // Find the textarea within the same chat module
-            var chatModule = jQuery(this).closest('.psource-chat-module-message-area');
-            var textarea = chatModule.find('textarea.psource-chat-send');
-            
-            console.log('Chat module found:', chatModule.length); // Debug
-            console.log('Textarea found:', textarea.length); // Debug
+            // Find the parent chat box container
+            var chatBox = jQuery(this).closest('.psource-chat-box');
+            var textarea = chatBox.find('textarea.psource-chat-send');
             
             if (textarea.length) {
                 // Insert emoji at cursor position
@@ -3259,12 +3308,12 @@ jQuery(document).ready(function () {
                     textarea[0].setSelectionRange(newCursorPos, newCursorPos);
                 }
                 
+                // Trigger change event for any listeners
+                textarea.trigger('change');
+                
                 // Focus textarea
                 textarea.focus();
-                
-                console.log('Emoji inserted successfully'); // Debug
             } else {
-                console.log('Textarea not found - trying global fallback'); // Debug
                 // Global fallback - find any visible chat textarea
                 var fallbackTextarea = jQuery('textarea.psource-chat-send:visible').first();
                 
@@ -3280,10 +3329,8 @@ jQuery(document).ready(function () {
                         fallbackTextarea[0].setSelectionRange(newCursorPos, newCursorPos);
                     }
                     
+                    fallbackTextarea.trigger('change');
                     fallbackTextarea.focus();
-                    console.log('Emoji inserted via global fallback'); // Debug
-                } else {
-                    console.log('No textarea found at all'); // Debug
                 }
             }
             
@@ -3293,7 +3340,7 @@ jQuery(document).ready(function () {
         
         // Close emoji picker when clicking outside
         jQuery(document).off('click.emoji-outside').on('click.emoji-outside', function(e) {
-            if (!jQuery(e.target).closest('.psource-chat-send-input-emoticons').length) {
+            if (!jQuery(e.target).closest('.psource-chat-emoji-picker, .psource-chat-emoticons-menu').length) {
                 jQuery('.psource-chat-emoji-picker').removeClass('active');
             }
         });

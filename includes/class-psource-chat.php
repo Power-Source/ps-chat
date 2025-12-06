@@ -3891,6 +3891,48 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				background-color: ' . $chat_session['box_text_color'] . '
 			}';
 
+			$content .= $CSS_prefix . ' div.psource-chat-module-message-area {
+				position: relative;
+			}';
+			
+			$content .= $CSS_prefix . ' div.psource-chat-input-wrapper {
+				display: flex;
+				gap: 5px;
+				align-items: flex-end;
+				margin-bottom: 5px;
+			}';
+			
+			$content .= $CSS_prefix . ' div.psource-chat-input-wrapper textarea.psource-chat-send {
+				flex: 1;
+				min-width: 0;
+			}';
+			
+			$content .= $CSS_prefix . ' div.psource-chat-input-wrapper button.psource-chat-send-button {
+				flex-shrink: 0;
+				width: 40px;
+				height: 40px;
+				padding: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border-radius: 4px;
+				border: 1px solid #ccc;
+				background-color: #f5f5f5;
+				cursor: pointer;
+				font-size: 18px;
+				font-weight: bold;
+				transition: all 0.2s ease;
+			}';
+			
+			$content .= $CSS_prefix . ' div.psource-chat-input-wrapper button.psource-chat-send-button:hover {
+				background-color: #e8e8e8;
+				border-color: #999;
+			}';
+			
+			$content .= $CSS_prefix . ' div.psource-chat-input-wrapper button.psource-chat-send-button:active {
+				transform: scale(0.95);
+			}';
+
 			$content .= $CSS_prefix . ' div.psource-chat-module-message-area textarea.psource-chat-send {
 				height: ' . $chat_session['row_message_input_height'] . ';
 				background-color: ' . $chat_session['row_message_input_background_color'] . ';
@@ -4114,30 +4156,47 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 		 *
 		 * @return    $content - The output of the styles. Will be echoed at some other point.
 		 */
-		function chat_session_message_area_module( $chat_session ) {
-			$content = '';
-			if ( ( $chat_session['session_status'] != "open" ) && ( ! psource_chat_is_moderator( $chat_session ) ) ) {
-				$display_style = ' style="display:none;" ';
+	function chat_session_message_area_module( $chat_session ) {
+		$content = '';
+		if ( ( $chat_session['session_status'] != "open" ) && ( ! psource_chat_is_moderator( $chat_session ) ) ) {
+			$display_style = ' style="display:none;" ';
+		} else {
+			$display_style = ' style="display:block;" ';
+		}
+
+		if ( intval( $chat_session['row_message_input_length'] ) > 0 ) {
+			$textarea_max_length = ' maxlength="' . intval( $chat_session['row_message_input_length'] ) . '" ';
+		} else {
+			$textarea_max_length = '';
+		}
+
+		// Wrapper für flexbox layout mit textarea und button
+		$content .= '<div class="psource-chat-input-wrapper">';
+		
+		$content .= '<textarea id="psource-chat-send-' . $chat_session['id'] . '" class="psource-chat-send" ' . $textarea_max_length . ' rows="5" placeholder="' . __( 'Tippe Deine Chatnachricht hier', 'psource-chat' ) . '"></textarea>';
+
+		if ( ( $chat_session['box_send_button_enable'] == "enabled" )
+		     || ( ( $chat_session['box_send_button_enable'] == "mobile_only" ) && ( $this->chat_localized['settings']['wp_is_mobile'] == true ) )
+		) {
+			$btn_id = 'psource-chat-send-button-' . $chat_session['id'];
+			$btn_class = 'psource-chat-send-button';
+			$btn_title = esc_attr( $chat_session['box_send_button_label'] );
+			if ( isset( $chat_session['box_send_button_position'] ) && $chat_session['box_send_button_position'] === 'right' ) {
+				// Icon-only square button for right position
+				$content .= '<button id="' . $btn_id . '" class="' . $btn_class . '" type="button" title="' . $btn_title . '" aria-label="' . $btn_title . '">'
+					. '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+					. '<path d="M2 21l21-9-21-9v7l15 2-15 2v7z"></path>'
+					. '</svg>'
+					. '</button>';
 			} else {
-				$display_style = ' style="display:block;" ';
+				// Text label button (default)
+				$content .= '<button id="' . $btn_id . '" class="' . $btn_class . '" type="button">' . $chat_session['box_send_button_label'] . '</button>';
 			}
+		}
+		
+		$content .= '</div>'; // close input wrapper
 
-			if ( intval( $chat_session['row_message_input_length'] ) > 0 ) {
-				$textarea_max_length = ' maxlength="' . intval( $chat_session['row_message_input_length'] ) . '" ';
-			} else {
-				$textarea_max_length = '';
-			}
-
-			$content .= '<textarea id="psource-chat-send-' . $chat_session['id'] . '" class="psource-chat-send" ' . $textarea_max_length . ' rows="5" placeholder="' . __( 'Tippe Deine Chatnachricht hier', 'psource-chat' ) . '"></textarea>';
-
-
-			if ( ( $chat_session['box_send_button_enable'] == "enabled" )
-			     || ( ( $chat_session['box_send_button_enable'] == "mobile_only" ) && ( $this->chat_localized['settings']['wp_is_mobile'] == true ) )
-			) {
-				$content .= '<button id="psource-chat-send-button-' . $chat_session['id'] . '" class="psource-chat-send-button">' . $chat_session['box_send_button_label'] . '</button>';
-			}
-
-			if ( ( $chat_session['box_emoticons'] == "enabled" ) || ( $chat_session['box_sound'] == "enabled" ) || ( intval( $chat_session['row_message_input_length'] ) > 0 ) || ( $chat_session['file_uploads_enabled'] == "enabled" && $this->get_option( 'file_uploads_enabled', 'global' ) == 'enabled' ) ) {
+		if ( ( $chat_session['box_emoticons'] == "enabled" ) || ( $chat_session['box_sound'] == "enabled" ) || ( intval( $chat_session['row_message_input_length'] ) > 0 ) || ( $chat_session['file_uploads_enabled'] == "enabled" && $this->get_option( 'file_uploads_enabled', 'global' ) == 'enabled' ) ) {
 
 				$content .= '<ul class="psource-chat-send-meta">';
 
@@ -4150,36 +4209,47 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 					$content .= '<li class="psource-chat-action-menu-item-sound-on"><a href="#" class="psource-chat-action-sound" title="' .
 					            __( 'Schalte Chat-Sound aus', 'psource-chat' ) . '"><img height="16" width="16" src="' . $this->get_plugin_url( '/images/sound-on.png' ) . '" alt="' . __( 'Schalte Chat-Sound aus', 'psource-chat' ) . '" class="psource-chat-sound-on" title="' . __( 'Schalte Chat-Sound aus', 'psource-chat' ) . '" /></a></li>';
 
-					$content .= '<li class="psource-chat-action-menu-item-sound-off"><a href="#" class="psource-chat-action-sound" title="' .
-					            __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '"><img height="16" width="16" src="' . $this->get_plugin_url( '/images/sound-off.png' ) . '" alt="' . __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '" class="psource-chat-sound-off" title="' . __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '" /></a></li>';
-				}
-				// Modern emoji picker using the new modular system
-				if ( $chat_session['box_emoticons'] == "enabled" ) {
-					// Use the new emoji system
-					if ( ! isset( $this->emoji_system ) ) {
-						require_once plugin_dir_path( __FILE__ ) . 'class-psource-chat-emoji.php';
-						$this->emoji_system = new PSource_Chat_Emoji( $this->get_plugin_url() );
-					}
-					
-					$content .= $this->emoji_system->generate_emoji_picker( $chat_session );
-				}
-
-				// File upload button
-				if ( $chat_session['file_uploads_enabled'] == "enabled" && $this->get_option( 'file_uploads_enabled', 'global' ) == 'enabled' ) {
-					$content .= '<li class="psource-chat-action-menu-item-file-upload">';
-					$content .= '<a href="#" class="psource-chat-upload-button" title="' . __( 'Datei hochladen', 'psource-chat' ) . '">';
-					$content .= '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">';
-					$content .= '<path d="M16.5,6V17.5A4,4 0 0,1 12.5,21.5A4,4 0 0,1 8.5,17.5V5A2.5,2.5 0 0,1 11,2.5A2.5,2.5 0 0,1 13.5,5V15.5A1,1 0 0,1 12.5,16.5A1,1 0 0,1 11.5,15.5V6H10V15.5A2.5,2.5 0 0,0 12.5,18A2.5,2.5 0 0,0 15,15.5V5A4,4 0 0,0 11,1A4,4 0 0,0 7,5V17.5A5.5,5.5 0 0,0 12.5,23A5.5,5.5 0 0,0 18,17.5V6H16.5Z"/>';
-					$content .= '</svg>';
-					$content .= '</a>';
-					$content .= '<input type="file" id="psource-chat-file-input-' . $chat_session['id'] . '" class="psource-chat-file-input" style="display: none;" multiple>';
-					$content .= '</li>';
-				}
-
-				$content .= '</ul>';
+				$content .= '<li class="psource-chat-action-menu-item-sound-off"><a href="#" class="psource-chat-action-sound" title="' .
+				            __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '"><img height="16" width="16" src="' . $this->get_plugin_url( '/images/sound-off.png' ) . '" alt="' . __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '" class="psource-chat-sound-off" title="' . __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '" /></a></li>';
 			}
 
-			$container_style = '';
+			// File upload button
+			if ( $chat_session['file_uploads_enabled'] == "enabled" && $this->get_option( 'file_uploads_enabled', 'global' ) == 'enabled' ) {
+				$content .= '<li class="psource-chat-action-menu-item-file-upload">';
+				$content .= '<a href="#" class="psource-chat-upload-button" title="' . __( 'Datei hochladen', 'psource-chat' ) . '">';
+				$content .= '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">';
+				$content .= '<path d="M16.5,6V17.5A4,4 0 0,1 12.5,21.5A4,4 0 0,1 8.5,17.5V5A2.5,2.5 0 0,1 11,2.5A2.5,2.5 0 0,1 13.5,5V15.5A1,1 0 0,1 12.5,16.5A1,1 0 0,1 11.5,15.5V6H10V15.5A2.5,2.5 0 0,0 12.5,18A2.5,2.5 0 0,0 15,15.5V5A4,4 0 0,0 11,1A4,4 0 0,0 7,5V17.5A5.5,5.5 0 0,0 12.5,23A5.5,5.5 0 0,0 18,17.5V6H16.5Z"/>';
+				$content .= '</svg>';
+				$content .= '</a>';
+				$content .= '<input type="file" id="psource-chat-file-input-' . $chat_session['id'] . '" class="psource-chat-file-input" style="display: none;" multiple>';
+				$content .= '</li>';
+			}
+
+			// Modern emoji picker button
+			if ( $chat_session['box_emoticons'] == "enabled" ) {
+				// Use the new emoji system
+				if ( ! isset( $this->emoji_system ) ) {
+					require_once plugin_dir_path( __FILE__ ) . 'class-psource-chat-emoji.php';
+					$this->emoji_system = new PSource_Chat_Emoji( $this->get_plugin_url() );
+				}
+				
+				$content .= $this->emoji_system->generate_emoji_picker( $chat_session );
+			}
+
+			$content .= '</ul>';
+			
+			// Emoji picker modal added after message-area module closes
+			if ( $chat_session['box_emoticons'] == "enabled" ) {
+				if ( ! isset( $this->emoji_system ) ) {
+					require_once plugin_dir_path( __FILE__ ) . 'class-psource-chat-emoji.php';
+					$this->emoji_system = new PSource_Chat_Emoji( $this->get_plugin_url() );
+				}
+				
+				$content .= $this->emoji_system->generate_emoji_picker_modal( $chat_session );
+			}
+		}
+
+		$container_style = '';
 			$content         = $this->chat_session_module_wrap( $chat_session, $content, 'psource-chat-module-message-area', $container_style );
 
 			return $content;

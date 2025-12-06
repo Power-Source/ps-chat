@@ -1,0 +1,97 @@
+# Logs and Database
+*.log
+debug.log
+.DS_Store
+thumbs.db
+
+# Composer
+vendor/
+composer.lock
+.composer/
+
+# Node.js / NPM
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.sublime-project
+.sublime-workspace
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+.AppleDouble
+.LSOverride
+._*
+
+# Testing
+tests/output/
+coverage/
+.phpunit.result.cache
+phpunit.xml
+
+# Build artifacts
+dist/
+build/
+*.min.js
+*.min.css
+
+# WordPress
+wp-config.php
+wp-content/uploads/
+wp-content/backup-*
+wp-content/advanced-cache.php
+wp-content/object-cache.php
+wp-content/cache/
+wp-content/mu-plugins/
+/wp-cli.yml
+
+# Git hooks
+.git/hooks/*
+!.git/hooks/README.md
+!.githooks/
+
+# Local environment
+.env
+.env.local
+*.env
+!.env.example
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+.tmp/
+
+# IDE - Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# macOS
+.AppleDouble
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Backups
+*.backup
+*.bkp
+*.old
+*.orig

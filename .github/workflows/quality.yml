@@ -1,0 +1,143 @@
+name: Code Quality & Testing
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  phpstan:
+    name: PHPStan Static Analysis
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['7.4', '8.0', '8.1']
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer
+      
+      - name: Cache Composer packages
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php${{ matrix.php-version }}-composer-
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+      
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse includes/ lib/
+
+  phpcs:
+    name: PHP Code Sniffer (PHPCS)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer
+      
+      - name: Cache Composer packages
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+      
+      - name: Run PHPCS
+        run: vendor/bin/phpcs includes/ lib/ --standard=.phpcsrc.xml
+
+  phpunit:
+    name: PHPUnit Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['7.4', '8.0', '8.1']
+        wordpress-version: ['5.9', '6.0', '6.5']
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer
+          extensions: mysql
+      
+      - name: Cache Composer packages
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php${{ matrix.php-version }}-composer-
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+      
+      - name: Run PHPUnit
+        run: |
+          if [ -f phpunit.xml ]; then
+            vendor/bin/phpunit
+          else
+            echo "phpunit.xml not found, skipping tests"
+          fi
+
+  eslint:
+    name: ESLint (JavaScript)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      
+      - name: Install dependencies
+        run: npm install
+        if: hashFiles('package.json') != ''
+      
+      - name: Run ESLint
+        run: npm run lint
+        if: hashFiles('package.json') != ''
+
+  security:
+    name: Security Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Run security checks
+        run: |
+          # Check for hardcoded secrets
+          if grep -r "password\|secret\|api[_-]key" includes/ lib/ --exclude-dir=vendor 2>/dev/null | grep -v "\.example\|//\|\/\*"; then
+            echo "⚠️ Possible hardcoded secrets found"
+            exit 1
+          fi
+          echo "✅ No obvious hardcoded secrets detected"
+      
+      - name: Check file permissions
+        run: |
+          # Ensure no executable files in plugin
+          find . -type f -name "*.php" -executable | grep -v vendor && exit 1 || true
