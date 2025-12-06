@@ -4170,31 +4170,41 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			$textarea_max_length = '';
 		}
 
-		// Wrapper für flexbox layout mit textarea und button
-		$content .= '<div class="psource-chat-input-wrapper">';
-		
-		$content .= '<textarea id="psource-chat-send-' . $chat_session['id'] . '" class="psource-chat-send" ' . $textarea_max_length . ' rows="5" placeholder="' . __( 'Tippe Deine Chatnachricht hier', 'psource-chat' ) . '"></textarea>';
+		// Wrapper für flexbox layout: nur für Position "right" nutzen
+		$use_right_layout = ( isset( $chat_session['box_send_button_position'] ) && $chat_session['box_send_button_position'] === 'right' );
+		if ( $use_right_layout ) {
+			// Textarea + Button nebeneinander
+			$content .= '<div class="psource-chat-input-wrapper">';
+			$content .= '<textarea id="psource-chat-send-' . $chat_session['id'] . '" class="psource-chat-send" ' . $textarea_max_length . ' rows="5" placeholder="' . __( 'Tippe Deine Chatnachricht hier', 'psource-chat' ) . '"></textarea>';
+		} else {
+			// Nur Textarea (Button folgt darunter wie im Original)
+			$content .= '<div class="psource-chat-input-wrapper">';
+			$content .= '<textarea id="psource-chat-send-' . $chat_session['id'] . '" class="psource-chat-send" ' . $textarea_max_length . ' rows="5" placeholder="' . __( 'Tippe Deine Chatnachricht hier', 'psource-chat' ) . '"></textarea>';
+			$content .= '</div>';
+		}
 
+		// Senden-Button rendern abhängig von Position/Settings
 		if ( ( $chat_session['box_send_button_enable'] == "enabled" )
-		     || ( ( $chat_session['box_send_button_enable'] == "mobile_only" ) && ( $this->chat_localized['settings']['wp_is_mobile'] == true ) )
+			 || ( ( $chat_session['box_send_button_enable'] == "mobile_only" ) && ( $this->chat_localized['settings']['wp_is_mobile'] == true ) )
 		) {
 			$btn_id = 'psource-chat-send-button-' . $chat_session['id'];
 			$btn_class = 'psource-chat-send-button';
 			$btn_title = esc_attr( $chat_session['box_send_button_label'] );
-			if ( isset( $chat_session['box_send_button_position'] ) && $chat_session['box_send_button_position'] === 'right' ) {
-				// Icon-only square button for right position
+
+			if ( $use_right_layout ) {
+				// Icon-only square button direkt im Wrapper (rechts)
 				$content .= '<button id="' . $btn_id . '" class="' . $btn_class . '" type="button" title="' . $btn_title . '" aria-label="' . $btn_title . '">'
 					. '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
 					. '<path d="M2 21l21-9-21-9v7l15 2-15 2v7z"></path>'
 					. '</svg>'
 					. '</button>';
+				// Wrapper schließen bei rechter Position
+				$content .= '</div>';
 			} else {
-				// Text label button (default)
+				// Original: Text-Button unterhalb des Eingabebereichs
 				$content .= '<button id="' . $btn_id . '" class="' . $btn_class . '" type="button">' . $chat_session['box_send_button_label'] . '</button>';
 			}
 		}
-		
-		$content .= '</div>'; // close input wrapper
 
 		if ( ( $chat_session['box_emoticons'] == "enabled" ) || ( $chat_session['box_sound'] == "enabled" ) || ( intval( $chat_session['row_message_input_length'] ) > 0 ) || ( $chat_session['file_uploads_enabled'] == "enabled" && $this->get_option( 'file_uploads_enabled', 'global' ) == 'enabled' ) ) {
 
