@@ -1169,6 +1169,9 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			}
 
 			$this->chat_localized['settings']["session_poll_interval_users"] = 5;
+
+			// Security: Nonce for AJAX requests (write operations)
+			$this->chat_localized['settings']['nonce'] = wp_create_nonce( 'psource_chat' );
 		}
 
 		/**
@@ -6087,6 +6090,26 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				die();
 			}
 			$function = $_POST['function'];
+
+			// Verify nonce for write operations to prevent CSRF
+			$write_functions = array(
+				'chat_message_send',
+				'chat_messages_clear',
+				'chat_messages_archive',
+				'chat_session_moderate_status',
+				'chat_session_moderate_message',
+				'chat_session_moderate_ipaddress',
+				'chat_session_moderate_user',
+				'chat_session_invite_private',
+				'chat_update_user_status',
+				'chat_invite_update_user_status'
+			);
+			if ( in_array( $function, $write_functions, true ) ) {
+				if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_POST['nonce'] ), 'psource_chat' ) ) {
+					wp_send_json_error( 'Invalid nonce' );
+					die();
+				}
+			}
 
 			switch ( $function ) {
 
