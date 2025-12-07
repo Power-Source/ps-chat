@@ -1,30 +1,82 @@
-// See themes-options.js for better method. Need to convert the code below to work the same. The code below does not 
-// initialize the color wheel properly with the input field color value. 
+// See themes-options.js for better method. Need to convert the code below to work the same. The code below does not
+// initialize the color wheel properly with the input field color value.
 (function ($) {
+	function getActiveEditor() {
+		if (window.parent && window.parent.tinymce && window.parent.tinymce.activeEditor && !window.parent.tinymce.activeEditor.isHidden()) {
+			return window.parent.tinymce.activeEditor;
+		}
+
+		return null;
+	}
+
+	function replaceInTextarea(output) {
+		if (!window.parent || !window.parent.document) {
+			return false;
+		}
+
+		var textarea = window.parent.document.getElementById('content');
+		if (!textarea) {
+			return false;
+		}
+
+		if (window.psource_chat_shortcode_str && textarea.value.indexOf(window.psource_chat_shortcode_str) !== -1) {
+			textarea.value = textarea.value.replace(window.psource_chat_shortcode_str, output);
+		} else {
+			textarea.value += output;
+		}
+
+		return true;
+	}
+
+	function closeModal() {
+		if (window.parent && window.parent.tb_remove) {
+			window.parent.tb_remove();
+		}
+	}
+
+	function insertShortcode(output) {
+		var editor = getActiveEditor();
+
+		if (editor) {
+			var existingContent = editor.getContent();
+			if (window.psource_chat_shortcode_str && existingContent.indexOf(window.psource_chat_shortcode_str) !== -1) {
+				editor.setContent(existingContent.replace(window.psource_chat_shortcode_str, output));
+			} else {
+				editor.execCommand('mceInsertContent', false, output);
+			}
+			editor.focus();
+		} else if (!replaceInTextarea(output)) {
+			if (window.parent && window.parent.wp && window.parent.wp.media && window.parent.wp.media.editor) {
+				window.parent.wp.media.editor.insert(output);
+			} else if (window.parent && window.parent.send_to_editor) {
+				window.parent.send_to_editor(output);
+			}
+		}
+
+		closeModal();
+	}
+
+	window.psourceChatClose = closeModal;
+
 	$(document).ready(function () {
-		
-		// When the 'Reset' form button is clicked we remove all shortcode parameters. This will foce the shortcode to inherit all settings
-		jQuery('input#reset').on( "click", function() {
-			output  = '[chat ';
+
+		// When the 'Reset' form button is clicked we remove all shortcode parameters. This will force the shortcode to inherit all settings
+		jQuery('input#reset').on('click', function(event) {
+			event.preventDefault();
+			var output  = '[chat ';
 			if ((psource_chat_current_options.id != undefined) && (psource_chat_current_options.id != ''))
 				output = output+'id="'+psource_chat_current_options.id+'" ]';
 			else
 				output = output+' ]';
-				
-			if (psource_chat_shortcode_str == '') {
-				tinyMCEPopup.execCommand('mceReplaceContent', false, output);
-			} else {
-				tinyMCEPopup.execCommand('mceSetContent', false, tinyMCEPopup.editor.getContent().replace(psource_chat_shortcode_str, output));
-			}
 
-			// Return
-			tinyMCEPopup.close();						
+			insertShortcode(output);
 		});
 
 		// When the 'Insert' form button button is clicked we go through the form fields and check the value against the
 		// default options. If there is a difference we add that parameter set to the shortcode output
-		jQuery('input#insert').on( "click", function() {
-			output  ='[chat ';
+		jQuery('input#insert').on('click', function(event) {
+			event.preventDefault();
+			var output  ='[chat ';
 
 			//console.log('psource_chat_wp_user_level_10_roles[%o]', psource_chat_wp_user_level_10_roles);
 			
@@ -64,8 +116,7 @@
 									user_role_str+=user_role;
 								}
 							}
-							//if (user_role_str != '')
-								output += 'login_options="'+user_role_str+'" ';
+							output += 'login_options="'+user_role_str+'" ';
 						}
 					}
 					
@@ -92,8 +143,7 @@
 									user_role_str+=user_role;
 								}
 							}
-							//if (user_role_str != '')
-								output += 'moderator_roles="'+user_role_str+'" ';
+							output += 'moderator_roles="'+user_role_str+'" ';
 						}
 						
 					}
@@ -120,14 +170,7 @@
 			}
 			output += ']';
 
-			if (psource_chat_shortcode_str == '') {
-				tinyMCEPopup.execCommand('mceReplaceContent', false, output);
-			} else {
-				tinyMCEPopup.execCommand('mceSetContent', false, tinyMCEPopup.editor.getContent().replace(psource_chat_shortcode_str, output));
-			}
-
-			// Return
-			tinyMCEPopup.close();						
-		});		
+			insertShortcode(output);
+		});
 	});
 })(jQuery);

@@ -1360,10 +1360,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			}
 
 			if ( $_show_tinymce_button === true ) {
-				add_filter( "mce_external_plugins", array( &$this, "tinymce_add_plugin" ) );
-				add_filter( 'mce_buttons', array( &$this, 'tinymce_register_button' ) );
-				//add_filter('mce_external_languages', array(&$this,'tinymce_load_langs'));
-
+				add_action( 'media_buttons', array( &$this, 'render_media_button' ), 20 );
 			}
 
 			return $_show_tinymce_button;
@@ -4126,6 +4123,38 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			$content = $this->chat_session_module_wrap($chat_session, $content);
 		}
 		return $content;
+	}
+
+	/**
+	 * Render chat shortcode builder button in the media toolbar.
+	 *
+	 * @param string $editor_id Current editor ID from media_buttons action.
+	 *
+	 * @return void
+	 */
+	function render_media_button( $editor_id ) {
+		if ( empty( $editor_id ) ) {
+			return;
+		}
+
+		add_thickbox();
+
+		$modal_url = add_query_arg( array(
+			'action'    => 'chatTinymceOptions',
+			'TB_iframe' => 'true',
+			'width'    => 700,
+			'height'   => 650,
+		), admin_url( 'admin-ajax.php' ) );
+
+		$icon_url = $this->get_plugin_url( '/tinymce/images/chat.png' );
+
+		printf(
+			'<a href="%1$s" class="button thickbox psource-chat-media-button" data-editor="%2$s"><span class="wp-media-buttons-icon" style="background: url(%3$s) no-repeat center center; background-size: 18px 18px;"></span> %4$s</a>',
+			esc_url( $modal_url ),
+			esc_attr( $editor_id ),
+			esc_url( $icon_url ),
+			esc_html__( 'Chat einfügen', 'psource-chat' )
+		);
 	}
 
 

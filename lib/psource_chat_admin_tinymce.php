@@ -18,6 +18,66 @@
 		'psource-chat-admin-farbtastic-js'
 	) );
 	?>
+	<style type="text/css">
+		.tabs { margin: 0 0 10px 0; padding: 0; }
+		.tabs ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px; border-bottom: 1px solid #d8d8d8; }
+		.tabs li { margin: 0; padding: 0; }
+		.tabs li a { display: block; padding: 6px 10px; border: 1px solid #d8d8d8; border-bottom: none; background: #f5f5f5; text-decoration: none; color: #333; border-radius: 3px 3px 0 0; }
+		.tabs li.current a { background: #fff; font-weight: 600; }
+		.panel_wrapper { border: 1px solid #d8d8d8; padding: 12px; background: #fff; }
+		.panel { display: none; }
+		.panel.current { display: block; }
+		/* Show only the color swatch by default; reveal inputs + default button + picker on click */
+		.psource-chat-wrap-popup .wp-picker-container {
+			position: relative;
+			display: inline-block;
+		}
+		.psource-chat-wrap-popup .wp-picker-input-wrap,
+		.psource-chat-wrap-popup .wp-picker-default,
+		.psource-chat-wrap-popup .wp-picker-holder {
+			display: none;
+		}
+		.psource-chat-wrap-popup .wp-color-result {
+			border-radius: 3px;
+			height: 30px;
+			line-height: 28px;
+			box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+		}
+		.psource-chat-wrap-popup .wp-picker-active .wp-picker-input-wrap,
+		.psource-chat-wrap-popup .wp-picker-active .wp-picker-default,
+		.psource-chat-wrap-popup .wp-picker-active .wp-picker-holder {
+			display: block;
+		}
+		.psource-chat-wrap-popup .wp-picker-active .wp-picker-input-wrap {
+			margin-top: 6px;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+		.psource-chat-wrap-popup .wp-picker-active .wp-picker-input-wrap input.wp-color-picker {
+			width: 110px;
+			font-family: monospace;
+			padding: 4px 6px;
+			height: 30px;
+		}
+		.psource-chat-wrap-popup .wp-picker-active .wp-picker-default {
+			margin-top: 6px;
+			height: 30px;
+			line-height: 28px;
+			padding: 0 10px;
+			border-radius: 3px;
+		}
+		.psource-chat-wrap-popup .wp-picker-active .wp-picker-holder {
+			position: absolute;
+			top: calc(100% + 6px);
+			left: 0;
+			z-index: 1000;
+			border: 1px solid #d8d8d8;
+			box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+			background: #fff;
+			padding: 6px;
+		}
+	</style>
 	<script type="text/javascript">
 		<?php
 		// We basically want to built to options lists. The 'psource_chat_default_options' will match our Settings panel.
@@ -108,15 +168,32 @@
 			psource_chat_current_options[attr] = psource_chat_default_options[attr];
 		}
 
+		var psource_chat_shortcode_pairs = {};
 		var psource_chat_shortcode_str = '';
-		var _tmp_chat_shortcode = tinyMCEPopup.editor.getContent().split('[chat ');
+		var psource_chat_editor_content = '';
+
+		try {
+			if (window.parent) {
+				if (window.parent.tinymce && window.parent.tinymce.activeEditor && !window.parent.tinymce.activeEditor.isHidden()) {
+					psource_chat_editor_content = window.parent.tinymce.activeEditor.getContent();
+				} else if (window.parent.document) {
+					var textarea = window.parent.document.getElementById('content');
+					if (textarea && textarea.value) {
+						psource_chat_editor_content = textarea.value;
+					}
+				}
+			}
+		} catch (err) {
+			psource_chat_editor_content = '';
+		}
+
+		var _tmp_chat_shortcode = psource_chat_editor_content.split('[chat ');
 		if (_tmp_chat_shortcode.length > 1) {
 			_tmp_chat_shortcode = _tmp_chat_shortcode[1].split(']');
 			psource_chat_shortcode_str = '[chat ' + _tmp_chat_shortcode[0] + ']';
 
 			// Parse the WP shortcode. Taken from shortcode.js
-			var psource_chat_shortcode_pairs = {},
-				numeric = [],
+			var numeric = [],
 				pattern, match;
 
 			pattern = /(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/g;
@@ -137,7 +214,6 @@
 			// Now that we have the shortcode parsed into object pairs we apply the values to our psource_chat_current_options object which is then
 			// loaded to the form fields later.
 			for (attr in psource_chat_shortcode_pairs) {
-				//var attr_val = psource_chat_shortcode_pairs[attr];
 
 				// For the login_options and moderator_roles we convert to array (easier to work with)...
 				if ((attr == "login_options") || (attr == "moderator_roles")) {
@@ -181,6 +257,64 @@
 			}
 		}
 
+	</script>
+	<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			document.body.style.display = 'block';
+
+			// Vanilla fallback tab handling for Thickbox (mcTabs is not reliable here).
+			var tabs = Array.prototype.slice.call(document.querySelectorAll('.tabs li'));
+			var panels = Array.prototype.slice.call(document.querySelectorAll('.panel_wrapper .panel'));
+
+			function activateTab(tabId, panelId) {
+				tabs.forEach(function(tab) { tab.classList.remove('current'); });
+				panels.forEach(function(panel) {
+					panel.classList.remove('current');
+					panel.style.display = 'none';
+				});
+
+				var tabEl = document.getElementById(tabId);
+				var panelEl = document.getElementById(panelId);
+				if (tabEl) { tabEl.classList.add('current'); }
+				if (panelEl) {
+					panelEl.classList.add('current');
+					panelEl.style.display = 'block';
+				}
+			}
+
+			function parseTarget(str) {
+				if (!str) return null;
+				var match = str.match(/displayTab\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]\)/);
+				if (match && match.length === 3) {
+					return { tab: match[1], panel: match[2] };
+				}
+				return null;
+			}
+
+			tabs.forEach(function(tab) {
+				var link = tab.querySelector('a');
+				if (!link) return;
+				link.addEventListener('click', function(e) {
+					e.preventDefault();
+					var target = link.getAttribute('href') || link.getAttribute('onmousedown') || '';
+					var parsed = parseTarget(target);
+					if (parsed) {
+						activateTab(parsed.tab, parsed.panel);
+					}
+				});
+			});
+
+			// Initialize first tab
+			if (tabs.length) {
+				var firstLink = tabs[0].querySelector('a');
+				if (firstLink) {
+					var parsed = parseTarget(firstLink.getAttribute('href') || firstLink.getAttribute('onmousedown'));
+					if (parsed) {
+						activateTab(parsed.tab, parsed.panel);
+					}
+				}
+			}
+		});
 	</script>
 	<title><?php _e( 'WordPress Chat', 'psource-chat' ); ?></title>
 </head>
@@ -262,7 +396,7 @@
 				<input type="button" id="cancel" name="cancel"
 					value="<?php _e( 'Abbrechen', 'psource-chat' ); ?>"
 					title="<?php _e( 'Änderung abbrechen und Popup schließen', 'psource-chat' ); ?>"
-					onclick="tinyMCEPopup.close();"/>
+					onclick="psourceChatClose();"/>
 			</div>
 
 			<div style="float: right; width: 60%;">
