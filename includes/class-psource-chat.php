@@ -1370,15 +1370,11 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 			global $wp_version;
 
-			// For some dumb reason WordPress does not include any default jQuery UI styles even for wp-admin
-			$css_url = 'http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css';
-			if ( is_ssl() ) {
-				$css_url = str_replace( 'http://', 'https://', $css_url );
-			}
+			// ClassicPress deprecates jQuery UI core/mouse/sortable; avoid enqueue there.
+			$is_classicpress = ( defined( 'CLASSICPRESS_VERSION' ) || function_exists( '_cp_deprecate_wp_enqueue_scripts' ) );
 
 			//Register All the styles
 			wp_register_style( 'psource-chat-style', $this->get_plugin_url( '/css/psource-chat-style.css' ), array(), $this->chat_current_version );
-			wp_register_style( 'psource-chat-jquery-ui-datepicker-css', $css_url, false, '1.0.0' );
 
 			//Admin Styles
 			wp_register_style( 'psource-chat-wpadminbar-style', $this->get_plugin_url( '/css/psource-chat-wpadminbar.css' ), array(), $this->chat_current_version );
@@ -1388,24 +1384,11 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				wp_register_style( 'psource-chat-wpadminbar-style-pre-38', $this->get_plugin_url( '/css/psource-chat-wpadminbar-pre-38.css' ), array(), $this->chat_current_version );
 			}
 
-			if ( ( isset( $_GET['page'] ) ) && ( $_GET['page'] == 'chat_session_logs' ) ) {
-				wp_enqueue_style( 'psource-chat-jquery-ui-datepicker-css' );
-				wp_enqueue_script( 'jquery-ui-datepicker' );
-			}
 
 			//Register all the Scripts
-			wp_register_script( 'psource-chat-admin-js', $this->get_plugin_url( '/js/psource-chat-admin.js' ), array(
-				'jquery',
-				'jquery-ui-core',
-				'jquery-ui-tabs'
-			), $this->chat_current_version );
+			wp_register_script( 'psource-chat-admin-js', $this->get_plugin_url( '/js/psource-chat-admin.js' ), array( 'jquery' ), $this->chat_current_version );
 			wp_register_script( 'jquery-cookie', $this->get_plugin_url( '/js/jquery-cookie.js' ), array( 'jquery' ), $this->chat_current_version, true );
 			wp_register_script( 'psource-chat-admin-farbtastic-js', $this->get_plugin_url( '/js/psource-chat-admin-farbtastic.js' ), array( 'wp-color-picker' ), $this->chat_current_version, true );
-			wp_register_script( 'psource-chat-admin-js', $this->get_plugin_url( '/js/psource-chat-admin.js' ), array(
-				'jquery',
-				'jquery-ui-core',
-				'jquery-ui-tabs'
-			), $this->chat_current_version );
 			wp_register_script( 'psource-chat-js', $this->get_plugin_url( '/js/psource-chat.js' ), array( 'jquery' ), $this->chat_current_version, true );
 
 			$screen = get_current_screen();
@@ -1484,11 +1467,6 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				wp_enqueue_script( 'json2' );
 				$this->_registered_scripts['json2'] = 'json2';
 
-				wp_enqueue_script( 'jquery-ui-core' );
-				$this->_registered_scripts['jquery-ui-core'] = 'jquery-ui-core';
-
-				wp_enqueue_script( 'jquery-ui-tabs' );
-				$this->_registered_scripts['jquery-ui-tabs'] = 'jquery-ui-tabs';
 
 
 				$this->_registered_styles['psource-chat-style'] = 'psource-chat-style';
@@ -1582,11 +1560,6 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				wp_enqueue_script( 'json2' );
 				$this->_registered_scripts['json2'] = 'json2';
 
-				wp_enqueue_script( 'jquery-ui-core' );
-				$this->_registered_scripts['jquery-ui-core'] = 'jquery-ui-core';
-
-				wp_enqueue_script( 'jquery-ui-tabs' );
-				$this->_registered_scripts['jquery-ui-tabs'] = 'jquery-ui-tabs';
 
 				$this->_registered_styles['psource-chat-style'] = 'psource-chat-style';
 				$this->_registered_styles[]                     = 'psource-chat-admin-css';
@@ -2608,7 +2581,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			$this->_registered_scripts['psource-chat-admin-js'] = 'psource-chat-admin-js';
 
 			wp_enqueue_script( 'psource-chat-admin-tinymce-js', $this->get_plugin_url( '/js/psource-chat-admin-tinymce.js' ),
-				array( 'jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'wp-color-picker' ), $this->chat_current_version );
+				array( 'jquery', 'wp-color-picker' ), $this->chat_current_version );
 			$this->_registered_scripts['psource-chat-admin-tinymce-js'] = 'psource-chat-admin-tinymce-js';
 
 			wp_enqueue_script( 'psource-chat-admin-farbtastic-js', $this->get_plugin_url( '/js/psource-chat-admin-farbtastic.js' ), array(

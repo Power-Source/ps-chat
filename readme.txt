@@ -3,7 +3,7 @@ Contributors: DerN3rd (NerdService Eimen)
 Tags: multisite, chat, community, messenger, support
 Requires at least: 4.9
 Tested up to: 6.8.1
-Stable tag: 1.0.0
+Stable tag: 1.2.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -24,6 +24,19 @@ Online Geld verdienen macht dieses mächtige Leichtgewicht von eCommerce Plugin 
 
 
 == ChangeLog ==
+
+= 1.2.0 =
+
+* ClassicPress-sicher: jQuery UI Tabs/Datepicker entfernt, native Tabs & Datumsfelder
+* Admin-UI: Tabs neu gestylt, Farbwähler standardmäßig als Swatch, Session-Logs mit native date
+* Editor: Chat-Button in die Medienleiste verschoben, TinyMCE-Abhängigkeit entfernt, Modal-Tabs repariert
+
+= 1.1.0 =
+
+* Emoji-Picker: Modal im Chatfenster, kompaktere Emojis, Suchfeld, Tabs
+* Sendebutton: Option rechts als Icon, unten weiterhin Text, DOM-Logik korrigiert
+* Fehlerbehebung: 500er im Poll behoben (Filter-Parameter angepasst)
+* Cleanup: Debug-Logs im JS entfernt; Produktions-Logging wieder deaktiviert
 
 = 1.0.0 =
 

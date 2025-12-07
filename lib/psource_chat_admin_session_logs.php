@@ -228,16 +228,8 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 			global $psource_chat;
 
 			?>
-			<input type="text" placeholder="<?php _e( 'Anfangsdatum', 'psource-chat' ); ?>" name="start" size="15"
-				class="chat-start" value="<?php echo $this->filters['start']; ?>" id="start"/>
-			<input type="text" placeholder="<?php _e( 'Enddatum', 'psource-chat' ); ?>" name="end" size="15" class="chat-end" value="<?php echo $this->filters['end']; ?>" id="end"/>
-
-			<script>
-				jQuery(document).ready(function () {
-					jQuery('input#start').datepicker({dateFormat: 'yy-mm-dd'});
-					jQuery('input#end').datepicker({dateFormat: 'yy-mm-dd'});
-				});
-			</script>
+			<input type="date" placeholder="<?php _e( 'Anfangsdatum', 'psource-chat' ); ?>" name="start" class="chat-start" value="<?php echo $this->filters['start']; ?>" id="start" />
+			<input type="date" placeholder="<?php _e( 'Enddatum', 'psource-chat' ); ?>" name="end" class="chat-end" value="<?php echo $this->filters['end']; ?>" id="end" />
 		<?php
 		}
 
