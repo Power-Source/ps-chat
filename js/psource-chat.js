@@ -308,6 +308,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                     data: {
                         'function': 'chat_messages_update',
                         'action': 'chatProcess',
+                        'nonce': psource_chat_localized['settings']['nonce'],
                         'timers': timers,
                         'psource-chat-sessions': sessions_data,
                         'psource-chat-settings-request-uri': psource_chat_localized['settings']['REQUEST_URI']
@@ -322,9 +323,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                         if (reply_data != undefined) {
                             psource_chat.errors['chat_session_message_update'] = 0;
 
-                            if (reply_data['performance'] != undefined) {
-                                console.log('performance: chat_messages_update: %o', reply_data['performance']);
-                            }
+                            // Poll diagnostics removed after fix
 
                             //Check for new invites
                             if (reply_data['invites'] != undefined) {
@@ -1315,6 +1314,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                 data: {
                     'function': 'chat_message_send',
                     'action': 'chatProcess',
+                    'nonce': psource_chat_localized['settings']['nonce'],
                     'psource-chat-sessions': sessions_data,
                     'chat_messages': psource_chat.send_data,
                     'psource-chat-settings-request-uri': psource_chat_localized['settings']['REQUEST_URI']

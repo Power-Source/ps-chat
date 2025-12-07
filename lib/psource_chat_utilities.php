@@ -462,6 +462,7 @@ if ( ! class_exists( 'ChatLogger' ) ) {
 
 		var $DEBUG;
 		var $logFolder;
+		var $logFile;
 		var $logFileFull;
 		var $item_key;
 		var $data_item_key;

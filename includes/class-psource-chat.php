@@ -1169,6 +1169,9 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			}
 
 			$this->chat_localized['settings']["session_poll_interval_users"] = 5;
+
+			// Security: Nonce for AJAX requests (write operations)
+			$this->chat_localized['settings']['nonce'] = wp_create_nonce( 'psource_chat' );
 		}
 
 		/**
@@ -1357,10 +1360,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			}
 
 			if ( $_show_tinymce_button === true ) {
-				add_filter( "mce_external_plugins", array( &$this, "tinymce_add_plugin" ) );
-				add_filter( 'mce_buttons', array( &$this, 'tinymce_register_button' ) );
-				//add_filter('mce_external_languages', array(&$this,'tinymce_load_langs'));
-
+				add_action( 'media_buttons', array( &$this, 'render_media_button' ), 20 );
 			}
 
 			return $_show_tinymce_button;
@@ -4125,6 +4125,38 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 		return $content;
 	}
 
+	/**
+	 * Render chat shortcode builder button in the media toolbar.
+	 *
+	 * @param string $editor_id Current editor ID from media_buttons action.
+	 *
+	 * @return void
+	 */
+	function render_media_button( $editor_id ) {
+		if ( empty( $editor_id ) ) {
+			return;
+		}
+
+		add_thickbox();
+
+		$modal_url = add_query_arg( array(
+			'action'    => 'chatTinymceOptions',
+			'TB_iframe' => 'true',
+			'width'    => 700,
+			'height'   => 650,
+		), admin_url( 'admin-ajax.php' ) );
+
+		$icon_url = $this->get_plugin_url( '/tinymce/images/chat.png' );
+
+		printf(
+			'<a href="%1$s" class="button thickbox psource-chat-media-button" data-editor="%2$s"><span class="wp-media-buttons-icon" style="background: url(%3$s) no-repeat center center; background-size: 18px 18px;"></span> %4$s</a>',
+			esc_url( $modal_url ),
+			esc_attr( $editor_id ),
+			esc_url( $icon_url ),
+			esc_html__( 'Chat einfügen', 'psource-chat' )
+		);
+	}
+
 
 		/**
 		 * Adds the status module to the chat box. The module is just a div container displayed within the outer chat box div
@@ -4170,31 +4202,41 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			$textarea_max_length = '';
 		}
 
-		// Wrapper für flexbox layout mit textarea und button
-		$content .= '<div class="psource-chat-input-wrapper">';
-		
-		$content .= '<textarea id="psource-chat-send-' . $chat_session['id'] . '" class="psource-chat-send" ' . $textarea_max_length . ' rows="5" placeholder="' . __( 'Tippe Deine Chatnachricht hier', 'psource-chat' ) . '"></textarea>';
+		// Wrapper für flexbox layout: nur für Position "right" nutzen
+		$use_right_layout = ( isset( $chat_session['box_send_button_position'] ) && $chat_session['box_send_button_position'] === 'right' );
+		if ( $use_right_layout ) {
+			// Textarea + Button nebeneinander
+			$content .= '<div class="psource-chat-input-wrapper">';
+			$content .= '<textarea id="psource-chat-send-' . $chat_session['id'] . '" class="psource-chat-send" ' . $textarea_max_length . ' rows="5" placeholder="' . __( 'Tippe Deine Chatnachricht hier', 'psource-chat' ) . '"></textarea>';
+		} else {
+			// Nur Textarea (Button folgt darunter wie im Original)
+			$content .= '<div class="psource-chat-input-wrapper">';
+			$content .= '<textarea id="psource-chat-send-' . $chat_session['id'] . '" class="psource-chat-send" ' . $textarea_max_length . ' rows="5" placeholder="' . __( 'Tippe Deine Chatnachricht hier', 'psource-chat' ) . '"></textarea>';
+			$content .= '</div>';
+		}
 
+		// Senden-Button rendern abhängig von Position/Settings
 		if ( ( $chat_session['box_send_button_enable'] == "enabled" )
-		     || ( ( $chat_session['box_send_button_enable'] == "mobile_only" ) && ( $this->chat_localized['settings']['wp_is_mobile'] == true ) )
+			 || ( ( $chat_session['box_send_button_enable'] == "mobile_only" ) && ( $this->chat_localized['settings']['wp_is_mobile'] == true ) )
 		) {
 			$btn_id = 'psource-chat-send-button-' . $chat_session['id'];
 			$btn_class = 'psource-chat-send-button';
 			$btn_title = esc_attr( $chat_session['box_send_button_label'] );
-			if ( isset( $chat_session['box_send_button_position'] ) && $chat_session['box_send_button_position'] === 'right' ) {
-				// Icon-only square button for right position
+
+			if ( $use_right_layout ) {
+				// Icon-only square button direkt im Wrapper (rechts)
 				$content .= '<button id="' . $btn_id . '" class="' . $btn_class . '" type="button" title="' . $btn_title . '" aria-label="' . $btn_title . '">'
 					. '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
 					. '<path d="M2 21l21-9-21-9v7l15 2-15 2v7z"></path>'
 					. '</svg>'
 					. '</button>';
+				// Wrapper schließen bei rechter Position
+				$content .= '</div>';
 			} else {
-				// Text label button (default)
+				// Original: Text-Button unterhalb des Eingabebereichs
 				$content .= '<button id="' . $btn_id . '" class="' . $btn_class . '" type="button">' . $chat_session['box_send_button_label'] . '</button>';
 			}
 		}
-		
-		$content .= '</div>'; // close input wrapper
 
 		if ( ( $chat_session['box_emoticons'] == "enabled" ) || ( $chat_session['box_sound'] == "enabled" ) || ( intval( $chat_session['row_message_input_length'] ) > 0 ) || ( $chat_session['file_uploads_enabled'] == "enabled" && $this->get_option( 'file_uploads_enabled', 'global' ) == 'enabled' ) ) {
 
@@ -4911,8 +4953,8 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				$row_date_time = "<br />" . $row_date_time;
 			}
 
-			// Apply media content filter for display
-			$message = apply_filters( 'psource_chat_display_message', $message, $row );
+			// Apply media content filter for display (cast row to array for media filter)
+			$message = apply_filters( 'psource_chat_display_message', $message, (array) $row );
 			
 			$row_text .= '<p class="psource-chat-message">' . $row_avatar_name . ' ' . convert_smilies( $message ) . $row_date_time . '</p>';
 
@@ -6077,6 +6119,26 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				die();
 			}
 			$function = $_POST['function'];
+
+			// Verify nonce for write operations to prevent CSRF
+			$write_functions = array(
+				'chat_message_send',
+				'chat_messages_clear',
+				'chat_messages_archive',
+				'chat_session_moderate_status',
+				'chat_session_moderate_message',
+				'chat_session_moderate_ipaddress',
+				'chat_session_moderate_user',
+				'chat_session_invite_private',
+				'chat_update_user_status',
+				'chat_invite_update_user_status'
+			);
+			if ( in_array( $function, $write_functions, true ) ) {
+				if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_POST['nonce'] ), 'psource_chat' ) ) {
+					wp_send_json_error( 'Invalid nonce' );
+					die();
+				}
+			}
 
 			switch ( $function ) {
 

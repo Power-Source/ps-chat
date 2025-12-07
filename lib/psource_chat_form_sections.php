@@ -2021,9 +2021,9 @@ function psource_chat_form_section_tinymce_button_roles( $form_section = 'global
 	global $psource_chat, $wp_roles;
 	?>
 	<fieldset>
-		<legend><?php _e( 'WYSIWYG Chat-Schaltfläche Benutzerrollen', 'psource-chat' ); ?></legend>
+		<legend><?php _e( 'Editor Chat-Schaltfläche (Medienleiste) Benutzerrollen', 'psource-chat' ); ?></legend>
 
-		<p class="info"><?php _e( "Wähle mit der Schaltfläche Rollen aus welche die Chat WYSIWYG Schaltfläche, verwenden dürfen. Beachte, dass der Benutzer auch über Bearbeitungsfunktionen für den Beitragstyp verfügen muss.", 'psource-chat' ); ?></p>
+		<p class="info"><?php _e( "Wähle Rollen aus, die die Chat-Schaltfläche in der Medien-Leiste nutzen dürfen. Der Benutzer benötigt weiterhin die Bearbeitungsrechte für den Beitragstyp.", 'psource-chat' ); ?></p>
 		<table border="0" cellpadding="4" cellspacing="0">
 			<tr>
 				<td class="chat-label-column-wide">
@@ -2047,8 +2047,8 @@ function psource_chat_form_section_tinymce_button_post_types( $form_section = 'p
 	global $psource_chat;
 	?>
 	<fieldset>
-		<legend><?php _e( 'WYSIWYG Chat Button Beitragstypen', 'psource-chat' ); ?></legend>
-		<p class="info"><?php _e( "Wähle aus, für welche Beitragstypen die Schaltfläche Chat WYSIWYG verfügbar sein soll.", 'psource-chat' ); ?></p>
+		<legend><?php _e( 'Editor Chat Button Beitragstypen', 'psource-chat' ); ?></legend>
+		<p class="info"><?php _e( "Wähle aus, für welche Beitragstypen die Chat-Schaltfläche in der Medien-Leiste verfügbar sein soll.", 'psource-chat' ); ?></p>
 
 		<table border="0" cellpadding="4" cellspacing="0">
 			<tr>
