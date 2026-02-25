@@ -115,21 +115,44 @@
 		});
 
 		if (jQuery('#chat_tab_pane').length) {
-			// If the URL has a hash we check of this might be a hash to one of the tabs. If so set the tab index
-			var url_hash = window.location.hash;
-			if (url_hash != '') {
-				url_hash = url_hash.replace('_panel', '_tab');
-				var target_tab_li = jQuery('#chat_tab_pane ul li'+url_hash);
-				var target_tab_idx = jQuery('#chat_tab_pane ul li').index(target_tab_li);
-			} else {
-				var target_tab_idx = jQuery.cookie('selected-tab');
+			var $pane = jQuery('#chat_tab_pane');
+			var $tabs = $pane.find('ul li');
+			var $panels = $pane.children('div');
+
+			function activateTab(idx) {
+				$tabs.removeClass('ui-tabs-active ui-state-active');
+				$panels.hide();
+				var $tab = $tabs.eq(idx);
+				var target = $tab.find('a').attr('href');
+				$tab.addClass('ui-tabs-active ui-state-active');
+				if (target && target.charAt(0) === '#') {
+					$panels.filter(target).show();
+				}
+				jQuery.cookie('selected-tab', idx, { path: '/' });
 			}
-			jQuery("#chat_tab_pane").tabs({ 
-		    	activate: function (e, ui) { 
-		        	jQuery.cookie('selected-tab', ui.newTab.index(), { path: '/' }); 
-		    	}, 
-		    	active: target_tab_idx             
+
+			var target_tab_idx = 0;
+			var url_hash = window.location.hash;
+			if (url_hash) {
+				url_hash = url_hash.replace('_panel', '_tab');
+				var $targetLi = $pane.find('ul li' + url_hash);
+				if ($targetLi.length) {
+					target_tab_idx = $tabs.index($targetLi);
+				}
+			} else {
+				var cookieIdx = jQuery.cookie('selected-tab');
+				if (cookieIdx !== undefined && cookieIdx !== null && cookieIdx !== '') {
+					target_tab_idx = parseInt(cookieIdx, 10) || 0;
+				}
+			}
+
+			$tabs.find('a').on('click', function(e){
+				e.preventDefault();
+				var idx = $tabs.index(jQuery(this).closest('li'));
+				activateTab(idx);
 			});
+
+			activateTab(target_tab_idx);
 		}
 	});
 })(jQuery);

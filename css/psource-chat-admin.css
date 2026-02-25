@@ -224,6 +224,46 @@ body.toplevel_page_bp-groups #psource-chat-wrap .ui-tabs-panel.ui-widget-content
         margin-top: 2.0em;
 }
 
+/* Native tab styling (no jQuery UI dependency) */
+#chat_tab_pane > ul {
+    display: flex;
+    gap: 0.4em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid #ddd;
+}
+
+#chat_tab_pane > ul li {
+    margin: 0;
+}
+
+#chat_tab_pane > ul li a {
+    display: block;
+    padding: 0.4em 0.9em;
+    text-decoration: none;
+    background: #f3f3f3;
+    border: 1px solid #ddd;
+    border-radius: 4px 4px 0 0;
+    color: #333;
+}
+
+#chat_tab_pane > ul li.ui-tabs-active a,
+#chat_tab_pane > ul li.ui-state-active a {
+    background: #fff;
+    border-bottom-color: #fff;
+    color: #111;
+    font-weight: 600;
+}
+
+#chat_tab_pane > div {
+    border: 1px solid #ddd;
+    border-radius: 0 4px 4px 4px;
+    background: #fdfdfd;
+    padding: 1em;
+    margin-top: -1px;
+}
+
 #psource-chat-wrap .ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
         background-color: #FDFDFD;
 }
