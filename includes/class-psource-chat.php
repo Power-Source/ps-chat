@@ -4868,6 +4868,8 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 			$row_text = '';
 			$row_text .= '<div id="psource-chat-row-' . strtotime( $row->timestamp ) . '-' . $row->id . '" class="' . $row_class . '">';
+			$row_name_attr = esc_attr( $row->name );
+			$row_name_html = esc_html( $row->name );
 
 			$row_avatar_name = '';
 			if ( empty( $row->avatar ) ) {
@@ -4876,21 +4878,21 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			$row->avatar = esc_url( $row->avatar );
 			if ( $chat_session['row_name_avatar'] == 'avatar' ) {
 				if ( ( isset( $row->avatar ) ) && ( ! empty( $row->avatar ) ) ) {
-					$avatar = '<img alt="' . $row->name . '" src="' . $row->avatar . '" class="psource-chat-user psource-chat-user-avatar" height="' .
+					$avatar = '<img alt="' . $row_name_attr . '" src="' . $row->avatar . '" class="psource-chat-user psource-chat-user-avatar" height="' .
 					          intval( $chat_session['row_avatar_width'] ) . '" />';
-					$row_avatar_name .= '<a class="psource-chat-user psource-chat-user-avatar" title="@' . $row->name . '" href="#">' . $avatar . '</a>';
+					$row_avatar_name .= '<a class="psource-chat-user psource-chat-user-avatar" title="@' . $row_name_attr . '" href="#">' . $avatar . '</a>';
 				}
 
 			} else if ( $chat_session['row_name_avatar'] == "name" ) {
 
-				$row_avatar_name .= '<a class="psource-chat-user psource-chat-user-name" title="@' . $row->name . '" href="#">' . $row->name . '</a>';
+				$row_avatar_name .= '<a class="psource-chat-user psource-chat-user-name" title="@' . $row_name_attr . '" href="#">' . $row_name_html . '</a>';
 			} else if ( $chat_session['row_name_avatar'] == "name-avatar" ) {
 				if ( ( isset( $row->avatar ) ) && ( ! empty( $row->avatar ) ) ) {
-					$avatar = '<img alt="' . $row->name . '" src="' . $row->avatar . '" class="psource-chat-user psource-chat-user-avatar" height="' .
+					$avatar = '<img alt="' . $row_name_attr . '" src="' . $row->avatar . '" class="psource-chat-user psource-chat-user-avatar" height="' .
 					          intval( $chat_session['row_avatar_width'] ) . '" />';
-					$row_avatar_name .= '<a class="psource-chat-user psource-chat-user-avatar" title="@' . $row->name . '" href="#">' . $avatar . '</a>';
+					$row_avatar_name .= '<a class="psource-chat-user psource-chat-user-avatar" title="@' . $row_name_attr . '" href="#">' . $avatar . '</a>';
 				}
-				$row_avatar_name .= '<a class="psource-chat-user psource-chat-user-name" title="@' . $row->name . '" href="#">' . $row->name . '</a>';
+				$row_avatar_name .= '<a class="psource-chat-user psource-chat-user-name" title="@' . $row_name_attr . '" href="#">' . $row_name_html . '</a>';
 			}
 
 
@@ -4946,7 +4948,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				//if (($chat_session['session_type'] != "log") && ($row->moderator != "yes")) {
 				if ( $chat_session['session_type'] != "log" ) {
 
-					$row_text .= '<li class="psource-chat-admin-actions-item psource-chat-user-invite"><a class="psource-chat-user-invite" rel="' . $row->auth_hash . '" title="' . __( 'Zu privaten Chat einladen:', 'psource-chat' ) . ' ' . $row->name . '" href="#"><span class="action"><img height="10" src="' . $this->get_plugin_url( '/images/padlock-icon-th.png' ) . '" alt=""/></span></a></li>';
+					$row_text .= '<li class="psource-chat-admin-actions-item psource-chat-user-invite"><a class="psource-chat-user-invite" rel="' . $row->auth_hash . '" title="' . __( 'Zu privaten Chat einladen:', 'psource-chat' ) . ' ' . $row_name_attr . '" href="#"><span class="action"><img height="10" src="' . $this->get_plugin_url( '/images/padlock-icon-th.png' ) . '" alt=""/></span></a></li>';
 
 					$row_text .= '<li class="psource-chat-admin-actions-item psource-chat-admin-actions-item-delete"><a class="psource-chat-admin-actions-item-delete" title="' . __( 'moderiere diese Nachricht', 'psource-chat' ) . '" href="#"><span  class="action">' . $this->chat_localized['settings']["row_delete_text"] . '</span></a></li>';
 

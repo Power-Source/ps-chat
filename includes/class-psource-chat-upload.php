@@ -22,6 +22,13 @@ class PSource_Chat_Upload {
 	private static $upload_dir = null;
 
 	/**
+	 * Prevents repeated dbDelta calls in the same request.
+	 *
+	 * @var bool
+	 */
+	private static $files_table_ready = false;
+
+	/**
 	 * Erlaubte Dateitypen (Standard)
 	 * @var array
 	 */
@@ -227,7 +234,7 @@ class PSource_Chat_Upload {
 	 */
 	public static function ajax_upload_file() {
 		// Nonce prüfen
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'psource_chat_nonce' ) ) {
+		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'psource_chat_nonce' ) ) {
 			wp_send_json_error( 'Security check failed' );
 		}
 
@@ -243,6 +250,10 @@ class PSource_Chat_Upload {
 		
 		if ( ! $chat_session || ! self::are_uploads_enabled_for_session( $chat_session ) ) {
 			wp_send_json_error( 'Datei-Uploads sind für diese Chat-Session nicht erlaubt' );
+		}
+
+		if ( ! self::is_current_request_authorized_for_session( $chat_session ) ) {
+			wp_send_json_error( 'Keine Berechtigung für diese Chat-Session' );
 		}
 
 		// Datei prüfen
@@ -400,6 +411,10 @@ class PSource_Chat_Upload {
 	 * Erstellt Dateien-Tabelle
 	 */
 	private static function create_files_table() {
+		if ( self::$files_table_ready ) {
+			return;
+		}
+
 		global $wpdb;
 		
 		$table_name = $wpdb->prefix . 'psource_chat_files';
@@ -422,6 +437,7 @@ class PSource_Chat_Upload {
 		
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $sql );
+		self::$files_table_ready = true;
 	}
 
 	/**
@@ -436,38 +452,69 @@ class PSource_Chat_Upload {
 			return false;
 		}
 		
-		// Session-Typen: 'page', 'site', 'widget', 'dashboard', 'bp-group'
-		$session_type = 'site'; // Default für bottom_corner
-		
-		if ( $session_id === 'bottom_corner' ) {
-			$session_type = 'site';
-		} elseif ( is_numeric( $session_id ) ) {
-			$session_type = 'page';
+		if ( ! empty( $psource_chat->chat_sessions ) && isset( $psource_chat->chat_sessions[ $session_id ] ) ) {
+			$session = $psource_chat->chat_sessions[ $session_id ];
+			if ( is_array( $session ) ) {
+				if ( empty( $session['id'] ) ) {
+					$session['id'] = $session_id;
+				}
+				return $session;
+			}
 		}
-		
-		// Hole VOLLSTÄNDIGE Session-Konfiguration aus dem Chat-System
-		$full_session_config = array();
-		
-		// Alle Optionen für den Session-Typ holen
-		foreach ( $psource_chat->_chat_options[ $session_type ] as $key => $value ) {
-			$full_session_config[ $key ] = $value;
+
+		if ( 'bottom_corner' === $session_id && ! empty( $psource_chat->_chat_options['site'] ) ) {
+			$fallback_session                 = $psource_chat->_chat_options['site'];
+			$fallback_session['id']          = $session_id;
+			$fallback_session['session_type'] = 'site';
+			if ( ! isset( $fallback_session['blog_id'] ) ) {
+				$fallback_session['blog_id'] = get_current_blog_id();
+			}
+
+			return $fallback_session;
 		}
-		
-		// Wichtige Felder sicherstellen
-		$full_session_config['id'] = $session_id;
-		$full_session_config['session_type'] = $session_type;
-		
-		// Blog-ID sicherstellen
-		if ( ! isset( $full_session_config['blog_id'] ) ) {
-			$full_session_config['blog_id'] = get_current_blog_id();
+
+		return false;
+	}
+
+	/**
+	 * Verifiziert, dass der aktuelle Request zur Session berechtigt ist.
+	 */
+	private static function is_current_request_authorized_for_session( $chat_session ) {
+		global $psource_chat;
+
+		if ( is_user_logged_in() ) {
+			return true;
 		}
-		
-		// Moderator-Status sicherstellen
-		if ( ! isset( $full_session_config['moderator'] ) ) {
-			$full_session_config['moderator'] = '';
+
+		if ( empty( $psource_chat->chat_auth ) || empty( $psource_chat->chat_auth['auth_hash'] ) ) {
+			return false;
 		}
-		
-		return $full_session_config;
+
+		if ( ! method_exists( $psource_chat, 'chat_session_get_active_users' ) ) {
+			return false;
+		}
+
+		$auth_hash = sanitize_text_field( $psource_chat->chat_auth['auth_hash'] );
+		$active    = $psource_chat->chat_session_get_active_users( $chat_session );
+
+		if ( empty( $active ) || ! is_array( $active ) ) {
+			return false;
+		}
+
+		$groups = array( 'users', 'moderators' );
+		foreach ( $groups as $group ) {
+			if ( empty( $active[ $group ] ) || ! is_array( $active[ $group ] ) ) {
+				continue;
+			}
+
+			foreach ( $active[ $group ] as $active_user ) {
+				if ( isset( $active_user['auth_hash'] ) && hash_equals( (string) $active_user['auth_hash'], (string) $auth_hash ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -632,6 +679,11 @@ class PSource_Chat_Upload {
 		if ( ! $file_data ) {
 			wp_die( 'Datei nicht gefunden' );
 		}
+
+		$chat_session = self::get_chat_session( $file_data['session_id'] );
+		if ( ! $chat_session || ! self::is_current_request_authorized_for_session( $chat_session ) ) {
+			wp_die( 'Keine Berechtigung für diese Datei' );
+		}
 		
 		$file_path = self::get_upload_dir() . '/' . $file_data['session_id'] . '/' . $file_data['stored_name'];
 		
@@ -643,14 +695,20 @@ class PSource_Chat_Upload {
 		$file_extension = strtolower( pathinfo( $file_data['original_name'], PATHINFO_EXTENSION ) );
 		$is_image = in_array( $file_extension, array( 'jpg', 'jpeg', 'png', 'gif', 'webp' ) );
 		
+		$download_name = sanitize_file_name( $file_data['original_name'] );
+		if ( empty( $download_name ) ) {
+			$download_name = 'chat-file';
+		}
+
 		// Headers setzen
 		header( 'Content-Type: ' . $file_data['mime_type'] );
+		header( 'X-Content-Type-Options: nosniff' );
 		
 		// Für Bilder inline anzeigen, für andere Dateien als Download
 		if ( $is_image ) {
-			header( 'Content-Disposition: inline; filename="' . $file_data['original_name'] . '"' );
+			header( 'Content-Disposition: inline; filename="' . $download_name . '"' );
 		} else {
-			header( 'Content-Disposition: attachment; filename="' . $file_data['original_name'] . '"' );
+			header( 'Content-Disposition: attachment; filename="' . $download_name . '"' );
 		}
 		
 		header( 'Content-Length: ' . filesize( $file_path ) );
@@ -868,9 +926,6 @@ class PSource_Chat_Upload {
 			$file_id = $matches[1];
 			
 			try {
-				// Tabelle sicherstellen
-				self::create_files_table();
-				
 				$file_data = self::get_file_by_id( $file_id );
 				
 				if ( ! $file_data ) {

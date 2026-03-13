@@ -9,6 +9,7 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 
 		var $filters = array();
 		var $item;
+		var $message_stats = array();
 
 		function __construct() {
 			global $status, $page;
@@ -527,39 +528,68 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 		}
 
 		function column_messages_count( $item ) {
-			unset( $item->messages_count );
-			if ( ( isset( $item->messages_count ) ) && ( ! empty( $item->messages_count ) ) ) {
-				echo $item->messages_count;
-			} else {
-				global $wpdb;
-				if ( $item->archived == "no" ) {
-					$sql_str = $wpdb->prepare( "SELECT count(*) count FROM " . PSOURCE_Chat::tablename( 'message' ) . " WHERE blog_id = %d AND chat_id = %s AND archived=%s AND log_id=%d", $item->blog_id, $item->chat_id, $item->archived, $item->id );
+			$archived_key = ( 'no' === $item->archived ) ? 'no' : 'yes';
+			$stat_key     = $item->id . '|' . $archived_key;
+			$stat         = isset( $this->message_stats[ $stat_key ] ) ? $this->message_stats[ $stat_key ] : null;
+
+			if ( empty( $stat ) ) {
+				echo '0';
+				return;
+			}
+
+			echo intval( $stat['count'] );
+
+			if ( 'no' === $archived_key && ! empty( $stat['last_ts'] ) ) {
+				$last_ts    = strtotime( $stat['last_ts'] );
+				$current_ts = current_time( 'timestamp' );
+
+				$diff = (int) abs( intval( $last_ts ) - intval( $current_ts ) );
+				if ( $diff < MINUTE_IN_SECONDS ) {
+					echo sprintf( _n( ' (%s Sekunde zuvor)', ' (%s Sekunden zuvor)', $diff ), $diff );
 				} else {
-					$sql_str = $wpdb->prepare( "SELECT count(*) count FROM " . PSOURCE_Chat::tablename( 'message' ) . " WHERE blog_id = %d AND chat_id = %s AND archived=%s AND log_id=%d", $item->blog_id, $item->chat_id, 'yes', $item->id );
+					echo ' (' . human_time_diff( intval( $last_ts ), intval( $current_ts ) ) . ' ago)';
 				}
-				$counts = $wpdb->get_row( $sql_str );
-				if ( ( $counts ) && ( count( $counts ) ) ) {
-					echo $counts->count;
+			}
+		}
+
+		/**
+		 * Preload message stats for all currently visible logs.
+		 */
+		function preload_message_stats( $items = array() ) {
+			global $wpdb;
+
+			$this->message_stats = array();
+			if ( empty( $items ) || ! is_array( $items ) ) {
+				return;
+			}
+
+			$log_ids = array();
+			foreach ( $items as $item ) {
+				if ( isset( $item->id ) ) {
+					$log_ids[] = intval( $item->id );
 				}
+			}
 
-				if ( $item->archived == "no" ) {
-					$sql_str = $wpdb->prepare( "SELECT timestamp FROM " . PSOURCE_Chat::tablename( 'message' ) . " WHERE blog_id = %d AND chat_id = %s AND archived=%s AND log_id=%d ORDER BY timestamp DESC LIMIT 1", $item->blog_id, $item->chat_id, $item->archived, $item->id );
-					//echo "sql_str=[". $sql_str ."]<br />";
-					$timestamp = $wpdb->get_var( $sql_str );
-					if ( ! empty( $timestamp ) ) {
-						$last_ts    = strtotime( $timestamp );
-						$current_ts = current_time( 'timestamp' );
+			$log_ids = array_values( array_unique( array_filter( $log_ids ) ) );
+			if ( empty( $log_ids ) ) {
+				return;
+			}
 
-						// The WordPress function 'human_time_diff' doesn't handle values less than a minute. So we need to.
-						$diff = (int) abs( intval( $last_ts ) - intval( $current_ts ) );
-						if ( $diff < MINUTE_IN_SECONDS ) {
-							echo sprintf( _n( ' (%s Sekunde zuvor)', ' (%s Sekunden zuvor)', $diff ), $diff );
-						} else {
-							echo ' (' . human_time_diff( intval( $last_ts ), intval( $current_ts ) ) . ' ago)';
-						}
-					}
-				}
+			$placeholders = implode( ',', array_fill( 0, count( $log_ids ), '%d' ) );
+			$sql          = "SELECT log_id, archived, COUNT(*) AS cnt, MAX(timestamp) AS last_ts FROM " . PSOURCE_Chat::tablename( 'message' ) . " WHERE log_id IN ({$placeholders}) GROUP BY log_id, archived";
+			$prepared_sql = call_user_func_array( array( $wpdb, 'prepare' ), array_merge( array( $sql ), $log_ids ) );
+			$stats        = $wpdb->get_results( $prepared_sql );
 
+			if ( empty( $stats ) ) {
+				return;
+			}
+
+			foreach ( $stats as $row ) {
+				$key                        = intval( $row->log_id ) . '|' . $row->archived;
+				$this->message_stats[ $key ] = array(
+					'count'   => intval( $row->cnt ),
+					'last_ts' => $row->last_ts,
+				);
 			}
 		}
 
@@ -808,6 +838,7 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 			if ( ( isset( $items ) ) && ( count( $items ) ) ) {
 
 				$this->items = $items;
+				$this->preload_message_stats( $items );
 
 				$this->set_pagination_args( array(
 						'total_items' => $total_items,

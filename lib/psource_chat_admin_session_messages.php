@@ -481,25 +481,31 @@ if ( ! class_exists( 'PSOURCEChat_Session_Messages_Table' ) ) {
 				return;
 			}
 
-			if ( $this->log_item->archived == 'no' ) {
-				$sql_str = $wpdb->prepare( "SELECT * FROM " . PSOURCE_Chat::tablename( 'message' ) . " WHERE blog_id = %d AND chat_id = %s AND log_id=%d", $this->filters['blog_id'], $this->filters['chat_id'], $this->log_item->id );
-			} else {
-				$sql_str = $wpdb->prepare( "SELECT * FROM " . PSOURCE_Chat::tablename( 'message' ) . " WHERE blog_id = %d AND chat_id = %s AND log_id=%d", $this->filters['blog_id'], $this->filters['chat_id'], $this->log_item->id );
-			}
+			$message_table = PSOURCE_Chat::tablename( 'message' );
+
+			$where_clauses = array(
+				'blog_id = %d',
+				'chat_id = %s',
+				'log_id = %d',
+				'session_type = %s',
+			);
+			$query_params  = array(
+				intval( $this->filters['blog_id'] ),
+				(string) $this->filters['chat_id'],
+				intval( $this->log_item->id ),
+				(string) $this->log_item->session_type,
+			);
 
 			if ( ! empty( $this->filters['search'] ) ) {
-				$sql_str .= " AND message like '%" . $this->filters['search'] . "%'";
+				$where_clauses[] = 'message LIKE %s';
+				$query_params[]  = '%' . $wpdb->esc_like( $this->filters['search'] ) . '%';
 			}
 
 			if ( ( isset( $this->filters['status'] ) ) && ( ! empty( $this->filters['status'] ) ) ) {
-				if ( $this->filters['status'] == "hidden" ) {
-					$sql_str .= " AND `deleted` ='yes' ";
-				} else {
-					//$sql_str .= " AND `archived` ='". $this->filters['status']."' ";
+				if ( $this->filters['status'] == 'hidden' ) {
+					$where_clauses[] = "`deleted` = 'yes'";
 				}
 			}
-
-			$sql_str .= " AND `session_type` ='" . $this->log_item->session_type . "' ";
 
 			$names_array = array();
 
@@ -521,40 +527,31 @@ if ( ! class_exists( 'PSOURCEChat_Session_Messages_Table' ) ) {
 			$names_array = array_unique( $names_array );
 
 			if ( count( $names_array ) ) {
-				$names_str = '';
+				$placeholders    = implode( ',', array_fill( 0, count( $names_array ), '%s' ) );
+				$where_clauses[] = "name IN ({$placeholders})";
 				foreach ( $names_array as $name ) {
-					if ( ! empty( $names_str ) ) {
-						$names_str .= ",";
-					}
-					$names_str .= "'" . addslashes( $name ) . "'";
+					$query_params[] = (string) $name;
 				}
-				$sql_str .= " AND name IN(" . $names_str . ") ";
 			}
 
-			$sql_str .= " ORDER BY timestamp ASC";
-			//echo "sql_str[". $sql_str ."]<br />";
-			$items = $wpdb->get_results( $sql_str );
-			if ( $items ) {
-				if ( count( $items ) ) {
-					$total_items = count( $items );
-					//echo "total_items=[". $total_items ."]<br />";
-					//echo "per_page[". $per_page ."]<br />";
-					$this->items = array_slice( $items, $per_page * ( intval( $current_page ) - 1 ), intval( $per_page ), true );
+			$where_sql = ' WHERE ' . implode( ' AND ', $where_clauses );
 
-					$this->set_pagination_args( array(
-							'total_items' => $total_items,
-							// WE have to calculate the total number of items
-							'per_page'    => intval( $per_page ),
-							// WE have to determine how many items to show on a page
-							'total_pages' => ceil( intval( $total_items ) / intval( $per_page ) )
-							// WE have to calculate the total number of pages
-						)
-					);
-				}
-				$total_items = count( $items );
+			$count_sql      = "SELECT COUNT(*) FROM {$message_table}{$where_sql}";
+			$count_prepared = call_user_func_array( array( $wpdb, 'prepare' ), array_merge( array( $count_sql ), $query_params ) );
+			$total_items    = intval( $wpdb->get_var( $count_prepared ) );
 
-
+			if ( $total_items > 0 ) {
+				$items_sql      = "SELECT * FROM {$message_table}{$where_sql} ORDER BY timestamp ASC LIMIT %d OFFSET %d";
+				$items_params   = array_merge( $query_params, array( intval( $per_page ), intval( $page_offset ) ) );
+				$items_prepared = call_user_func_array( array( $wpdb, 'prepare' ), array_merge( array( $items_sql ), $items_params ) );
+				$this->items    = $wpdb->get_results( $items_prepared );
 			}
+
+			$this->set_pagination_args( array(
+				'total_items' => $total_items,
+				'per_page'    => intval( $per_page ),
+				'total_pages' => ceil( intval( $total_items ) / intval( $per_page ) ),
+			) );
 		}
 	}
 }
