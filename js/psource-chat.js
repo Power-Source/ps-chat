@@ -11,6 +11,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
     errors: {},
     timers: {},
     send_data: {},
+    rest_state: {},
 //	init_users: true,
     popouts: {},
     bound: false,
@@ -84,6 +85,14 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
             domain: psource_chat_localized['settings']['cookie_domain']
         });
 
+        if (psource_chat.settings['auth']['rest_tokens'] == undefined) {
+            psource_chat.settings['auth']['rest_tokens'] = {};
+        }
+
+        psource_chat.rest_state['token_requests'] = {};
+        psource_chat.rest_state['send_requests'] = {};
+        psource_chat.rest_state['revoke_request'] = '';
+
         //var auth_cookie = psource_chat.cookie('psource-chat-auth');
         //var auth_cookie_parsed = JSON.parse(auth_cookie);
 
@@ -106,7 +115,193 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
         psource_chat.init_avatar_fallbacks();
 
         psource_chat.chat_sessions_init();
+        psource_chat.chat_session_prefetch_rest_tokens();
         //psource_chat.chat_session_message_update();
+    },
+    persist_auth_cookie: function () {
+        psource_chat.cookie('psource-chat-auth', JSON.stringify(psource_chat.settings['auth']), {
+            path: psource_chat_localized['settings']['cookiepath'],
+            domain: psource_chat_localized['settings']['cookie_domain']
+        });
+    },
+    chat_session_should_use_rest: function (chat_id) {
+        var chat_session = psource_chat.chat_session_get_session_by_id(chat_id);
+
+        if (chat_session == undefined) {
+            return false;
+        }
+
+        if (psource_chat_localized['settings']['ajax_type'] != 'modern') {
+            return false;
+        }
+
+        if ((psource_chat.settings['auth'] == undefined) || (psource_chat.settings['auth']['type'] != 'public_user')) {
+            return false;
+        }
+
+        if ((psource_chat_localized['settings']['rest_url'] == undefined) || (psource_chat_localized['settings']['rest_auth_url'] == undefined)) {
+            return false;
+        }
+
+        return true;
+    },
+    chat_session_is_rest_token_valid: function (chat_id) {
+        var token_data = psource_chat.settings['auth']['rest_tokens'][chat_id];
+        var expires_at = 0;
+
+        if ((token_data == undefined) || (token_data['token'] == undefined) || (token_data['token'] == '')) {
+            return false;
+        }
+
+        if (token_data['expires_at'] != undefined) {
+            if (!isNaN(parseInt(token_data['expires_at'], 10)) && (token_data['expires_at'].toString().indexOf('-') === -1)) {
+                expires_at = parseInt(token_data['expires_at'], 10);
+            } else {
+                expires_at = Math.round(Date.parse(token_data['expires_at']) / 1000);
+            }
+        }
+
+        if (expires_at < 1) {
+            return true;
+        }
+
+        return expires_at > (Math.round((new Date()).getTime() / 1000) + 30);
+    },
+    chat_session_get_rest_headers: function (chat_id) {
+        var headers = {};
+
+        if (psource_chat_localized['settings']['rest_nonce'] != undefined) {
+            headers['X-WP-Nonce'] = psource_chat_localized['settings']['rest_nonce'];
+        }
+
+        if (psource_chat.chat_session_is_rest_token_valid(chat_id)) {
+            headers['Authorization'] = 'Bearer ' + psource_chat.settings['auth']['rest_tokens'][chat_id]['token'];
+        }
+
+        return headers;
+    },
+    chat_session_ensure_rest_token: function (chat_id) {
+        var deferred = jQuery.Deferred();
+        var chat_session = psource_chat.chat_session_get_session_by_id(chat_id);
+
+        if (!psource_chat.chat_session_should_use_rest(chat_id) || (chat_session == undefined)) {
+            deferred.reject();
+            return deferred.promise();
+        }
+
+        if (psource_chat.chat_session_is_rest_token_valid(chat_id)) {
+            deferred.resolve(psource_chat.settings['auth']['rest_tokens'][chat_id]['token']);
+            return deferred.promise();
+        }
+
+        if (psource_chat.rest_state['token_requests'][chat_id] != undefined) {
+            return psource_chat.rest_state['token_requests'][chat_id];
+        }
+
+        if ((psource_chat.settings['auth']['name'] == undefined) || (psource_chat.settings['auth']['email'] == undefined)) {
+            deferred.reject();
+            return deferred.promise();
+        }
+
+        psource_chat.rest_state['token_requests'][chat_id] = jQuery.ajax({
+            type: 'POST',
+            url: psource_chat_localized['settings']['rest_auth_url'],
+            dataType: 'json',
+            cache: false,
+            data: {
+                session_id: chat_session['id'],
+                name: psource_chat.settings['auth']['name'],
+                email: psource_chat.settings['auth']['email']
+            }
+        }).done(function (reply_data) {
+            if ((reply_data != undefined) && (reply_data['success'] == true) && (reply_data['data'] != undefined) && (reply_data['data']['token'] != undefined)) {
+                psource_chat.settings['auth']['rest_tokens'][chat_id] = {
+                    token: reply_data['data']['token'],
+                    expires_at: reply_data['data']['expires_at']
+                };
+                psource_chat.persist_auth_cookie();
+                deferred.resolve(reply_data['data']['token']);
+            } else {
+                delete psource_chat.settings['auth']['rest_tokens'][chat_id];
+                deferred.reject(reply_data);
+            }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.log('chat_session_ensure_rest_token: error HTTP Status[' + jqXHR.status + '] ' + errorThrown);
+            deferred.reject(jqXHR);
+        }).always(function () {
+            delete psource_chat.rest_state['token_requests'][chat_id];
+        });
+
+        return deferred.promise();
+    },
+    chat_session_prefetch_rest_tokens: function () {
+        if ((psource_chat.settings['sessions'] == undefined) || (psource_chat.settings['auth']['type'] != 'public_user')) {
+            return;
+        }
+
+        for (var chat_id in psource_chat.settings['sessions']) {
+            if (!psource_chat.settings['sessions'].hasOwnProperty(chat_id)) continue;
+
+            if (psource_chat.chat_session_should_use_rest(chat_id)) {
+                psource_chat.chat_session_ensure_rest_token(chat_id);
+            }
+        }
+    },
+    chat_session_revoke_rest_tokens: function () {
+        if ((psource_chat.settings['auth'] == undefined) || (psource_chat.settings['auth']['rest_tokens'] == undefined) || (psource_chat_localized['settings']['rest_revoke_url'] == undefined)) {
+            return;
+        }
+
+        for (var chat_id in psource_chat.settings['auth']['rest_tokens']) {
+            if (!psource_chat.settings['auth']['rest_tokens'].hasOwnProperty(chat_id)) continue;
+
+            var token_data = psource_chat.settings['auth']['rest_tokens'][chat_id];
+            if ((token_data == undefined) || (token_data['token'] == undefined) || (token_data['token'] == '')) {
+                continue;
+            }
+
+            jQuery.ajax({
+                type: 'POST',
+                url: psource_chat_localized['settings']['rest_revoke_url'],
+                dataType: 'json',
+                cache: false,
+                headers: {
+                    Authorization: 'Bearer ' + token_data['token']
+                },
+                data: {
+                    token: token_data['token']
+                }
+            });
+        }
+
+        psource_chat.settings['auth']['rest_tokens'] = {};
+        psource_chat.persist_auth_cookie();
+    },
+    chat_session_get_modern_sessions: function (sessions_data) {
+        var modern_sessions = {};
+
+        for (var chat_id in sessions_data) {
+            if (!sessions_data.hasOwnProperty(chat_id)) continue;
+
+            if (psource_chat.chat_session_should_use_rest(chat_id)) {
+                modern_sessions[chat_id] = sessions_data[chat_id];
+            }
+        }
+
+        return modern_sessions;
+    },
+    chat_session_get_legacy_sessions: function (sessions_data) {
+        var legacy_sessions = {};
+
+        for (var chat_id in sessions_data) {
+            if (!sessions_data.hasOwnProperty(chat_id)) continue;
+
+            if (!psource_chat.chat_session_should_use_rest(chat_id)) {
+                legacy_sessions[chat_id] = sessions_data[chat_id];
+            }
+        }
+
+        return legacy_sessions;
     },
     chat_sessions_init: function () {
 
@@ -286,6 +481,18 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
             psource_chat.timers['users'] = current_ts;
         }
 
+        var modern_sessions_data = psource_chat.chat_session_get_modern_sessions(sessions_data);
+        var legacy_sessions_data = psource_chat.chat_session_get_legacy_sessions(sessions_data);
+
+        if (((timers['messages'] == 1) || (timers['users'] == 1)) && (Object.keys(modern_sessions_data).length > 0)) {
+            psource_chat.chat_session_message_update_modern(modern_sessions_data, timers);
+
+            if (Object.keys(legacy_sessions_data).length == 0) {
+                timers['messages'] = 0;
+                timers['users'] = 0;
+            }
+        }
+
         if ((psource_chat.pids['chat_session_message_update'] == '') && (psource_chat.errors['chat_session_message_update'] < 10)) {
             // If our timers are all unset then wait for the next interval.
             if ((timers['users'] == 0) && (timers['meta'] == 0) && (timers['invites'] == 0) && (timers['messages'] == 0)) {
@@ -310,7 +517,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                         'action': 'chatProcess',
                         'nonce': psource_chat_localized['settings']['nonce'],
                         'timers': timers,
-                        'psource-chat-sessions': sessions_data,
+                        'psource-chat-sessions': legacy_sessions_data,
                         'psource-chat-settings-request-uri': psource_chat_localized['settings']['REQUEST_URI']
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -351,101 +558,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
 
                             if (reply_data['sessions'] != undefined) {
                                 for (var chat_id in reply_data['sessions']) {
-                                    var chat_session = psource_chat.chat_session_get_session_by_id(chat_id);
-                                    if (chat_session == undefined)
-                                        continue;
-
-                                    //If there is a error for the chat session
-                                    if (reply_data['sessions'][chat_id]['errorStatus']) {
-                                        jQuery('#psource-chat-box-' + chat_id + ' .psource-chat-session-user-status-message p').html(reply_data['sessions'][chat_id]['errorText']);
-                                        jQuery('#psource-chat-box-' + chat_id + ' .psource-chat-session-user-status-message').show();
-                                    }
-
-                                    var chat_reply_data = reply_data['sessions'][chat_id];
-
-                                    if (chat_reply_data['last_row_id'] != undefined) {
-                                        psource_chat.settings['sessions'][chat_id]['last_row_id'] = chat_reply_data['last_row_id'];
-                                    }
-
-                                    if (chat_reply_data['rows'] != undefined) {
-
-                                        if (chat_reply_data['rows'] == "__EMPTY__") {
-                                            //if (psource_chat.settings['sessions'][chat_id]['session_type'] != 'private') {
-                                            if (psource_chat.settings['sessions'][chat_id]['last_row_id'] != "__EMPTY__") {
-                                                psource_chat.settings['sessions'][chat_id]['last_row_id'] = chat_reply_data['rows'];
-                                                jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-messages-list').empty();
-                                                jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-session-generic-message p').html(chat_session['session_cleared_message']);
-                                                jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-session-generic-message').show().delay(5000).fadeOut(psource_chat.chat_session_size_message_list);
-                                            }
-                                            //}
-                                        } else if (Object.keys(chat_reply_data['rows']).length) {
-                                            //console.log('rows['+Object.keys(chat_reply_data['rows']).length+']');
-                                            var has_new_messages = psource_chat.chat_session_process_rows(chat_session, chat_reply_data['rows']);
-
-                                            if (has_new_messages == true) {
-                                                if ((psource_chat.settings['sessions'][chat_id]['box_sound'] == "enabled") && (psource_chat.settings['user'][chat_id]['sound_on_off'] == "on")) {
-                                                    if (!jQuery('div#psource-chat-box-' + chat_id + '.psource-chat-box').hasClass('psource-chat-box-pop-out')) {
-                                                        if (chat_session['has_send_message'] == true) {
-                                                            psource_chat.settings['sessions'][chat_id]['has_send_message'] = false;
-                                                        } else {
-                                                            play_new_messages_sound[chat_id] = true;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        psource_chat.chat_session_click_avatar_row(chat_id);
-                                        psource_chat.chat_session_admin_row_actions(chat_id);
-
-                                        // If not moderator we want to remove the admin UL item within the rows
-                                        //if ((chat_session['moderator'] == "no") || (chat_session['session_type'] == "private")) {
-                                        if (chat_session['moderator'] == "no") {
-                                            jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-messages-list div.psource-chat-row ul.psource-chat-row-footer').remove();
-                                        }
-                                    }
-
-                                    if ((chat_reply_data['meta'] != undefined) && (Object.keys(chat_reply_data['meta']).length)) {
-
-                                        // Update our session status
-                                        if (chat_reply_data['meta']['session-status'] != undefined) {
-
-                                            // If the session type is private it does not follow the convention of open/closed like a group chat. The session-status value
-                                            // returned fom the server is the users archived status for the private chat. This allows us to rmeove the chat_session if the
-                                            // user left the chat_session via another brower session.
-                                            if (chat_session['session_type'] == "private") {
-                                                //console.log('chat_id['+chat_id+'] session-status['+chat_reply_data['meta']['session-status']+']');
-                                                if (chat_reply_data['meta']['session-status'] == 'yes') {
-                                                    psource_chat.chat_session_remove_item(chat_id);
-                                                    continue;
-                                                }
-                                            } else {
-                                                psource_chat.chat_session_process_status_change(chat_id, chat_reply_data['meta']['session-status']);
-                                            }
-                                        }
-
-                                        // Update the users list (optional)
-                                        if (chat_reply_data['meta']['users-active'] != undefined) {
-                                            psource_chat.chat_session_process_users_list(chat_id, chat_reply_data['meta']['users-active']);
-                                        }
-
-                                        // Mark Deleted/Undeleted rows
-                                        if (chat_reply_data['meta']['deleted-rows'] != undefined) {
-                                            psource_chat.chat_session_admin_process_row_delete_actions(chat_id, chat_reply_data['meta']['deleted-rows']);
-                                        }
-                                    }
-
-                                    // Mark the rows with Blocked IP Addresses
-                                    if (chat_reply_data['global'] != undefined) {
-
-                                        if (chat_reply_data['global']['blocked-ip-addresses'] != undefined) {
-                                            psource_chat.chat_session_admin_process_blocked_ip_addresses(chat_id, chat_reply_data['global']['blocked-ip-addresses']);
-                                        }
-
-                                        // Mark the rows with Blocked Users
-                                        if (chat_reply_data['global']['blocked-users'] != undefined) {
-                                            psource_chat.chat_session_admin_process_blocked_users(chat_id, chat_reply_data['global']['blocked-users']);
-                                        }
-                                    }
+                                    psource_chat.chat_session_apply_session_update(chat_id, reply_data['sessions'][chat_id], play_new_messages_sound);
                                 }
                                 if (Object.keys(play_new_messages_sound).length > 0) {
                                     psource_chat.chat_session_sound_play();
@@ -487,6 +600,144 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
             }
         }
     }, /* End of function chat_session_message_update */
+    chat_session_apply_session_update: function (chat_id, chat_reply_data, play_new_messages_sound) {
+        var chat_session = psource_chat.chat_session_get_session_by_id(chat_id);
+
+        if (chat_session == undefined) {
+            return;
+        }
+
+        if (chat_reply_data['errorStatus']) {
+            jQuery('#psource-chat-box-' + chat_id + ' .psource-chat-session-user-status-message p').html(chat_reply_data['errorText']);
+            jQuery('#psource-chat-box-' + chat_id + ' .psource-chat-session-user-status-message').show();
+        }
+
+        if (chat_reply_data['last_row_id'] != undefined) {
+            psource_chat.settings['sessions'][chat_id]['last_row_id'] = chat_reply_data['last_row_id'];
+        }
+
+        if (chat_reply_data['rows'] != undefined) {
+            if (chat_reply_data['rows'] == '__EMPTY__') {
+                if (psource_chat.settings['sessions'][chat_id]['last_row_id'] != '__EMPTY__') {
+                    psource_chat.settings['sessions'][chat_id]['last_row_id'] = chat_reply_data['rows'];
+                    jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-messages-list').empty();
+                    jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-session-generic-message p').html(chat_session['session_cleared_message']);
+                    jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-session-generic-message').show().delay(5000).fadeOut(psource_chat.chat_session_size_message_list);
+                }
+            } else if (Object.keys(chat_reply_data['rows']).length) {
+                var has_new_messages = psource_chat.chat_session_process_rows(chat_session, chat_reply_data['rows']);
+
+                if (has_new_messages == true) {
+                    if ((psource_chat.settings['sessions'][chat_id]['box_sound'] == 'enabled') && (psource_chat.settings['user'][chat_id]['sound_on_off'] == 'on')) {
+                        if (!jQuery('div#psource-chat-box-' + chat_id + '.psource-chat-box').hasClass('psource-chat-box-pop-out')) {
+                            if (chat_session['has_send_message'] == true) {
+                                psource_chat.settings['sessions'][chat_id]['has_send_message'] = false;
+                            } else {
+                                play_new_messages_sound[chat_id] = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            psource_chat.chat_session_click_avatar_row(chat_id);
+            psource_chat.chat_session_admin_row_actions(chat_id);
+
+            if (chat_session['moderator'] == 'no') {
+                jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-messages-list div.psource-chat-row ul.psource-chat-row-footer').remove();
+            }
+        }
+
+        if ((chat_reply_data['meta'] != undefined) && (Object.keys(chat_reply_data['meta']).length)) {
+            if (chat_reply_data['meta']['session-status'] != undefined) {
+                if (chat_session['session_type'] == 'private') {
+                    if (chat_reply_data['meta']['session-status'] == 'yes') {
+                        psource_chat.chat_session_remove_item(chat_id);
+                        return;
+                    }
+                } else {
+                    psource_chat.chat_session_process_status_change(chat_id, chat_reply_data['meta']['session-status']);
+                }
+            }
+
+            if (chat_reply_data['meta']['users-active'] != undefined) {
+                psource_chat.chat_session_process_users_list(chat_id, chat_reply_data['meta']['users-active']);
+            }
+
+            if (chat_reply_data['meta']['deleted-rows'] != undefined) {
+                psource_chat.chat_session_admin_process_row_delete_actions(chat_id, chat_reply_data['meta']['deleted-rows']);
+            }
+        }
+
+        if (chat_reply_data['global'] != undefined) {
+            if (chat_reply_data['global']['blocked-ip-addresses'] != undefined) {
+                psource_chat.chat_session_admin_process_blocked_ip_addresses(chat_id, chat_reply_data['global']['blocked-ip-addresses']);
+            }
+
+            if (chat_reply_data['global']['blocked-users'] != undefined) {
+                psource_chat.chat_session_admin_process_blocked_users(chat_id, chat_reply_data['global']['blocked-users']);
+            }
+        }
+    },
+    chat_session_message_update_modern: function (sessions_data, timers) {
+        var play_new_messages_sound = {};
+
+        for (var chat_id in sessions_data) {
+            if (!sessions_data.hasOwnProperty(chat_id)) continue;
+
+            (function (current_chat_id) {
+                psource_chat.chat_session_ensure_rest_token(current_chat_id).done(function () {
+                    if (timers['messages'] == 1) {
+                        jQuery.ajax({
+                            type: 'GET',
+                            url: psource_chat_localized['settings']['rest_url'] + 'messages',
+                            dataType: 'json',
+                            cache: false,
+                            headers: psource_chat.chat_session_get_rest_headers(current_chat_id),
+                            data: {
+                                session_id: sessions_data[current_chat_id]['id'],
+                                last_id: sessions_data[current_chat_id]['last_row_id']
+                            }
+                        }).done(function (reply_data) {
+                            var payload = ((reply_data != undefined) && (reply_data['data'] != undefined)) ? reply_data['data'] : reply_data;
+
+                            if (payload != undefined) {
+                                psource_chat.chat_session_apply_session_update(current_chat_id, payload, play_new_messages_sound);
+
+                                if (Object.keys(play_new_messages_sound).length > 0) {
+                                    psource_chat.chat_session_sound_play();
+                                    play_new_messages_sound = {};
+                                }
+                            }
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                            console.log('chat_session_message_update_modern: error HTTP Status[' + jqXHR.status + '] ' + errorThrown);
+                        });
+                    }
+
+                    if (timers['users'] == 1) {
+                        jQuery.ajax({
+                            type: 'GET',
+                            url: psource_chat_localized['settings']['rest_url'] + 'users',
+                            dataType: 'json',
+                            cache: false,
+                            headers: psource_chat.chat_session_get_rest_headers(current_chat_id),
+                            data: {
+                                session_id: sessions_data[current_chat_id]['id']
+                            }
+                        }).done(function (reply_data) {
+                            var payload = ((reply_data != undefined) && (reply_data['data'] != undefined)) ? reply_data['data'] : reply_data;
+
+                            if (payload != undefined) {
+                                psource_chat.chat_session_process_users_list(current_chat_id, payload);
+                            }
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                            console.log('chat_session_users_update_modern: error HTTP Status[' + jqXHR.status + '] ' + errorThrown);
+                        });
+                    }
+                });
+            })(chat_id);
+        }
+    },
     // Called to dynamically add new private chats to the user's screen
     chat_session_add_item: function (chat_id, chat_item) {
 
@@ -1284,18 +1535,30 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
         if (psource_chat.pids['chat_session_messages_send'] != '')
             return;
 
-        var sessions_data = {};
+        var legacy_sessions_data = {};
+        var modern_messages = [];
 
         if ((psource_chat.settings['sessions'] != undefined) && (Object.keys(psource_chat.settings['sessions']).length > 0)) {
             for (var chat_id in psource_chat.settings['sessions']) {
-                //sessions_data[chat_id] = psource_chat.settings['sessions'][chat_id];
-
                 if ((psource_chat.send_data[chat_id] != undefined) && (Object.keys(psource_chat.send_data[chat_id]).length > 0)) {
                     var chat_session = psource_chat.settings['sessions'][chat_id];
-                    sessions_data[chat_id] = {};
-                    sessions_data[chat_id]['id'] = chat_session['id'];
-                    sessions_data[chat_id]['blog_id'] = chat_session['blog_id'];
-                    sessions_data[chat_id]['session_type'] = chat_session['session_type'];
+
+                    if (psource_chat.chat_session_should_use_rest(chat_id)) {
+                        for (var message_id in psource_chat.send_data[chat_id]) {
+                            if (!psource_chat.send_data[chat_id].hasOwnProperty(message_id)) continue;
+
+                            modern_messages.push({
+                                chat_id: chat_id,
+                                message_id: message_id,
+                                message: psource_chat.send_data[chat_id][message_id]
+                            });
+                        }
+                    } else {
+                        legacy_sessions_data[chat_id] = {};
+                        legacy_sessions_data[chat_id]['id'] = chat_session['id'];
+                        legacy_sessions_data[chat_id]['blog_id'] = chat_session['blog_id'];
+                        legacy_sessions_data[chat_id]['session_type'] = chat_session['session_type'];
+                    }
 
                     // Set a flag for this session so we don't make a sound when we update the message rows.
                     //commented out, as it plays the sound twice
@@ -1304,7 +1567,83 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
             }
         }
 
-        if ((Object.keys(sessions_data).length > 0) && (psource_chat.pids['chat_session_messages_send'] == '') && (psource_chat.errors['chat_session_messages_send'] < 10)) {
+        if ((modern_messages.length > 0) && (psource_chat.errors['chat_session_messages_send'] < 10)) {
+            psource_chat.pids['chat_session_messages_send'] = 'modern';
+
+            var pending_requests = modern_messages.length;
+            var on_modern_complete = function () {
+                pending_requests -= 1;
+
+                if (pending_requests < 1) {
+                    psource_chat.pids['chat_session_messages_send'] = '';
+
+                    if (Object.keys(legacy_sessions_data).length > 0) {
+                        psource_chat.chat_session_messages_send();
+                    } else {
+                        setTimeout(function () {
+                            psource_chat.chat_session_messages_send();
+                        }, 1000);
+                    }
+                }
+            };
+
+            for (var modern_idx = 0; modern_idx < modern_messages.length; modern_idx++) {
+                psource_chat.chat_session_send_message_modern(modern_messages[modern_idx]).always(on_modern_complete);
+            }
+
+            if (Object.keys(legacy_sessions_data).length == 0) {
+                return;
+            }
+        }
+
+        if ((Object.keys(legacy_sessions_data).length > 0) && (psource_chat.pids['chat_session_messages_send'] == '') && (psource_chat.errors['chat_session_messages_send'] < 10)) {
+            psource_chat.chat_session_messages_send_legacy(legacy_sessions_data);
+        }
+    },
+    chat_session_send_message_modern: function (message_data) {
+        var deferred = jQuery.Deferred();
+        var chat_session = psource_chat.chat_session_get_session_by_id(message_data['chat_id']);
+
+        if (chat_session == undefined) {
+            deferred.reject();
+            return deferred.promise();
+        }
+
+        psource_chat.chat_session_ensure_rest_token(message_data['chat_id']).done(function () {
+            jQuery.ajax({
+                type: 'POST',
+                url: psource_chat_localized['settings']['rest_url'] + 'messages',
+                dataType: 'json',
+                cache: false,
+                headers: psource_chat.chat_session_get_rest_headers(message_data['chat_id']),
+                data: {
+                    session_id: chat_session['id'],
+                    message: message_data['message']
+                }
+            }).done(function (reply_data) {
+                if ((reply_data != undefined) && (reply_data['success'] == true)) {
+                    if ((psource_chat.send_data[message_data['chat_id']] != undefined) && (psource_chat.send_data[message_data['chat_id']][message_data['message_id']] != undefined)) {
+                        delete psource_chat.send_data[message_data['chat_id']][message_data['message_id']];
+                    }
+                    psource_chat.errors['chat_session_messages_send'] = 0;
+                    deferred.resolve(reply_data);
+                } else {
+                    psource_chat.errors['chat_session_messages_send'] = parseInt(psource_chat.errors['chat_session_messages_send']) + 1;
+                    deferred.reject(reply_data);
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                psource_chat.errors['chat_session_messages_send'] = parseInt(psource_chat.errors['chat_session_messages_send']) + 1;
+                console.log('chat_session_send_message_modern: error HTTP Status[' + jqXHR.status + '] ' + errorThrown);
+                deferred.reject(jqXHR);
+            });
+        }).fail(function () {
+            psource_chat.errors['chat_session_messages_send'] = parseInt(psource_chat.errors['chat_session_messages_send']) + 1;
+            deferred.reject();
+        });
+
+        return deferred.promise();
+    },
+    chat_session_messages_send_legacy: function (sessions_data) {
 
             psource_chat.pids['chat_session_messages_send'] = jQuery.ajax({
                 type: "POST",
@@ -1368,7 +1707,6 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                     }, poll_interval * 1000);
                 }
             });
-        }
     },
 
     /* Appends rows from AJAX reply to chat -box */
@@ -2162,10 +2500,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
 
                     // Update our internal settings...and update the cookie
                     psource_chat.settings['auth']['chat_status'] = user_new_status;
-                    psource_chat.cookie('psource-chat-auth', JSON.stringify(psource_chat.settings['auth']), {
-                        path: psource_chat_localized['settings']['cookiepath'],
-                        domain: psource_chat_localized['settings']['cookie_domain']
-                    });
+                    psource_chat.persist_auth_cookie();
 
                 }
             });
@@ -2449,15 +2784,13 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                 return;
 
             } else if (psource_chat.settings['auth']['type'] == "public_user") {
+                psource_chat.chat_session_revoke_rest_tokens();
                 psource_chat.settings['auth'] = {};
 
             }
 
             // Update our cookie
-            psource_chat.cookie('psource-chat-auth', JSON.stringify(psource_chat.settings['auth']), {
-                path: psource_chat_localized['settings']['cookiepath'],
-                domain: psource_chat_localized['settings']['cookie_domain']
-            });
+            psource_chat.persist_auth_cookie();
 
             //Hide settings menu
             jQuery(this).closest('.psource-chat-actions-settings-menu').slideUp(200);
@@ -2884,11 +3217,11 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                         if (reply_data['errorStatus'] == false) {
                             if (reply_data['user_info'] != undefined) {
                                 psource_chat.settings['auth'] = reply_data['user_info'];
+                                if (psource_chat.settings['auth']['rest_tokens'] == undefined) {
+                                    psource_chat.settings['auth']['rest_tokens'] = {};
+                                }
 
-                                psource_chat.cookie('psource-chat-auth', JSON.stringify(psource_chat.settings['auth']), {
-                                    path: psource_chat_localized['settings']['cookiepath'],
-                                    domain: psource_chat_localized['settings']['cookie_domain']
-                                });
+                                psource_chat.persist_auth_cookie();
                                 //var tmp_cookie_json = psource_chat.cookie('psource-chat-auth');
                                 //var tmp_cookie_obj	= JSON.parse(tmp_cookie_json);
 
@@ -2897,6 +3230,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                                     jQuery('#' + chat_box_id + ' .psource-chat-login-error').hide();
                                 }
                                 psource_chat.chat_session_set_auth_view();
+                                psource_chat.chat_session_prefetch_rest_tokens();
 
                                 return false;
                             }
