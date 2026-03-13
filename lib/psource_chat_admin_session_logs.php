@@ -799,6 +799,13 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 				$_blog_id = $blog_id;
 			}
 
+			$filter_search       = isset( $this->filters['search'] ) ? sanitize_text_field( $this->filters['search'] ) : '';
+			$filter_chat_id      = isset( $this->filters['chat_id'] ) ? sanitize_text_field( $this->filters['chat_id'] ) : '';
+			$filter_session_type = isset( $this->filters['session_type'] ) ? sanitize_text_field( $this->filters['session_type'] ) : '';
+			$filter_start        = isset( $this->filters['start'] ) ? sanitize_text_field( $this->filters['start'] ) : '';
+			$filter_end          = isset( $this->filters['end'] ) ? sanitize_text_field( $this->filters['end'] ) : '';
+			$filter_status       = isset( $this->filters['status'] ) ? sanitize_text_field( $this->filters['status'] ) : '';
+
 			if ( ( ! empty( $filter_search ) ) || ( $filter_session_type == "private" ) ) {
 
 				$sql_str_filters = '';

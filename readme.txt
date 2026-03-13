@@ -40,6 +40,13 @@ PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für 
 
 == ChangeLog ==
 
+= 1.1.2 =
+
+* Fix: PHP-Warnung behoben (`Undefined variable $filter_session_type`) in Session-Logs (`PSOURCEChat_Session_Logs_Table::prepare_items()`)
+* Fix: Filter-Variablen in Session-Logs vor Verwendung konsistent initialisiert (`search`, `chat_id`, `session_type`, `start`, `end`, `status`)
+* Hardening: Eingehende Filterwerte in der Session-Log-Abfrage weiterhin explizit sanitisiert verarbeitet
+* Wartung: Vergleichbare Admin-Tabellenpruefungen auf gleiches Muster durchgefuehrt (keine weiteren Treffer)
+
 = 1.1.1 =
 
 * ClassicPress-sicher: jQuery UI Tabs/Datepicker entfernt, native Tabs & Datumsfelder
