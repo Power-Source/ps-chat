@@ -450,7 +450,26 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			if ( isset( $_POST['psource-chat-sessions'] ) ) {
 				if ( ( is_array( $_POST['psource-chat-sessions'] ) ) && ( count( $_POST['psource-chat-sessions'] ) ) ) {
 
-					foreach ( $_POST['psource-chat-sessions'] as $chat_session ) {
+					foreach ( $_POST['psource-chat-sessions'] as $chat_session_raw ) {
+						if ( ! is_array( $chat_session_raw ) ) {
+							continue;
+						}
+
+						$chat_session = array();
+						$chat_session['id'] = isset( $chat_session_raw['id'] ) ? sanitize_text_field( wp_unslash( $chat_session_raw['id'] ) ) : '';
+						$chat_session['session_type'] = isset( $chat_session_raw['session_type'] ) ? sanitize_text_field( wp_unslash( $chat_session_raw['session_type'] ) ) : '';
+						$chat_session['blog_id'] = isset( $chat_session_raw['blog_id'] ) ? intval( $chat_session_raw['blog_id'] ) : 0;
+						$chat_session['last_row_id'] = isset( $chat_session_raw['last_row_id'] ) ? intval( $chat_session_raw['last_row_id'] ) : 0;
+						$chat_session['last_row_compare'] = isset( $chat_session_raw['last_row_compare'] ) ? trim( sanitize_text_field( wp_unslash( $chat_session_raw['last_row_compare'] ) ) ) : '>=';
+
+						if ( ! in_array( $chat_session['last_row_compare'], array( '>', '>=' ), true ) ) {
+							$chat_session['last_row_compare'] = '>=';
+						}
+
+						if ( empty( $chat_session['id'] ) || empty( $chat_session['session_type'] ) ) {
+							continue;
+						}
+
 						$chat_id       = $chat_session['id'];
 						$transient_key = "chat-session-" . $chat_session['id'] . '-' . $chat_session['session_type'];
 
@@ -6093,11 +6112,12 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			if ( ! isset( $_POST['function'] ) ) {
 				die();
 			}
-			$function = $_POST['function'];
+			$function = sanitize_text_field( wp_unslash( $_POST['function'] ) );
 
 			// Verify nonce for write operations to prevent CSRF
 			$write_functions = array(
 				'chat_message_send',
+				'chat_messages_update',
 				'chat_messages_clear',
 				'chat_messages_archive',
 				'chat_session_moderate_status',
@@ -6718,6 +6738,10 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 		function chat_session_get_messages( $chat_session ) {
 			global $wpdb;
 
+			$chat_session['blog_id'] = isset( $chat_session['blog_id'] ) ? intval( $chat_session['blog_id'] ) : 0;
+			$chat_session['id'] = isset( $chat_session['id'] ) ? sanitize_text_field( $chat_session['id'] ) : '';
+			$chat_session['session_type'] = isset( $chat_session['session_type'] ) ? sanitize_text_field( $chat_session['session_type'] ) : '';
+
 			if ( ( isset( $chat_session['since'] ) ) && ( $chat_session['since'] > 0 ) ) {
 				$since_timestamp = date( 'Y-m-d H:i:s', $chat_session['since'] );
 			} else {
@@ -6731,14 +6755,23 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			}
 
 			if ( isset( $chat_session['orderby'] ) ) {
-				$orderby = $chat_session['orderby'];
+				$orderby = strtoupper( trim( (string) $chat_session['orderby'] ) );
 			} else {
 				$orderby = "DESC";
 			}
+			if ( ! in_array( $orderby, array( 'ASC', 'DESC' ), true ) ) {
+				$orderby = 'DESC';
+			}
 
 			if ( ! isset( $chat_session['last_row_compare'] ) ) {
-				$chat_session['last_row_compare'] = ' > ';
+				$chat_session['last_row_compare'] = '>';
 			}
+
+			$chat_session['last_row_compare'] = trim( (string) $chat_session['last_row_compare'] );
+			if ( ! in_array( $chat_session['last_row_compare'], array( '>', '>=' ), true ) ) {
+				$chat_session['last_row_compare'] = '>';
+			}
+			$chat_session['last_row_id'] = isset( $chat_session['last_row_id'] ) ? intval( $chat_session['last_row_id'] ) : 0;
 
 			$archived_str = "";
 			if ( ! isset( $chat_session['archived'] ) ) {
@@ -6747,11 +6780,18 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 			if ( ( isset( $chat_session['archived'] ) ) && ( count( $chat_session['archived'] ) ) ) {
 				foreach ( $chat_session['archived'] as $_val ) {
+					$_val = sanitize_text_field( $_val );
+					if ( ! in_array( $_val, array( 'yes', 'no' ), true ) ) {
+						continue;
+					}
 					if ( strlen( $archived_str ) ) {
 						$archived_str .= ",";
 					}
 					$archived_str .= "'" . $_val . "'";
 				}
+			}
+			if ( '' === $archived_str ) {
+				$archived_str = "'no'";
 			}
 
 			$deleted_str = "";
@@ -6761,26 +6801,33 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 			if ( ( isset( $chat_session['deleted'] ) ) && ( count( $chat_session['deleted'] ) ) ) {
 				foreach ( $chat_session['deleted'] as $_val ) {
+					$_val = sanitize_text_field( $_val );
+					if ( ! in_array( $_val, array( 'yes', 'no' ), true ) ) {
+						continue;
+					}
 					if ( strlen( $deleted_str ) ) {
 						$deleted_str .= ",";
 					}
 					$deleted_str .= "'" . $_val . "'";
 				}
 			}
+			if ( '' === $deleted_str ) {
+				$deleted_str = "'no'";
+			}
 
 			if ( $end_timestamp > 0 ) {
 				$sql_str = $wpdb->prepare( "SELECT * FROM `" . PSOURCE_Chat::tablename( 'message' ) . "` WHERE " .
-				                           " blog_id = %s " .
+				                           " blog_id = %d " .
 				                           " AND chat_id = %s " .
 				                           " AND session_type=%s " .
 				                           " AND archived IN ( " . $archived_str . " ) " .
 				                           " AND deleted IN ( " . $deleted_str . " ) " .
-				                           " AND timestamp BETWEEN '" . $since_timestamp . "' AND '" . $end_timestamp . "' " .
-				                           " ORDER BY timestamp " . $orderby, $chat_session['blog_id'], $chat_session['id'], $chat_session['session_type'] );
+				                           " AND timestamp BETWEEN %s AND %s " .
+				                           " ORDER BY timestamp " . $orderby, $chat_session['blog_id'], $chat_session['id'], $chat_session['session_type'], $since_timestamp, $end_timestamp );
 			} else {
 				$sql_str = $wpdb->prepare( "SELECT * FROM `" . PSOURCE_Chat::tablename( 'message' ) . "` WHERE 1=1 " .
 				                           " AND id " . $chat_session['last_row_compare'] . " " . $chat_session['last_row_id'] . " " .
-				                           " AND blog_id = %s " .
+				                           " AND blog_id = %d " .
 				                           " AND chat_id = %s " .
 				                           " AND session_type=%s " .
 				                           " AND archived IN ( " . $archived_str . " ) " .

@@ -9,6 +9,7 @@ if ( ( isset( $_GET['psource-chat-key'] ) ) && ( ! empty( $_GET['psource-chat-ke
 	}
 	if ( ( ! empty( $chat_session ) ) && ( is_array( $chat_session ) ) ) {
 		global $psource_chat;
+		$safe_session_id = esc_attr( $chat_session['id'] );
 		?>
 		<!DOCTYPE html>
 		<!--[if IE 6]>
@@ -50,7 +51,7 @@ if ( ( isset( $_GET['psource-chat-key'] ) ) && ( ! empty( $_GET['psource-chat-ke
 			}
 
 			/* Desktop styles */
-			body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> {
+			body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> {
 				width: 100%;
 				height: 100vh;
 				position: fixed !important;
@@ -66,14 +67,14 @@ if ( ( isset( $_GET['psource-chat-key'] ) ) && ( ! empty( $_GET['psource-chat-ke
 			}
 
 			/* Message list optimizations */
-			body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-messages-list {
+			body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-messages-list {
 				height: calc(100vh - 120px);
 				overflow-y: auto;
 				-webkit-overflow-scrolling: touch;
 				padding: 10px;
 			}
 
-			body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-messages-list div.psource-chat-row p.psource-chat-message {
+			body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-messages-list div.psource-chat-row p.psource-chat-message {
 				font-size: 14px;
 				line-height: 1.4;
 				word-wrap: break-word;
@@ -81,7 +82,7 @@ if ( ( isset( $_GET['psource-chat-key'] ) ) && ( ! empty( $_GET['psource-chat-ke
 			}
 
 			/* Text area optimization */
-			body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-message-area textarea.psource-chat-send {
+			body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-message-area textarea.psource-chat-send {
 				min-height: 40px;
 				max-height: 120px;
 				font-size: 16px; /* Prevents zoom on iOS */
@@ -92,7 +93,7 @@ if ( ( isset( $_GET['psource-chat-key'] ) ) && ( ! empty( $_GET['psource-chat-ke
 			}
 
 			/* Header optimizations */
-			body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-header {
+			body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-header {
 				padding: 10px;
 				background: #fff;
 				border-bottom: 1px solid #e1e1e1;
@@ -134,19 +135,19 @@ if ( ( isset( $_GET['psource-chat-key'] ) ) && ( ! empty( $_GET['psource-chat-ke
 
 			/* Mobile specific styles */
 			@media screen and (max-width: 768px) {
-				body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> {
+				body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> {
 					font-size: 16px; /* Larger base font for mobile */
 				}
 
 				/* Larger touch targets for mobile */
-				body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-message-area textarea.psource-chat-send {
+				body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-message-area textarea.psource-chat-send {
 					font-size: 18px; /* Prevent zoom on mobile */
 					padding: 15px;
 					min-height: 50px;
 				}
 
 				/* Mobile message styling */
-				body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-messages-list div.psource-chat-row p.psource-chat-message {
+				body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-messages-list div.psource-chat-row p.psource-chat-message {
 					font-size: 16px;
 					line-height: 1.5;
 					padding: 12px 15px;
@@ -154,13 +155,13 @@ if ( ( isset( $_GET['psource-chat-key'] ) ) && ( ! empty( $_GET['psource-chat-ke
 				}
 
 				/* Mobile header */
-				body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-header {
+				body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-header {
 					padding: 15px;
 					font-size: 18px;
 				}
 
 				/* Mobile message list */
-				body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-messages-list {
+				body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-messages-list {
 					height: calc(100vh - 140px);
 					padding: 15px;
 				}
@@ -197,18 +198,18 @@ if ( ( isset( $_GET['psource-chat-key'] ) ) && ( ! empty( $_GET['psource-chat-ke
 
 			/* Small mobile devices */
 			@media screen and (max-width: 480px) {
-				body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-message-area textarea.psource-chat-send {
+				body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-message-area textarea.psource-chat-send {
 					font-size: 18px;
 					padding: 20px;
 					min-height: 60px;
 				}
 
-				body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-messages-list div.psource-chat-row p.psource-chat-message {
+				body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-messages-list div.psource-chat-row p.psource-chat-message {
 					font-size: 17px;
 					padding: 15px 18px;
 				}
 
-				body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-messages-list {
+				body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-messages-list {
 					height: calc(100vh - 160px);
 					padding: 20px 15px;
 				}
@@ -216,11 +217,11 @@ if ( ( isset( $_GET['psource-chat-key'] ) ) && ( ! empty( $_GET['psource-chat-ke
 
 			/* Landscape orientation on mobile */
 			@media screen and (max-width: 768px) and (orientation: landscape) {
-				body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-messages-list {
+				body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-messages-list {
 					height: calc(100vh - 120px);
 				}
 
-				body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-message-area textarea.psource-chat-send {
+				body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-message-area textarea.psource-chat-send {
 					min-height: 40px;
 				}
 			}
@@ -232,13 +233,13 @@ if ( ( isset( $_GET['psource-chat-key'] ) ) && ( ! empty( $_GET['psource-chat-ke
 					color: #ffffff;
 				}
 
-				body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-header {
+				body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-header {
 					background: #2a2a2a;
 					border-bottom-color: #444;
 					color: #ffffff;
 				}
 
-				body.psource-chat-pop-out div#psource-chat-box-<?php echo $chat_session['id'] ?> div.psource-chat-module-message-area textarea.psource-chat-send {
+				body.psource-chat-pop-out div#psource-chat-box-<?php echo $safe_session_id ?> div.psource-chat-module-message-area textarea.psource-chat-send {
 					background: #2a2a2a;
 					color: #ffffff;
 					border-color: #555;

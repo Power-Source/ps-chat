@@ -310,6 +310,11 @@ function psource_chat_get_friends_status( $user_id, $friends_list ) {
 		$friends_list = array( $friends_list );
 	}
 
+	$friends_list = array_values( array_filter( array_map( 'intval', $friends_list ) ) );
+	if ( empty( $friends_list ) ) {
+		return array();
+	}
+
 	$time_threshold = time() - 300;    // 5 minites. Though the user_meta field is updated on each page load.
 
 	if ( ( isset( $psource_chat->_chat_options_defaults['user_meta']['chat_user_status'] ) )
@@ -320,7 +325,7 @@ function psource_chat_get_friends_status( $user_id, $friends_list ) {
 		$default_status = '';
 	}
 
-	$sql_str = "SELECT users.ID, users.display_name, usermeta.meta_value as last_activity, IFNULL(usermeta2.meta_value, '" . $default_status . "') as chat_status FROM " . $wpdb->base_prefix . "users as users LEFT JOIN " . $wpdb->base_prefix . "usermeta as usermeta ON users.ID=usermeta.user_id AND usermeta.meta_key='psource_chat_last_activity' LEFT JOIN " . $wpdb->base_prefix . "usermeta as usermeta2 ON users.ID=usermeta2.user_id AND usermeta2.meta_key='psource_chat_user_status' WHERE users.ID IN (" . implode( ",", $friends_list ) . ") AND usermeta.meta_value > " . $time_threshold . " ORDER BY users.display_name ASC LIMIT 50";
+	$sql_str = "SELECT users.ID, users.display_name, usermeta.meta_value as last_activity, IFNULL(usermeta2.meta_value, '" . $default_status . "') as chat_status FROM " . $wpdb->base_prefix . "users as users LEFT JOIN " . $wpdb->base_prefix . "usermeta as usermeta ON users.ID=usermeta.user_id AND usermeta.meta_key='psource_chat_last_activity' LEFT JOIN " . $wpdb->base_prefix . "usermeta as usermeta2 ON users.ID=usermeta2.user_id AND usermeta2.meta_key='psource_chat_user_status' WHERE users.ID IN (" . implode( ",", $friends_list ) . ") AND usermeta.meta_value > " . intval( $time_threshold ) . " ORDER BY users.display_name ASC LIMIT 50";
 
 	$friends_status = $wpdb->get_results( $sql_str );
 

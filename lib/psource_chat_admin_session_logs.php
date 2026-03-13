@@ -10,6 +10,8 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 		var $filters = array();
 		var $item;
 		var $message_stats = array();
+		var $participant_names = array();
+		var $active_users_cache = array();
 
 		function __construct() {
 			global $status, $page;
@@ -200,6 +202,13 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 				$_blog_id = $blog_id;
 			}
 
+			$filter_search = isset( $this->filters['search'] ) ? sanitize_text_field( $this->filters['search'] ) : '';
+			$filter_chat_id = isset( $this->filters['chat_id'] ) ? sanitize_text_field( $this->filters['chat_id'] ) : '';
+			$filter_session_type = isset( $this->filters['session_type'] ) ? sanitize_text_field( $this->filters['session_type'] ) : '';
+			$filter_start = isset( $this->filters['start'] ) ? sanitize_text_field( $this->filters['start'] ) : '';
+			$filter_end = isset( $this->filters['end'] ) ? sanitize_text_field( $this->filters['end'] ) : '';
+			$filter_status = isset( $this->filters['status'] ) ? sanitize_text_field( $this->filters['status'] ) : '';
+
 			$sql_str = "SELECT session_type FROM " . PSOURCE_Chat::tablename( 'log' ) . " WHERE 1=1 AND (blog_id=" . $_blog_id . " OR blog_id=0) GROUP BY session_type ORDER BY session_type";
 
 			$results = $wpdb->get_results( $sql_str );
@@ -276,7 +285,7 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 
 		function column_cb( $item ) {
 			//$chat_details_value = strtotime($item->start) .'-'. $item->chat_id;
-			?><input type="checkbox" name="chat-logs-bulk[]" value="<?php echo $item->id; ?>" /><?php
+			?><input type="checkbox" name="chat-logs-bulk[]" value="<?php echo absint( $item->id ); ?>" /><?php
 		}
 
 		function get_columns() {
@@ -307,9 +316,9 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 			if ( $item->session_type == "private" ) {
 				echo __( 'Privat', 'psource-chat' );
 			} else if ( ( isset( $item->box_title ) ) && ( ! empty( $item->box_title ) ) ) {
-				echo strip_tags( $item->box_title ) . ' (' . $item->chat_id . ')';
+				echo esc_html( strip_tags( $item->box_title ) ) . ' (' . esc_html( $item->chat_id ) . ')';
 			} else {
-				echo $item->chat_id;
+				echo esc_html( $item->chat_id );
 			}
 		}
 
@@ -331,7 +340,7 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 		function column_type( $item ) {
 			global $psource_chat;
 			if ( ! empty( $item->session_type ) ) {
-				echo $item->session_type;
+				echo esc_html( $item->session_type );
 			} else {
 				_e( 'Chat', 'psource-chat' );
 			}
@@ -448,18 +457,13 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 		}
 
 		function column_users( $item ) {
-			global $psource_chat, $wpdb;
+			global $psource_chat;
 
 			$names_str = '';
+			$active_users = array();
 
 			if ( $item->archived == "no" ) {
-				$chat_session = array(
-					'id'                          => $item->chat_id,
-					'blog_id'                     => $item->blog_id,
-					'session_type'                => $item->session_type,
-					'users_list_threshold_delete' => $psource_chat->_chat_options_defaults['page']['users_list_threshold_delete']
-				);
-				$active_users = $psource_chat->chat_session_get_active_users( $chat_session );
+				$active_users = $this->get_active_users_cached( $item );
 				if ( ( isset( $active_users['users'] ) ) && ( is_array( ( $active_users['users'] ) ) ) && ( count( ( $active_users['users'] ) ) ) ) {
 					foreach ( ( $active_users['users'] ) as $user ) {
 						if ( strlen( $names_str ) ) {
@@ -470,15 +474,14 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 				}
 			}
 
-
-			$sql_str     = $wpdb->prepare( "SELECT DISTINCT name, auth_hash, moderator FROM " . PSOURCE_Chat::tablename( 'message' ) . " WHERE blog_id = %d AND chat_id = %s AND archived=%s  AND log_id=%d AND moderator=%s ORDER by name ASC", $item->blog_id, $item->chat_id, $item->archived, $item->id, 'no' );
-			$names_users = $wpdb->get_results( $sql_str );
-			foreach ( $names_users as $name ) {
-				if ( ! isset( $active_users['users'][ $name->auth_hash ] ) ) {
+			$cache_key_users = intval( $item->id ) . '|no|' . $item->archived;
+			$names_users = isset( $this->participant_names[ $cache_key_users ] ) ? $this->participant_names[ $cache_key_users ] : array();
+			foreach ( $names_users as $auth_hash => $name ) {
+				if ( ! isset( $active_users['users'][ $auth_hash ] ) ) {
 					if ( strlen( $names_str ) ) {
 						$names_str .= ", ";
 					}
-					$names_str .= '<span class="psource-chat-user">' . $name->name . '</strong>';
+					$names_str .= '<span class="psource-chat-user">' . $name . '</strong>';
 				}
 			}
 
@@ -486,18 +489,13 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 		}
 
 		function column_moderators( $item ) {
-			global $psource_chat, $wpdb;
+			global $psource_chat;
 
 			$names_str = '';
+			$active_users = array();
 
 			if ( $item->archived == "no" ) {
-				$chat_session = array(
-					'id'                          => $item->chat_id,
-					'blog_id'                     => $item->blog_id,
-					'session_type'                => $item->session_type,
-					'users_list_threshold_delete' => $psource_chat->_chat_options_defaults['page']['users_list_threshold_delete']
-				);
-				$active_users = $psource_chat->chat_session_get_active_users( $chat_session );
+				$active_users = $this->get_active_users_cached( $item );
 			}
 
 			// First show moderators
@@ -510,16 +508,23 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 				}
 			}
 
-			global $wpdb;
-			$sql_str          = $wpdb->prepare( "SELECT DISTINCT name, auth_hash, moderator FROM " . PSOURCE_Chat::tablename( 'message' ) . " WHERE blog_id = %d AND chat_id = %s AND log_id=%d AND moderator=%s ORDER by name ASC", $item->blog_id, $item->chat_id, $item->id, 'yes' );
-			$names_moderators = $wpdb->get_results( $sql_str );
-			if ( ( $names_moderators ) && ( ! empty( $names_moderators ) ) ) {
-				foreach ( $names_moderators as $name ) {
-					if ( ! isset( $active_users['moderators'][ $name->auth_hash ] ) ) {
+			$cache_key_mod_no  = intval( $item->id ) . '|yes|no';
+			$cache_key_mod_yes = intval( $item->id ) . '|yes|yes';
+			$names_moderators = array();
+			if ( isset( $this->participant_names[ $cache_key_mod_no ] ) ) {
+				$names_moderators = $this->participant_names[ $cache_key_mod_no ];
+			}
+			if ( isset( $this->participant_names[ $cache_key_mod_yes ] ) ) {
+				$names_moderators = array_merge( $names_moderators, $this->participant_names[ $cache_key_mod_yes ] );
+			}
+
+			if ( ! empty( $names_moderators ) ) {
+				foreach ( $names_moderators as $auth_hash => $name ) {
+					if ( ! isset( $active_users['moderators'][ $auth_hash ] ) ) {
 						if ( strlen( $names_str ) ) {
 							$names_str .= ", ";
 						}
-						$names_str .= '<span class="psource-chat-moderator">' . $name->name . '</span>';
+						$names_str .= '<span class="psource-chat-moderator">' . $name . '</span>';
 					}
 				}
 			}
@@ -591,6 +596,70 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 					'last_ts' => $row->last_ts,
 				);
 			}
+		}
+
+		/**
+		 * Preload participant names for currently visible logs.
+		 */
+		function preload_participant_names( $items = array() ) {
+			global $wpdb;
+
+			$this->participant_names = array();
+			if ( empty( $items ) || ! is_array( $items ) ) {
+				return;
+			}
+
+			$log_ids = array();
+			foreach ( $items as $item ) {
+				if ( isset( $item->id ) ) {
+					$log_ids[] = intval( $item->id );
+				}
+			}
+
+			$log_ids = array_values( array_unique( array_filter( $log_ids ) ) );
+			if ( empty( $log_ids ) ) {
+				return;
+			}
+
+			$placeholders = implode( ',', array_fill( 0, count( $log_ids ), '%d' ) );
+			$sql = "SELECT DISTINCT log_id, name, auth_hash, moderator, archived FROM " . PSOURCE_Chat::tablename( 'message' ) . " WHERE log_id IN ({$placeholders}) ORDER BY name ASC";
+			$prepared_sql = call_user_func_array( array( $wpdb, 'prepare' ), array_merge( array( $sql ), $log_ids ) );
+			$rows = $wpdb->get_results( $prepared_sql );
+
+			if ( empty( $rows ) ) {
+				return;
+			}
+
+			foreach ( $rows as $row ) {
+				$key = intval( $row->log_id ) . '|' . $row->moderator . '|' . $row->archived;
+				if ( ! isset( $this->participant_names[ $key ] ) ) {
+					$this->participant_names[ $key ] = array();
+				}
+
+				$this->participant_names[ $key ][ $row->auth_hash ] = $row->name;
+			}
+		}
+
+		/**
+		 * Cache active users per chat session to avoid duplicate calls per row.
+		 */
+		function get_active_users_cached( $item ) {
+			global $psource_chat;
+
+			$cache_key = intval( $item->blog_id ) . '|' . $item->chat_id . '|' . $item->session_type;
+			if ( isset( $this->active_users_cache[ $cache_key ] ) ) {
+				return $this->active_users_cache[ $cache_key ];
+			}
+
+			$chat_session = array(
+				'id'                          => $item->chat_id,
+				'blog_id'                     => $item->blog_id,
+				'session_type'                => $item->session_type,
+				'users_list_threshold_delete' => $psource_chat->_chat_options_defaults['page']['users_list_threshold_delete']
+			);
+
+			$this->active_users_cache[ $cache_key ] = $psource_chat->chat_session_get_active_users( $chat_session );
+			return $this->active_users_cache[ $cache_key ];
 		}
 
 		function column_blog( $item ) {
@@ -730,43 +799,45 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 				$_blog_id = $blog_id;
 			}
 
-			if ( ( ! empty( $this->filters['search'] ) ) || ( $this->filters['session_type'] == "private" ) ) {
+			if ( ( ! empty( $filter_search ) ) || ( $filter_session_type == "private" ) ) {
 
 				$sql_str_filters = '';
-				$sql_str_filters .= " AND (blog_id=" . $_blog_id . " OR blog_id=0) ";
+				$sql_str_filters .= $wpdb->prepare( ' AND (blog_id=%d OR blog_id=0) ', $_blog_id );
 
-				if ( ( isset( $this->filters['search'] ) ) && ( ! empty( $this->filters['search'] ) ) ) {
-					$sql_str_filters .= " AND `message` like '%" . $this->filters['search'] . "%' ";
+				if ( ! empty( $filter_search ) ) {
+					$sql_str_filters .= $wpdb->prepare( ' AND `message` LIKE %s ', '%' . $wpdb->esc_like( $filter_search ) . '%' );
 				}
 
-				if ( ( isset( $this->filters['chat_id'] ) ) && ( ! empty( $this->filters['chat_id'] ) ) ) {
-					$sql_str_filters .= " AND `chat_id`='" . $this->filters['chat_id'] . "' ";
+				if ( ! empty( $filter_chat_id ) ) {
+					$sql_str_filters .= $wpdb->prepare( ' AND `chat_id`=%s ', $filter_chat_id );
 				}
 
-				if ( ( isset( $this->filters['session_type'] ) ) && ( ! empty( $this->filters['session_type'] ) ) ) {
-					if ( $this->filters['session_type'] == "private" ) {
+				if ( ! empty( $filter_session_type ) ) {
+					if ( $filter_session_type == "private" ) {
 						global $current_user;
-						$sql_str_filters .= " AND session_type='" . $this->filters['session_type'] . "' AND `auth_hash`='" . md5( $current_user->ID ) . "' ";
+						$sql_str_filters .= $wpdb->prepare( ' AND session_type=%s AND `auth_hash`=%s ', $filter_session_type, md5( $current_user->ID ) );
 					} else {
-						$sql_str_filters .= " AND `session_type`='" . $this->filters['session_type'] . "' ";
+						$sql_str_filters .= $wpdb->prepare( ' AND `session_type`=%s ', $filter_session_type );
 					}
 				} else {
 					$sql_str_filters .= " AND `session_type`!='private' ";
 				}
 
-				if ( ( isset( $this->filters['start'] ) ) && ( ! empty( $this->filters['start'] ) ) ) {
-					$sql_str_filters .= " AND `timestamp` >='" . $this->filters['start'] . " 00:00:00' ";
+				if ( ! empty( $filter_start ) && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $filter_start ) ) {
+					$sql_str_filters .= $wpdb->prepare( ' AND `timestamp` >= %s ', $filter_start . ' 00:00:00' );
 				}
 
-				if ( ( isset( $this->filters['end'] ) ) && ( ! empty( $this->filters['end'] ) ) ) {
-					$sql_str_filters .= " AND `timestamp` <='" . $this->filters['end'] . " 23:59:59' ";
+				if ( ! empty( $filter_end ) && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $filter_end ) ) {
+					$sql_str_filters .= $wpdb->prepare( ' AND `timestamp` <= %s ', $filter_end . ' 23:59:59' );
 				}
 
-				if ( ( isset( $this->filters['status'] ) ) && ( ! empty( $this->filters['status'] ) ) ) {
-					if ( $this->filters['status'] == "hidden" ) {
+				if ( ! empty( $filter_status ) ) {
+					if ( $filter_status == "hidden" ) {
 						$sql_str_filters .= " AND `deleted` ='yes' ";
+					} else if ( in_array( $filter_status, array( 'yes', 'no' ), true ) ) {
+						$sql_str_filters .= $wpdb->prepare( ' AND `archived` = %s ', $filter_status );
 					} else {
-						$sql_str_filters .= " AND `archived` ='" . $this->filters['status'] . "' ";
+						$sql_str_filters .= " AND `archived` ='no' ";
 					}
 				}
 				$sql_str = "SELECT DISTINCT log_id FROM " . PSOURCE_Chat::tablename( 'message' ) . " WHERE 1=1 ";
@@ -774,6 +845,10 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 				$sql_str .= $sql_str_filters;
 				$log_ids = $wpdb->get_col( $sql_str );
 				if ( ( $log_ids ) && ( is_array( $log_ids ) ) && ( count( $log_ids ) ) ) {
+					$log_ids = array_values( array_filter( array_map( 'intval', $log_ids ) ) );
+					if ( empty( $log_ids ) ) {
+						$log_ids = array( 0 );
+					}
 					$total_items = count( $log_ids );
 
 					$sql_str = "SELECT log.* FROM " . PSOURCE_Chat::tablename( 'log' ) . " as log ";
@@ -791,26 +866,28 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 				$sql_str .= " WHERE 1=1 ";
 
 				$sql_str_filters = '';
-				$sql_str_filters .= " AND blog_id=" . $_blog_id . " ";
+				$sql_str_filters .= $wpdb->prepare( ' AND blog_id=%d ', $_blog_id );
 
-				if ( ( isset( $this->filters['chat_id'] ) ) && ( ! empty( $this->filters['chat_id'] ) ) ) {
-					$sql_str_filters .= " AND chat_id='" . $this->filters['chat_id'] . "' ";
+				if ( ! empty( $filter_chat_id ) ) {
+					$sql_str_filters .= $wpdb->prepare( ' AND chat_id=%s ', $filter_chat_id );
 				}
-				if ( ( isset( $this->filters['session_type'] ) ) && ( ! empty( $this->filters['session_type'] ) ) ) {
-					$sql_str_filters .= " AND session_type='" . $this->filters['session_type'] . "' ";
+				if ( ! empty( $filter_session_type ) ) {
+					$sql_str_filters .= $wpdb->prepare( ' AND session_type=%s ', $filter_session_type );
 				}
 
-				if ( ( isset( $this->filters['start'] ) ) && ( ! empty( $this->filters['start'] ) ) ) {
-					$sql_str_filters .= " AND start >='" . $this->filters['start'] . " 00:00:00' ";
+				if ( ! empty( $filter_start ) && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $filter_start ) ) {
+					$sql_str_filters .= $wpdb->prepare( ' AND start >= %s ', $filter_start . ' 00:00:00' );
 				}
-				if ( ( isset( $this->filters['end'] ) ) && ( ! empty( $this->filters['end'] ) ) ) {
-					$sql_str_filters .= " AND end <='" . $this->filters['end'] . " 23:59:59' ";
+				if ( ! empty( $filter_end ) && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $filter_end ) ) {
+					$sql_str_filters .= $wpdb->prepare( ' AND end <= %s ', $filter_end . ' 23:59:59' );
 				}
-				if ( ( isset( $this->filters['status'] ) ) && ( ! empty( $this->filters['status'] ) ) ) {
-					if ( $this->filters['status'] == "hidden" ) {
+				if ( ! empty( $filter_status ) ) {
+					if ( $filter_status == "hidden" ) {
 						$sql_str_filters .= " AND `deleted` ='yes' ";
+					} else if ( in_array( $filter_status, array( 'yes', 'no' ), true ) ) {
+						$sql_str_filters .= $wpdb->prepare( ' AND `archived` = %s ', $filter_status );
 					} else {
-						$sql_str_filters .= " AND `archived` ='" . $this->filters['status'] . "' ";
+						$sql_str_filters .= " AND `archived` ='no' ";
 					}
 				}
 
@@ -839,6 +916,7 @@ if ( ! class_exists( 'PSOURCEChat_Session_Logs_Table' ) ) {
 
 				$this->items = $items;
 				$this->preload_message_stats( $items );
+				$this->preload_participant_names( $items );
 
 				$this->set_pagination_args( array(
 						'total_items' => $total_items,

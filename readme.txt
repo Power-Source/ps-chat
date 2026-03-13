@@ -1,8 +1,9 @@
 === PS Chat ===
-Contributors: DerN3rd (NerdService Eimen)
+Contributors: DerNerd (PSOURCE)
 Tags: multisite, chat, community, messenger, support
 Requires at least: 4.9
 Tested up to: 6.8.1
+ClassicPress: 2.6.0
 Stable tag: 1.1.1
 Requires PHP: 7.0
 License: GPLv2 or later
@@ -44,6 +45,11 @@ PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für 
 * ClassicPress-sicher: jQuery UI Tabs/Datepicker entfernt, native Tabs & Datumsfelder
 * Admin-UI: Tabs neu gestylt, Farbwähler standardmäßig als Swatch, Session-Logs mit native date
 * Editor: Chat-Button in die Medienleiste verschoben, TinyMCE-Abhängigkeit entfernt, Modal-Tabs repariert
+* Security: Nonce-Pruefung fuer schreibende Chat-Aktionen verstaerkt (inkl. `chat_messages_update`)
+* Security: Eingaben fuer Session-/Filter-Parameter zusaetzlich sanitisiert; SQL-Abfragen in Session-Logs gehaertet
+* Security: Link-Preview gegen SSRF gehaertet (unsichere Hosts/IP-Bereiche geblockt)
+* Performance: Session-Log-Liste optimiert (N+1-Abfragen fuer Teilnehmer reduziert, Active-User gecacht)
+* Hardening: Ausgaben in Pop-out-Template und Admin-Log-Spalten konsequent escaped
 
 = 1.1.0 =
 

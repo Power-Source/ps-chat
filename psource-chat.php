@@ -2,7 +2,7 @@
 /*
 Plugin Name: PS Chat
 Plugin URI: https://power-source.github.io/ps-chat/
-Description: Bietet Dir einen voll ausgestatteten Chat-Bereich entweder in einem Beitrag, einer Seite, einem Widget oder in der unteren Ecke Ihrer Website. Unterstützt PS Community Group-Chats und private Chats zwischen angemeldeten Benutzern. KEINE EXTERNEN SERVER/DIENSTE!
+Description: Bietet Dir einen voll ausgestatteten Chat-Bereich entweder in einem Beitrag, einer Seite, einem Widget oder in der unteren Ecke Deiner Webseite. Unterstützt PS Community Group-Chats und private Chats zwischen angemeldeten Benutzern. KEINE EXTERNEN SERVER/DIENSTE!
 Author: PSOURCE
 Version: 1.1.1
 Author URI: https://github.com/Power-Source

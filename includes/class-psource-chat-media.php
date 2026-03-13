@@ -254,6 +254,10 @@ class PSource_Chat_Media {
 	 * @return array|false
 	 */
 	private static function get_link_preview( string $url ): array|false {
+		if ( ! self::is_safe_preview_url( $url ) ) {
+			return false;
+		}
+
 		// Transient für Caching prüfen
 		$cache_key = 'psource_chat_preview_' . md5( $url );
 		$cached = get_transient( $cache_key );
@@ -263,6 +267,8 @@ class PSource_Chat_Media {
 
 		$response = wp_remote_get( $url, [
 			'timeout' => 10,
+			'redirection' => 3,
+			'reject_unsafe_urls' => true,
 			'user-agent' => 'Mozilla/5.0 (compatible; PSChat-LinkPreview/1.0)'
 		] );
 
@@ -292,6 +298,62 @@ class PSource_Chat_Media {
 		set_transient( $cache_key, $preview_data, HOUR_IN_SECONDS );
 
 		return $preview_data;
+	}
+
+	/**
+	 * Validate preview URLs against SSRF-style targets.
+	 *
+	 * @param string $url
+	 * @return bool
+	 */
+	private static function is_safe_preview_url( string $url ): bool {
+		if ( ! wp_http_validate_url( $url ) ) {
+			return false;
+		}
+
+		$parts = wp_parse_url( $url );
+		if ( empty( $parts['host'] ) ) {
+			return false;
+		}
+
+		$host = strtolower( $parts['host'] );
+		if ( 'localhost' === $host || false !== strpos( $host, '.local' ) ) {
+			return false;
+		}
+
+		$resolved_ips = array();
+		if ( filter_var( $host, FILTER_VALIDATE_IP ) ) {
+			$resolved_ips[] = $host;
+		} else {
+			$ipv4_hosts = gethostbynamel( $host );
+			if ( is_array( $ipv4_hosts ) ) {
+				$resolved_ips = array_merge( $resolved_ips, $ipv4_hosts );
+			}
+
+			if ( function_exists( 'dns_get_record' ) ) {
+				$aaaa_records = dns_get_record( $host, DNS_AAAA );
+				if ( is_array( $aaaa_records ) ) {
+					foreach ( $aaaa_records as $record ) {
+						if ( ! empty( $record['ipv6'] ) ) {
+							$resolved_ips[] = $record['ipv6'];
+						}
+					}
+				}
+			}
+		}
+
+		$resolved_ips = array_values( array_unique( array_filter( $resolved_ips ) ) );
+		if ( empty( $resolved_ips ) ) {
+			return false;
+		}
+
+		foreach ( $resolved_ips as $ip ) {
+			if ( false === filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -507,7 +569,7 @@ class PSource_Chat_Media {
 	 */
 	public static function ajax_get_link_preview() {
 		// Nonce prüfen
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'psource_chat_nonce' ) ) {
+		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'psource_chat_nonce' ) ) {
 			wp_die( 'Security check failed' );
 		}
 
@@ -515,6 +577,10 @@ class PSource_Chat_Media {
 		
 		if ( empty( $url ) ) {
 			wp_send_json_error( 'Keine URL angegeben' );
+		}
+
+		if ( ! self::is_safe_preview_url( $url ) ) {
+			wp_send_json_error( 'Ungültige oder unsichere URL' );
 		}
 
 		$media_info = self::analyze_url( $url );
