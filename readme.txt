@@ -3,7 +3,7 @@ Contributors: DerN3rd (NerdService Eimen)
 Tags: multisite, chat, community, messenger, support
 Requires at least: 4.9
 Tested up to: 6.8.1
-Stable tag: 1.2.0
+Stable tag: 1.1.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -12,20 +12,34 @@ Erlaube Deinen Usern, mit Dir oder anderen Usern zu chatten. Inkl. Gruppenchats.
 
 == Description ==
 
-Das mächtigste Livechat Tool zum selbsthosten für WordPress. Vorsicht, je nach Auslastung kann der Betrieb des Chat-Tools eine hohe Server-Last verursachen.
-Manche Hosting-Anbieter oder V-Server könnten Dich für einen Spammer halten. Stelle sicher das Du entweder niedrigere Abfrageintervalle einstellst oder ein
-entsprechendes Hosting, zB. einen Root-Server Dein Eigen nennst.
+# PS Chat – Selbstgehosteter WordPress‑Chat
 
-[POWERED BY Power-SOURCE](https://github.com/Power-Source)
-Online Geld verdienen macht dieses mächtige Leichtgewicht von eCommerce Plugin im Nu Kinderleicht.
+PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für WordPress. Es bietet Direktnachrichten, Gruppen‑Chats (BuddyPress), Medien‑Einbettungen und eine moderne Emoji‑Auswahl – ohne externe Dienste.
 
-[Projektseite](https://power-source.github.io/ps-chat/)
+## Highlights
 
+- Chat in Beiträgen/Seiten, Widgets oder als Dock unten rechts
+- Private Chats zwischen angemeldeten Nutzern (Einladungen, Re‑Open)
+- BuddyPress‑Gruppen‑Chats mit Moderation
+- Medienunterstützung: Link‑Previews, Bilder, YouTube
+- Moderner Emoji‑Picker (Suche, Kategorien, kompaktes Grid)
+- Dateiuploads mit Vorschau (optional)
+- Transienten‑Caching, optimierte Polling‑Routen
+- Mehrsprachigkeit (Deutsch, EN, FR, IT)
 
+## Funktionen im Detail
+
+- Direktnachrichten: 1:1‑Chats, Einladungen, Status „available/busy/invisible“
+- Gruppen: BuddyPress‑Gruppenräume inkl. Admin/Mod‑Rechten
+- Medien: Automatische Erkennung und Rendering von URLs (Link‑Preview, Bild, Video)
+- Emoji: Modal‑Picker im Chatfenster mit Suche und Tabs
+- Uploads: Drag & Drop/Dateiwähler, saubere Einbettung in Nachrichten
+- Moderation: Nachrichten ausblenden, IP‑Verwaltung, Benutzersperren
+- Performance: Transienten, leichtgewichtige Polling‑Endpunkte
 
 == ChangeLog ==
 
-= 1.2.0 =
+= 1.1.1 =
 
 * ClassicPress-sicher: jQuery UI Tabs/Datepicker entfernt, native Tabs & Datumsfelder
 * Admin-UI: Tabs neu gestylt, Farbwähler standardmäßig als Swatch, Session-Logs mit native date
