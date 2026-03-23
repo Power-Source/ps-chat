@@ -1,4 +1,30 @@
 /* Styles related to the WP admin bar */
+#wpadminbar li#wp-admin-bar-psource-chat-container .psource-chat-ab-icon {
+	height: 16px;
+	width: 16px;
+	margin-right: 5px;
+	background-size: 100%;
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	background-image: url("../images/icon_status_red.png");
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#wpadminbar li#wp-admin-bar-psource-chat-container .psource-chat-ab-icon-available {
+	background-image: url("../images/icon_status_green.png");
+}
+
+#wpadminbar li#wp-admin-bar-psource-chat-container .psource-chat-ab-icon-unavailable {
+	background-image: none;
+	background-color: #f59e0b;
+	border-radius: 50%;
+}
+
+#wpadminbar li#wp-admin-bar-psource-chat-container .psource-chat-ab-icon-away {
+	background-image: url("../images/icon_status_red.png");
+}
+
 #wpadminbar #wp-admin-bar-psource-chat-user-friends span.psource-chat-friend-avatar img {
 	height: 20px;
 	width: 20px;

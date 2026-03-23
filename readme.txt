@@ -46,6 +46,12 @@ PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für 
 * Fix: Filter-Variablen in Session-Logs vor Verwendung konsistent initialisiert (`search`, `chat_id`, `session_type`, `start`, `end`, `status`)
 * Hardening: Eingehende Filterwerte in der Session-Log-Abfrage weiterhin explizit sanitisiert verarbeitet
 * Wartung: Vergleichbare Admin-Tabellenpruefungen auf gleiches Muster durchgefuehrt (keine weiteren Treffer)
+* Fix: Chat-Status-Wechsel (Profil + Toolbar) wieder persistent; Status bleibt nach Seitenwechsel/Reload erhalten
+* Fix: Legacy-AJAX fuer `chat_update_user_status` auf korrektes Nonce-Feld vereinheitlicht
+* Fix: User-Status wird beim Speichern zusaetzlich in `psource-chat-user` synchronisiert (Kompatibilitaet Alt/Neu-Meta)
+* Fix: Adminbar-Statusumschalter zeigt wieder alle verfuegbaren Stati (inkl. `away`/Offline)
+* Fix: CP-Community-Avatar-Kompatibilitaet wiederhergestellt (`user_avatar_core_avatar_paths`)
+* UI: Statusfarben vereinheitlicht (`available`=gruen, `unavailable`=gelb, `away`=rot), inkl. CSS-Fallback wenn gelbe Icon-Datei fehlt
 
 = 1.1.1 =
 

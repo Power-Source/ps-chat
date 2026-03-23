@@ -2470,11 +2470,16 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                     'action': 'chatProcess',
                     'function': 'chat_update_user_status',
                     'psource-chat-user-status': user_new_status,
+                    'nonce': psource_chat_localized['settings']['nonce'],
                     //'psource-chat-settings': psource_chat_localized['settings']
                     //'psource-chat-settings-abspath': psource_chat_localized['settings']['ABSPATH'],
                     'psource-chat-settings-request-uri': psource_chat_localized['settings']['REQUEST_URI']
                 },
                 success: function (reply_data) {
+                    if ((reply_data == undefined) || (reply_data.success !== true)) {
+                        return;
+                    }
+
                     if (jQuery('#wp-toolbar li#wp-admin-bar-psource-chat-container div.ab-item span.psource-chat-user-status-current span.psource-chat-ab-icon').length) {
                         jQuery('#wp-toolbar li#wp-admin-bar-psource-chat-container div.ab-item span.psource-chat-user-status-current span.psource-chat-ab-icon').removeClass('psource-chat-ab-icon-' + psource_chat.settings['auth']['chat_status']);
                         jQuery('#wp-toolbar li#wp-admin-bar-psource-chat-container div.ab-item span.psource-chat-user-status-current span.psource-chat-ab-icon').addClass('psource-chat-ab-icon-' + user_new_status);
@@ -2498,6 +2503,8 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                         }
                     }
 
+                    psource_chat.update_profile_status_widgets(user_new_status);
+
                     // Update our internal settings...and update the cookie
                     psource_chat.settings['auth']['chat_status'] = user_new_status;
                     psource_chat.persist_auth_cookie();
@@ -2506,6 +2513,15 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
             });
         }
 
+    },
+    update_profile_status_widgets: function (user_new_status) {
+        if (!jQuery('.cpc-pschat-profile-status').length) {
+            return;
+        }
+
+        jQuery('.cpc-pschat-profile-status')
+            .removeClass('cpc-pschat-status-available cpc-pschat-status-unavailable cpc-pschat-status-away')
+            .addClass('cpc-pschat-status-' + user_new_status);
     },
     /*
      Play a sound when new messages are received. Note we don't care about which session has sound since that was determined in 'chat_session_setup_sound' function.

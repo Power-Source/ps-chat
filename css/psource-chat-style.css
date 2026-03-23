@@ -962,6 +962,16 @@ span.psource-chat-ab-icon-available {
     background-image: url("../images/icon_status_green.png");
 }
 
+span.psource-chat-ab-icon-unavailable {
+    background-image: none;
+    background-color: #f59e0b;
+    border-radius: 50%;
+}
+
+span.psource-chat-ab-icon-away {
+    background-image: url("../images/icon_status_red.png");
+}
+
 .psource-chat-box-network-site .psource-chat-actions-menu .psource-chat-min-max,
 .psource-chat-box-site .psource-chat-actions-menu .psource-chat-min-max {
     margin-top: 1px !important;

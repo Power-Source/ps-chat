@@ -6025,19 +6025,26 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 		function chat_update_user_status() {
 			if ( ! is_user_logged_in() ) {
-				return;
+				wp_send_json_error();
 			}
 
 			$user_id = get_current_user_id();
-			if ( md5( $user_id ) == $this->chat_auth['auth_hash'] ) {
-				if ( isset( $_POST['psource-chat-user-status'] ) ) {
-					$new_status = esc_attr( $_POST['psource-chat-user-status'] );
-					if ( isset( $this->_chat_options['user-statuses'][ $new_status ] ) ) {
-						psource_chat_update_user_status( $user_id, $new_status );
-						wp_send_json_success();
-					}
+			if ( isset( $_POST['psource-chat-user-status'] ) ) {
+				$new_status = esc_attr( $_POST['psource-chat-user-status'] );
+				if ( isset( $this->_chat_options['user-statuses'][ $new_status ] ) ) {
+					psource_chat_update_user_status( $user_id, $new_status );
+					$this->user_meta['chat_user_status'] = $new_status;
+					$this->chat_auth['chat_status'] = $new_status;
+
+					wp_send_json_success(
+						array(
+							'status' => $new_status,
+						)
+					);
 				}
 			}
+
+			wp_send_json_error();
 			die();
 		}
 

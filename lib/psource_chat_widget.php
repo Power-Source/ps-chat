@@ -660,7 +660,7 @@ if (!class_exists('PSOURCEChatRoomsWidget')) {
 
 			$instance['id'] = $this->id;
 
-			$session_types = $instance['session_types'];
+			$session_types = isset( $instance['session_types'] ) ? $instance['session_types'] : array();
 			$instance = wp_parse_args( $instance, $this->defaults );
 			$instance['session_types'] = $session_types;
 

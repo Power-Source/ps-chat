@@ -35,6 +35,8 @@ function psource_chat_get_user_status( $user_id = 0 ) {
 }
 
 function psource_chat_update_user_status( $user_id = 0, $status = 'away' ) {
+	global $psource_chat;
+
 	if ( ! $user_id ) {
 		$user_id = get_current_user_id();
 	}
@@ -43,6 +45,18 @@ function psource_chat_update_user_status( $user_id = 0, $status = 'away' ) {
 	}
 
 	update_user_meta( $user_id, 'psource_chat_user_status', $status );
+
+	$user_meta = get_user_meta( $user_id, 'psource-chat-user', true );
+	if ( ! is_array( $user_meta ) ) {
+		$user_meta = array();
+	}
+
+	if ( isset( $psource_chat ) && is_object( $psource_chat ) && isset( $psource_chat->_chat_options_defaults['user_meta'] ) ) {
+		$user_meta = wp_parse_args( $user_meta, $psource_chat->_chat_options_defaults['user_meta'] );
+	}
+
+	$user_meta['chat_user_status'] = $status;
+	update_user_meta( $user_id, 'psource-chat-user', $user_meta );
 }
 
 function psource_chat_update_user_activity( $user_id = 0 ) {
@@ -122,10 +136,6 @@ function psource_chat_wpadminbar_render() {
 			) );
 
 			foreach ( $psource_chat->_chat_options['user-statuses'] as $status_key => $status_label ) {
-				if ( $status_key == 'away' ) {
-					continue;
-				}
-
 				$sub_menu_meta_title  = __( 'Wechsle Chat Status auf', 'psource-chat' ) . ' ' . $status_label;
 				$sub_menu_meta_status = '<span class="psource-chat-ab-icon psource-chat-ab-icon-' . $status_key . '"></span><span class="psource-chat-ab-label">' .
 				                        $status_label . '</span>';

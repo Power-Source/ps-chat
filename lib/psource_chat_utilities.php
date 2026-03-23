@@ -411,6 +411,10 @@ function psource_chat_get_active_sessions( $session_types = array( 'page' ) ) {
 
 	$chat_sessions = array();
 
+	if ( empty( $session_types ) || ! is_array( $session_types ) ) {
+		return $chat_sessions;
+	}
+
 	$session_types_str = '';
 	foreach ( $session_types as $session_type_slug => $session_type_active ) {
 		if ( $session_type_active == 'on' ) {
@@ -419,6 +423,10 @@ function psource_chat_get_active_sessions( $session_types = array( 'page' ) ) {
 			}
 			$session_types_str .= "'" . $session_type_slug . "'";
 		}
+	}
+
+	if ( empty( $session_types_str ) ) {
+		return $chat_sessions;
 	}
 
 	$sql_str      = $wpdb->prepare( "SELECT * FROM " . PSOURCE_Chat::tablename( 'log' ) . " WHERE session_type IN (" . $session_types_str . ") AND archived=%s AND deleted=%s AND blog_id=%d", 'no', 'no', $blog_id );
