@@ -13,15 +13,15 @@ Erlaube Deinen Usern, mit Dir oder anderen Usern zu chatten. Inkl. Gruppenchats.
 
 == Description ==
 
-# PS Chat – Selbstgehosteter WordPress‑Chat
+# PS Chat – Selbstgehosteter ClassicPress‑Chat
 
-PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für WordPress. Es bietet Direktnachrichten, Gruppen‑Chats (BuddyPress), Medien‑Einbettungen und eine moderne Emoji‑Auswahl – ohne externe Dienste.
+PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für ClassicPress. Es bietet Direktnachrichten, Gruppen‑Chats (BuddyPress), Medien‑Einbettungen und eine moderne Emoji‑Auswahl – ohne externe Dienste.
 
 ## Highlights
 
 - Chat in Beiträgen/Seiten, Widgets oder als Dock unten rechts
 - Private Chats zwischen angemeldeten Nutzern (Einladungen, Re‑Open)
-- BuddyPress‑Gruppen‑Chats mit Moderation
+- PS Community‑Gruppen‑Chats mit Moderation
 - Medienunterstützung: Link‑Previews, Bilder, YouTube
 - Moderner Emoji‑Picker (Suche, Kategorien, kompaktes Grid)
 - Dateiuploads mit Vorschau (optional)
@@ -31,7 +31,7 @@ PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für 
 ## Funktionen im Detail
 
 - Direktnachrichten: 1:1‑Chats, Einladungen, Status „available/busy/invisible“
-- Gruppen: BuddyPress‑Gruppenräume inkl. Admin/Mod‑Rechten
+- Gruppen: PS Community‑Gruppenräume inkl. Admin/Mod‑Rechten
 - Medien: Automatische Erkennung und Rendering von URLs (Link‑Preview, Bild, Video)
 - Emoji: Modal‑Picker im Chatfenster mit Suche und Tabs
 - Uploads: Drag & Drop/Dateiwähler, saubere Einbettung in Nachrichten

@@ -1086,6 +1086,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				$this->_chat_options_defaults['user_meta'] = wp_parse_args( get_option( 'psource-chat-user-meta', array() ),
 					array(
 						'chat_user_status'                      => 'available',
+						'chat_reachability'                    => 'public',
 						'chat_name_display'                     => 'display_name',
 						'chat_wp_admin'                         => 'enabled',
 						'chat_wp_toolbar'                       => 'enabled',
@@ -5927,6 +5928,45 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				return;
 			}
 			$user_to_hash = esc_attr( $_REQUEST['psource-chat-to-user'] );
+
+			$user_to_id = (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT ID FROM {$wpdb->users} WHERE MD5(ID) = %s LIMIT 1",
+					$user_to_hash
+				)
+			);
+
+			if ( $user_to_id > 0 && $user_to_id !== $user_id ) {
+				$user_to_meta = get_user_meta( $user_to_id, 'psource-chat-user', true );
+				$reachability = 'public';
+
+				if ( is_array( $user_to_meta ) && ! empty( $user_to_meta['chat_reachability'] ) ) {
+					$reachability = sanitize_key( $user_to_meta['chat_reachability'] );
+				}
+
+				if ( $reachability === 'friends' ) {
+					$can_invite = user_can( $user_id, 'manage_options' );
+
+					if ( ! $can_invite && function_exists( 'cpc_are_friends' ) ) {
+						$friend_status = cpc_are_friends( $user_id, $user_to_id );
+						$can_invite = ( is_array( $friend_status ) && isset( $friend_status['status'] ) && $friend_status['status'] === 'publish' );
+					} elseif ( ! $can_invite && function_exists( 'cpc_is_active' ) && cpc_is_active( 'friends' ) && class_exists( 'CPC_Friends_Friendship' ) ) {
+						$friend_status = CPC_Friends_Friendship::check_is_friend( $user_id, $user_to_id );
+						$can_invite = ( $friend_status === 'is_friend' );
+					}
+
+					if ( ! $can_invite ) {
+						wp_send_json(
+							array(
+								'errorStatus' => true,
+								'errorText'   => __( 'Dieser Benutzer akzeptiert private Chats nur von Freunden.', 'psource-chat' ),
+							)
+						);
+
+						return;
+					}
+				}
+			}
 
 			$private_invite_nonce = time();
 			$chat_id              = "private-" . $private_invite_nonce;

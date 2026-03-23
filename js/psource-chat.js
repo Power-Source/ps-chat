@@ -873,6 +873,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                 'action': 'chatProcess',
                 'chat-id': chat_id,
                 'invite-status': invite_status,
+                'nonce': psource_chat_localized['settings']['nonce'],
                 //'psource-chat-settings': psource_chat_localized['settings']
                 //'psource-chat-settings-abspath': psource_chat_localized['settings']['ABSPATH'],
                 'psource-chat-settings-request-uri': psource_chat_localized['settings']['REQUEST_URI']
@@ -2439,6 +2440,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                     'action': 'chatProcess',
                     'function': 'chat_session_invite_private',
                     'psource-chat-to-user': user_hash,
+                    'nonce': psource_chat_localized['settings']['nonce'],
                     //'psource-chat-settings': psource_chat_localized['settings']
                     //'psource-chat-settings-abspath': psource_chat_localized['settings']['ABSPATH'],
                     'psource-chat-settings-request-uri': psource_chat_localized['settings']['REQUEST_URI']
