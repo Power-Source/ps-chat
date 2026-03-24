@@ -1945,6 +1945,29 @@ div.psource-chat-box div.psource-chat-module-header ul.psource-chat-actions-menu
     position: relative;
 }
 
+/* Admin/Dashboard fallback: ensure picker is visible and not clipped */
+body.wp-admin div.psource-chat-box div.psource-chat-module-message-area {
+    overflow: visible !important;
+}
+
+body.wp-admin .psource-chat-emoji-picker.active {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    right: 20px !important;
+    bottom: 56px !important;
+    left: auto !important;
+    top: auto !important;
+    width: min(320px, calc(100vw - 24px)) !important;
+    max-height: min(360px, calc(100vh - 96px)) !important;
+    z-index: 999999 !important;
+}
+
+body.wp-admin .psource-chat-emoji-grid-container {
+    max-height: min(260px, calc(100vh - 180px));
+}
+
 /* Mobile responsive */
 @media (max-width: 480px) {
     .psource-chat-emoji-picker {

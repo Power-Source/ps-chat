@@ -2151,7 +2151,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                 if (existing_text != '') existing_text = existing_text + ' ';
                 existing_text = existing_text + name_title + ' ';
                 //psource_chat.moveCaretToEnd(textarea_el);
-                jQuery(textarea_el).val(existing_text).focus();
+                jQuery(textarea_el).val(existing_text).trigger('focus');
             }
             event.preventDefault();
             return false;
@@ -2204,7 +2204,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                         if (existing_text != '') existing_text = existing_text + ' ';
                         existing_text = existing_text + name_title + ' ';
                         //psource_chat.moveCaretToEnd(textarea_el);
-                        jQuery(textarea_el).val(existing_text).focus();
+                        jQuery(textarea_el).val(existing_text).trigger('focus');
                     }
                 });
             }
@@ -2732,12 +2732,12 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
             if (currentValue == '')
                 jQuery('div#psource-chat-box-' + chat_id + '.psource-chat-box div.psource-chat-module-message-area textarea.psource-chat-send').val(txtval);
 
-            jQuery('div#psource-chat-box-' + chat_id + '.psource-chat-box div.psource-chat-module-message-area textarea.psource-chat-send').focus(function () {
+            jQuery('div#psource-chat-box-' + chat_id + '.psource-chat-box div.psource-chat-module-message-area textarea.psource-chat-send').on('focus', function () {
                 if (jQuery(this).val() == txtval) {
                     jQuery(this).val('')
                 }
             });
-            jQuery('div#psource-chat-box-' + chat_id + '.psource-chat-box div.psource-chat-module-message-area textarea.psource-chat-send').blur(function () {
+            jQuery('div#psource-chat-box-' + chat_id + '.psource-chat-box div.psource-chat-module-message-area textarea.psource-chat-send').on('blur', function () {
                 if (jQuery(this).val() == "") {
                     jQuery(this).val(txtval);
                 }
@@ -2803,7 +2803,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
             jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-login').show();
             jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-login-prompt').hide();
 
-            jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-login input.psource-chat-login-name').focus();
+            jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-login input.psource-chat-login-name').trigger('focus');
 
             return false;
         });
@@ -2913,7 +2913,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
             }
             current_msg_box.val(current_msg_box_val + ' ' + emoji );
 
-            jQuery('#' + chat_box_id + '.psource-chat-box div.psource-chat-module-message-area textarea.psource-chat-send').focus();
+            jQuery('#' + chat_box_id + '.psource-chat-box div.psource-chat-module-message-area textarea.psource-chat-send').trigger('focus');
             return false;
 
         });
@@ -2974,7 +2974,10 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
         });
 
         // ADMIN: Clear menu options
-        jQuery('div#psource-chat-box-' + chat_id + '.psource-chat-box div.psource-chat-module-header ul.psource-chat-actions-settings-menu li.psource-chat-action-menu-item-session-clear a.psource-chat-action-session-clear').on( "click", function () {
+        jQuery('div#psource-chat-box-' + chat_id).on('click', 'a.psource-chat-action-session-clear', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
             var chat_box_id = jQuery(this).parents('.psource-chat-box').attr('id');
 
             var chat_session = psource_chat.chat_session_get_session_by_id(chat_id);
@@ -3614,17 +3617,28 @@ jQuery(document).ready(function () {
             if (picker.hasClass('active')) {
                 var searchInput = picker.find('.psource-chat-emoji-search');
                 if (searchInput.length) {
-                    searchInput.focus();
+                    searchInput.trigger('focus');
                 }
             }
         });
         
-        // Add close button logic
-        jQuery(document).off('click.emoji', '.psource-chat-emoji-close').on('click.emoji', '.psource-chat-emoji-close', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            jQuery(this).closest('.psource-chat-emoji-picker').removeClass('active');
-        });
+        // Add close button logic (robust for click + touch)
+        jQuery(document)
+            .off('click.emoji-close touchend.emoji-close', '.psource-chat-emoji-close')
+            .on('click.emoji-close touchend.emoji-close', '.psource-chat-emoji-close', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (typeof e.stopImmediatePropagation === 'function') {
+                    e.stopImmediatePropagation();
+                }
+
+                jQuery(this)
+                    .closest('.psource-chat-emoji-picker')
+                    .removeClass('active')
+                    .css({'position': '', 'top': '', 'left': '', 'width': '', 'height': '', 'display': ''});
+
+                return false;
+            });
         
         // Emoji search logic
         jQuery(document).off('input.emoji', '.psource-chat-emoji-search').on('input.emoji', '.psource-chat-emoji-search', function(e) {
@@ -3688,7 +3702,7 @@ jQuery(document).ready(function () {
                 textarea.trigger('change');
                 
                 // Focus textarea
-                textarea.focus();
+                textarea.trigger('focus');
             } else {
                 // Global fallback - find any visible chat textarea
                 var fallbackTextarea = jQuery('textarea.psource-chat-send:visible').first();
@@ -3706,7 +3720,7 @@ jQuery(document).ready(function () {
                     }
                     
                     fallbackTextarea.trigger('change');
-                    fallbackTextarea.focus();
+                    fallbackTextarea.trigger('focus');
                 }
             }
             
@@ -3735,3 +3749,66 @@ jQuery(document).ready(function () {
         initEmojiPicker();
     });
 });
+
+    // Fallback for admin/dashboard environments where delegated jQuery handlers
+    // might be blocked by third-party scripts or adminbar event handling.
+    (function() {
+        'use strict';
+
+        if (typeof document === 'undefined') {
+            return;
+        }
+
+        // This hard fallback is only needed in admin/dashboard contexts.
+        if (!document.body || !document.body.classList.contains('wp-admin')) {
+            return;
+        }
+
+        function findPicker(trigger) {
+            var messageArea = trigger.closest('.psource-chat-module-message-area');
+            if (messageArea) {
+                var scopedPicker = messageArea.querySelector('.psource-chat-emoji-picker');
+                if (scopedPicker) {
+                    return scopedPicker;
+                }
+            }
+
+            var chatBox = trigger.closest('.psource-chat-box');
+            if (chatBox) {
+                var boxPicker = chatBox.querySelector('.psource-chat-emoji-picker');
+                if (boxPicker) {
+                    return boxPicker;
+                }
+            }
+
+            return document.querySelector('.psource-chat-emoji-picker');
+        }
+
+        document.addEventListener('click', function(evt) {
+            var trigger = evt.target.closest('.psource-chat-emoticons-menu');
+            if (!trigger) {
+                return;
+            }
+
+            var picker = findPicker(trigger);
+            if (!picker) {
+                return;
+            }
+
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            var wasActive = picker.classList.contains('active');
+            var allPickers = document.querySelectorAll('.psource-chat-emoji-picker');
+            for (var i = 0; i < allPickers.length; i++) {
+                allPickers[i].classList.remove('active');
+                allPickers[i].style.display = '';
+            }
+
+            if (!wasActive) {
+                picker.classList.add('active');
+                picker.style.display = 'block';
+                picker.style.zIndex = '10000';
+            }
+        }, true);
+    })();

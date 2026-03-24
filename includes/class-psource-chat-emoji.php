@@ -266,7 +266,11 @@ class PSource_Chat_Emoji {
         
         // Only the button inside the list
         $content = '<li class="psource-chat-send-input-emoticons">';
-        $content .= '<a class="psource-chat-emoticons-menu" href="#" title="' . __( 'Emoji auswählen', 'psource-chat' ) . '">';
+        $onclick_fallback = '';
+        if ( is_admin() ) {
+            $onclick_fallback = ' onclick="(function(el){try{var msg=el.closest(\'.psource-chat-module-message-area\');var picker=msg?msg.querySelector(\'.psource-chat-emoji-picker\'):null;if(!picker){var box=el.closest(\'.psource-chat-box\');picker=box?box.querySelector(\'.psource-chat-emoji-picker\'):null;}if(!picker){picker=document.querySelector(\'.psource-chat-emoji-picker\');}if(!picker){return false;}var all=document.querySelectorAll(\'.psource-chat-emoji-picker\');for(var i=0;i<all.length;i++){if(all[i]!==picker){all[i].classList.remove(\'active\');all[i].style.display=\'\';}}var active=picker.classList.contains(\'active\');if(active){picker.classList.remove(\'active\');picker.style.display=\'\';}else{picker.classList.add(\'active\');picker.style.display=\'block\';picker.style.zIndex=\'999999\';}}catch(err){}return false;})(this);"';
+        }
+        $content .= '<a class="psource-chat-emoticons-menu" href="#" title="' . __( 'Emoji auswählen', 'psource-chat' ) . '"' . $onclick_fallback . '>';
         $content .= '<span class="psource-chat-emoji-trigger">' . $first_emoji . '</span>';
         $content .= '</a>';
         $content .= '</li>';
