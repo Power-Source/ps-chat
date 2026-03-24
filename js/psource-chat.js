@@ -2619,16 +2619,32 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
         });
 
         // Handle the Emoticons click/hover.
-        jQuery('div#psource-chat-box-' + chat_id + '.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-emoticons ul.psource-chat-emoticons-list').css({display: "none"});
-        jQuery('div#psource-chat-box-' + chat_id + '.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-emoticons').on( "click", function (event) {
+        jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-emoticons ul.psource-chat-emoticons-list').css({display: "none"});
+        jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-emoticons').on( "click", function (event) {
             event.preventDefault();
+
+            // Prefer the modern emoji picker when available.
+            var modernPicker = jQuery(this).closest('.psource-chat-module-message-area').find('.psource-chat-emoji-picker').first();
+            if (!modernPicker.length) {
+                modernPicker = jQuery('div#psource-chat-box-' + chat_id + ' .psource-chat-emoji-picker').first();
+            }
+            if (!modernPicker.length) {
+                modernPicker = jQuery('.psource-chat-emoji-picker').first();
+            }
+
+            if (modernPicker.length) {
+                jQuery('.psource-chat-emoji-picker').not(modernPicker).removeClass('active');
+                modernPicker.toggleClass('active');
+                return;
+            }
+
             jQuery('ul.psource-chat-emoticons-list', this).slideToggle(400);
         });
         // Emoticons child item. When clicked will close the parent UL
-        jQuery('div#psource-chat-box-' + chat_id + '.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-emoticons ul.psource-chat-emoticons-list li').on( "click", function (event) {
+        jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-emoticons ul.psource-chat-emoticons-list li').on( "click", function (event) {
             event.preventDefault();
             event.stopPropagation();
-            jQuery('div#psource-chat-box-' + chat_id + '.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-emoticons ul.psource-chat-emoticons-list').css({display: "none"});
+            jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-emoticons ul.psource-chat-emoticons-list').css({display: "none"});
         });
 
         jQuery('div#psource-chat-box-' + chat_id + '.psource-chat-box div.psource-chat-module-header ul.psource-chat-actions-menu li.psource-chat-actions-settings-pop-out a').on( "click", function (event) {
@@ -3555,8 +3571,9 @@ jQuery(document).ready(function () {
 
             // Find the parent chat box container
             var chatBox = jQuery(this).closest('.psource-chat-box');
+            var messageArea = jQuery(this).closest('.psource-chat-module-message-area');
             
-            var picker = chatBox.find('.psource-chat-emoji-picker');
+            var picker = chatBox.length ? chatBox.find('.psource-chat-emoji-picker') : messageArea.find('.psource-chat-emoji-picker');
             
             // If not found in chat box, search globally
             if (!picker.length) {
@@ -3571,20 +3588,26 @@ jQuery(document).ready(function () {
             
             // Position picker to stay within chat box bounds after toggling
             if (picker.hasClass('active')) {
-                var chatBoxOffset = chatBox.offset();
-                var chatBoxWidth = chatBox.outerWidth();
-                var chatBoxHeight = chatBox.outerHeight();
-                
-                // Set picker position and size to fit within chat box
-                picker.css({
-                    'position': 'fixed',
-                    'top': chatBoxOffset.top + 'px',
-                    'left': chatBoxOffset.left + 'px',
-                    'width': chatBoxWidth + 'px',
-                    'height': chatBoxHeight + 'px'
-                });
+                var chatBoxOffset = chatBox.length ? chatBox.offset() : null;
+                var chatBoxWidth = chatBox.length ? chatBox.outerWidth() : null;
+                var chatBoxHeight = chatBox.length ? chatBox.outerHeight() : null;
+
+                // In some admin/dashboard contexts there is no standard chat box wrapper.
+                // Keep default CSS positioning in that case instead of forcing fixed coordinates.
+                if (chatBoxOffset && chatBoxWidth && chatBoxHeight) {
+                    // Set picker position and size to fit within chat box
+                    picker.css({
+                        'position': 'fixed',
+                        'top': chatBoxOffset.top + 'px',
+                        'left': chatBoxOffset.left + 'px',
+                        'width': chatBoxWidth + 'px',
+                        'height': chatBoxHeight + 'px'
+                    });
+                } else {
+                    picker.css({'position': '', 'top': '', 'left': '', 'width': '', 'height': ''});
+                }
             } else {
-                picker.css({'position': 'fixed', 'top': 'auto', 'left': 'auto', 'width': 'auto', 'height': 'auto'});
+                picker.css({'position': '', 'top': '', 'left': '', 'width': '', 'height': ''});
             }
             
             // Focus search field if visible
@@ -3644,7 +3667,8 @@ jQuery(document).ready(function () {
             
             // Find the parent chat box container
             var chatBox = jQuery(this).closest('.psource-chat-box');
-            var textarea = chatBox.find('textarea.psource-chat-send');
+            var messageArea = jQuery(this).closest('.psource-chat-module-message-area');
+            var textarea = chatBox.length ? chatBox.find('textarea.psource-chat-send') : messageArea.find('textarea.psource-chat-send');
             
             if (textarea.length) {
                 // Insert emoji at cursor position

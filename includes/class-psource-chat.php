@@ -1410,6 +1410,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			wp_register_script( 'jquery-cookie', $this->get_plugin_url( '/js/jquery-cookie.js' ), array( 'jquery' ), $this->chat_current_version, true );
 			wp_register_script( 'psource-chat-admin-farbtastic-js', $this->get_plugin_url( '/js/psource-chat-admin-farbtastic.js' ), array( 'wp-color-picker' ), $this->chat_current_version, true );
 			wp_register_script( 'psource-chat-js', $this->get_plugin_url( '/js/psource-chat.js' ), array( 'jquery' ), $this->chat_current_version, true );
+			wp_register_script( 'psource-chat-upload-js', $this->get_plugin_url( '/js/psource-chat-upload.js' ), array( 'jquery', 'psource-chat-js' ), $this->chat_current_version, true );
 
 			$screen = get_current_screen();
 
@@ -1466,13 +1467,9 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 					wp_enqueue_script( 'psource-chat-js' );
 					$this->_registered_scripts['psource-chat-js'] = 'psource-chat-js';
-				}
 
-				if ( ( isset( $this->user_meta['chat_wp_toolbar'] ) ) && ( $this->user_meta['chat_wp_toolbar'] == "enabled" ) ) {
-
-					$this->_registered_styles['psource-chat-wpadminbar-style'] = 'psource-chat-wpadminbar-style';
-
-					// For older versions of WP (less than 3.8) we add some supplement styles
+						wp_enqueue_script( 'psource-chat-upload-js' );
+						$this->_registered_scripts['psource-chat-upload-js'] = 'psource-chat-upload-js';
 					if ( ! version_compare( $wp_version, '3.7.1', '>' ) ) {
 						$this->_registered_styles['psource-chat-wpadminbar-style-pre-38'] = 'psource-chat-wpadminbar-style-pre-38';
 					}
@@ -1494,6 +1491,9 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 				wp_enqueue_script( 'psource-chat-js' );
 				$this->_registered_scripts['psource-chat-js'] = 'psource-chat-js';
+
+				wp_enqueue_script( 'psource-chat-upload-js' );
+				$this->_registered_scripts['psource-chat-upload-js'] = 'psource-chat-upload-js';
 
 				wp_enqueue_script( 'psource-chat-admin-js' );
 				$this->_registered_scripts['psource-chat-admin-js'] = 'psource-chat-admin-js';
@@ -1528,6 +1528,9 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			//Commented out in 2.0.8.6, as it breaks on Gravity forms page
 			//wp_enqueue_script( 'psource-chat-js' );
 			$this->_registered_scripts['psource-chat-js'] = 'psource-chat-js';
+
+			wp_enqueue_script( 'psource-chat-upload-js' );
+			$this->_registered_scripts['psource-chat-upload-js'] = 'psource-chat-upload-js';
 
 		}
 
