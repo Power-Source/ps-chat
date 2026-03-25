@@ -1535,6 +1535,11 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			//wp_enqueue_script( 'psource-chat-js' );
 			$this->_registered_scripts['psource-chat-js'] = 'psource-chat-js';
 
+			if ( $this->is_box_resizable_enabled() ) {
+				wp_enqueue_script( 'jquery-ui-resizable' );
+				$this->_registered_scripts['jquery-ui-resizable'] = 'jquery-ui-resizable';
+			}
+
 			wp_enqueue_script( 'psource-chat-upload-js' );
 			$this->_registered_scripts['psource-chat-upload-js'] = 'psource-chat-upload-js';
 
@@ -1595,6 +1600,11 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				wp_enqueue_script( 'psource-chat-js' );
 				$this->_registered_scripts['psource-chat-js'] = 'psource-chat-js';
 
+				if ( $this->is_box_resizable_enabled() ) {
+					wp_enqueue_script( 'jquery-ui-resizable' );
+					$this->_registered_scripts['jquery-ui-resizable'] = 'jquery-ui-resizable';
+				}
+
 				wp_enqueue_script( 'psource-chat-media-js' );
 				$this->_registered_scripts['psource-chat-media-js'] = 'psource-chat-media-js';
 
@@ -1636,6 +1646,11 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 				wp_enqueue_script( 'psource-chat-js' );
 				$this->_registered_scripts['psource-chat-js'] = 'psource-chat-js';
+
+				if ( $this->is_box_resizable_enabled() ) {
+					wp_enqueue_script( 'jquery-ui-resizable' );
+					$this->_registered_scripts['jquery-ui-resizable'] = 'jquery-ui-resizable';
+				}
 
 				wp_enqueue_script( 'psource-chat-media-js' );
 				$this->_registered_scripts['psource-chat-media-js'] = 'psource-chat-media-js';
@@ -1828,6 +1843,26 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			}
 		}
 
+		/**
+		 * Returns true when at least one active chat session has resizable boxes enabled.
+		 * This lets us load jQuery UI only when needed.
+		 *
+		 * @return bool
+		 */
+		function is_box_resizable_enabled() {
+			if ( empty( $this->chat_sessions ) || ! is_array( $this->chat_sessions ) ) {
+				return false;
+			}
+
+			foreach ( $this->chat_sessions as $chat_session ) {
+				if ( ( isset( $chat_session['box_resizable'] ) ) && ( $chat_session['box_resizable'] === 'enabled' ) ) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		function set_chat_localized() {
 			$poll_type = $this->get_option( 'session_poll_type', 'global' );
 			
@@ -1862,8 +1897,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			$this->chat_localized['settings']['soundManager-js'] = $this->get_plugin_url( '/js/buzz.min.js' );
 			//$this->chat_localized['settings']['cookie-js'] 			= plugins_url('/js/jquery-cookie.js', __FILE__);
 
-			// Need to disable legacy setting.
-			$this->chat_localized['settings']['box_resizable'] = false;
+			$this->chat_localized['settings']['box_resizable'] = $this->is_box_resizable_enabled();
 
 			$this->chat_localized['sessions']               = $this->chat_sessions;
 			$this->chat_localized['user']                   = $this->chat_user;

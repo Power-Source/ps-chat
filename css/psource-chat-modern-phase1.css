@@ -123,6 +123,15 @@ div.psource-chat-box {
   overflow: hidden;
 }
 
+/* Keep resize handles usable when jQuery UI resizable is active */
+div.psource-chat-box.ui-resizable {
+  overflow: visible;
+}
+
+div.psource-chat-box.ui-resizable .ui-resizable-handle {
+  z-index: 30;
+}
+
 /* ============================================================
    3. Message Row – Flexbox Layout (CRITICAL)
    ============================================================ */
@@ -336,6 +345,13 @@ div.psource-chat-box div.psource-chat-module-message-area div.psource-chat-input
   gap: var(--psource-chat-density-gap);
 }
 
+div.psource-chat-box div.psource-chat-module-message-area div.psource-chat-input-wrapper textarea.psource-chat-send {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  box-sizing: border-box;
+}
+
 div.psource-chat-box div.psource-chat-module-message-area textarea.psource-chat-send {
   float: none;
   width: 100%;
@@ -381,11 +397,14 @@ div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-m
   display: flex !important;
   justify-content: flex-start !important;
   align-items: center !important;
+  flex-wrap: nowrap !important;
   gap: 0.28rem;
   list-style: none !important;
   margin: 0.2rem 0 0 0 !important;
   padding: 0 !important;
   width: 100% !important;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta li {
@@ -418,6 +437,7 @@ div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-m
 div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-length {
   order: 99;
   margin-left: auto !important;
+  flex: 0 0 auto;
 }
 
 div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta li a,
@@ -444,9 +464,9 @@ div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-m
 }
 
 div.psource-chat-box div.psource-chat-module-message-area li.psource-chat-send-input-length {
-  font-size: 0.86rem;
+  font-size: 0.8rem;
   color: var(--psource-color-text-secondary);
-  min-width: 3.2rem;
+  min-width: 2.6rem;
   line-height: 1;
 }
 
@@ -463,6 +483,69 @@ div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-m
 
 div.psource-chat-box div.psource-chat-module-message-area nav.psource-chat-send-meta-nav {
   display: block;
+}
+
+/* Admin corner-chat parity: enforce frontend proportions inside wp-admin */
+body.wp-admin div.psource-chat-box.psource-chat-box-site {
+  box-sizing: border-box;
+  max-width: calc(100vw - 8px);
+  font-family: var(--psource-font-family-base) !important;
+  font-size: var(--psource-font-size-base) !important;
+  line-height: var(--psource-line-height-base) !important;
+  right: 0;
+  left: auto;
+}
+
+body.wp-admin div.psource-chat-box.psource-chat-box-site,
+body.wp-admin div.psource-chat-box.psource-chat-box-site * {
+  box-sizing: border-box;
+}
+
+body.wp-admin div.psource-chat-box.psource-chat-box-site div.psource-chat-module-message-area div.psource-chat-input-wrapper {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.3rem;
+}
+
+body.wp-admin div.psource-chat-box.psource-chat-box-site div.psource-chat-module-message-area div.psource-chat-input-wrapper textarea.psource-chat-send {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+body.wp-admin div.psource-chat-box.psource-chat-box-site div.psource-chat-module-message-area ul.psource-chat-send-meta {
+  overflow: hidden;
+  margin: 0.2rem 0 0 0 !important;
+  padding: 0 !important;
+}
+
+body.wp-admin div.psource-chat-box.psource-chat-box-site div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-length {
+  min-width: 2.6rem;
+}
+
+body.wp-admin div.psource-chat-box.psource-chat-box-site div.psource-chat-module-message-area ul.psource-chat-send-meta li {
+  margin: 0 !important;
+  line-height: 1 !important;
+}
+
+body.wp-admin div.psource-chat-box.psource-chat-box-site div.psource-chat-module-message-area textarea.psource-chat-send,
+body.wp-admin div.psource-chat-box.psource-chat-box-site div.psource-chat-module-message-area button.psource-chat-send-button,
+body.wp-admin div.psource-chat-box.psource-chat-box-site div.psource-chat-module-message-area ul.psource-chat-send-meta li a,
+body.wp-admin div.psource-chat-box.psource-chat-box-site div.psource-chat-module-message-area ul.psource-chat-send-meta li button {
+  font: inherit !important;
+  line-height: normal !important;
+}
+
+/* Dashboard widget compatibility: neutralize legacy inline colors/spacing */
+div.psource-chat-box.psource-chat-dashboard-widget {
+  border: 0 !important;
+}
+
+div.psource-chat-box.psource-chat-dashboard-widget div.psource-chat-module-message-area ul.psource-chat-send-meta {
+  background: transparent !important;
+}
+
+div.psource-chat-box.psource-chat-dashboard-widget div.psource-chat-module-header {
+  box-shadow: none;
 }
 
 /* ============================================================
