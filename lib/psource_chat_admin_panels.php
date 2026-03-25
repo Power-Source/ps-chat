@@ -407,7 +407,6 @@ if ( ! class_exists( "psource_chat_admin_panels" ) ) {
 								<?php psource_chat_form_section_polling_content( $form_section ); ?>
 							<?php } ?>
 							<?php psource_chat_form_section_performance_content( $form_section ); ?>
-						</div>
 						<?php if ( ! is_network_admin() ) { ?>
 							<div id="psource_chat_file_uploads_panel" class="chat_panel">
 								<?php psource_chat_form_section_file_uploads_global( 'global' ); ?>

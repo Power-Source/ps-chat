@@ -1216,6 +1216,9 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			}
 
 			if ( ! empty( $this->_registered_styles ) ) {
+				// Load modern CSS ON TOP of legacy CSS (not replacing it)
+				$this->_registered_styles['psource-chat-modern-phase1'] = 'psource-chat-modern-phase1';
+				
 				wp_print_styles( array_values( $this->_registered_styles ) );
 			}
 			if ( $_SHOW_SITE_CHAT == true ) {
@@ -1395,6 +1398,9 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 			//Register All the styles
 			wp_register_style( 'psource-chat-style', $this->get_plugin_url( '/css/psource-chat-style.css' ), array(), $this->chat_current_version );
+			
+			// Register modern Phase1 CSS (Opt-In)
+			wp_register_style( 'psource-chat-modern-phase1', $this->get_plugin_url( '/css/psource-chat-modern-phase1.css' ), array(), $this->chat_current_version );
 
 			//Admin Styles
 			wp_register_style( 'psource-chat-wpadminbar-style', $this->get_plugin_url( '/css/psource-chat-wpadminbar.css' ), array(), $this->chat_current_version );
@@ -1553,8 +1559,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 			//Register Styles And Scripts
 			wp_register_style( 'psource-chat-style', $this->get_plugin_url( '/css/psource-chat-style.css' ), array(), $this->chat_current_version );
-			wp_register_style( 'psource-chat-admin-css', $this->get_plugin_url( '/css/psource-chat-admin.css' ), array(), $this->chat_current_version );
-			wp_register_style( 'psource-chat-wpadminbar-style', $this->get_plugin_url( '/css/psource-chat-wpadminbar.css' ), array(), $this->chat_current_version );
+		wp_register_style( 'psource-chat-modern-phase1', $this->get_plugin_url( '/css/psource-chat-modern-phase1.css' ), array(), $this->chat_current_version );
 
 			if ( ! version_compare( $wp_version, '3.7.1', '>' ) ) {
 				wp_register_style( 'psource-chat-wpadminbar-style-pre-38', $this->get_plugin_url( '/css/psource-chat-wpadminbar-pre-38.css' ), array(), $this->chat_current_version );
@@ -3955,35 +3960,40 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 			$content .= $CSS_prefix . ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-action-menu-item-file-upload {
 				cursor: pointer;
-				float: left !important;
-				margin-left: 5px !important;
+				float: none !important;
+				margin-left: 0 !important;
 				margin-right: 0 !important;
 			}
 			' . $CSS_prefix . ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-action-menu-item-file-upload a {
-				color: #666 !important;
+				color: #495057 !important;
 				text-decoration: none !important;
-				display: inline-block !important;
-				padding: 4px !important;
-				background: transparent !important;
-				border: none !important;
-				border-radius: 3px !important;
+				display: inline-flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+				width: 1.95rem !important;
+				height: 1.95rem !important;
+				padding: 0.2rem !important;
+				background: #ffffff !important;
+				border: 1px solid #cfd4da !important;
+				border-radius: 0.35rem !important;
 				box-shadow: none !important;
 				outline: none !important;
 				transition: all 0.2s ease !important;
 			}
 			' . $CSS_prefix . ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-action-menu-item-file-upload a:hover {
-				color: #333 !important;
-				background: rgba(0,0,0,0.05) !important;
+				color: #1f2933 !important;
+				background: #f1f3f5 !important;
+				border-color: #8bb8ff !important;
 				text-decoration: none !important;
 			}
 			' . $CSS_prefix . ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-action-menu-item-file-upload a:focus {
 				outline: none !important;
-				box-shadow: none !important;
+				box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.18) !important;
 			}
 			' . $CSS_prefix . ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-action-menu-item-file-upload svg {
 				vertical-align: middle !important;
-				width: 16px !important;
-				height: 16px !important;
+				width: 0.95rem !important;
+				height: 0.95rem !important;
 				display: block !important;
 			}
 			';
@@ -4198,63 +4208,55 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			$textarea_max_length = '';
 		}
 
-		// Wrapper für flexbox layout: nur für Position "right" nutzen
 		$use_right_layout = ( isset( $chat_session['box_send_button_position'] ) && $chat_session['box_send_button_position'] === 'right' );
-		if ( $use_right_layout ) {
-			// Textarea + Button nebeneinander
-			$content .= '<div class="psource-chat-input-wrapper">';
-			$content .= '<textarea id="psource-chat-send-' . $chat_session['id'] . '" class="psource-chat-send" ' . $textarea_max_length . ' rows="5" placeholder="' . __( 'Tippe Deine Chatnachricht hier', 'psource-chat' ) . '"></textarea>';
-		} else {
-			// Nur Textarea (Button folgt darunter wie im Original)
-			$content .= '<div class="psource-chat-input-wrapper">';
-			$content .= '<textarea id="psource-chat-send-' . $chat_session['id'] . '" class="psource-chat-send" ' . $textarea_max_length . ' rows="5" placeholder="' . __( 'Tippe Deine Chatnachricht hier', 'psource-chat' ) . '"></textarea>';
-			$content .= '</div>';
-		}
-
-		// Senden-Button rendern abhängig von Position/Settings
-		if ( ( $chat_session['box_send_button_enable'] == "enabled" )
+		$show_send_button = ( ( $chat_session['box_send_button_enable'] == "enabled" )
 			 || ( ( $chat_session['box_send_button_enable'] == "mobile_only" ) && ( $this->chat_localized['settings']['wp_is_mobile'] == true ) )
-		) {
-			$btn_id = 'psource-chat-send-button-' . $chat_session['id'];
-			$btn_class = 'psource-chat-send-button';
-			$btn_title = esc_attr( $chat_session['box_send_button_label'] );
+		);
+		$textarea_id = 'psource-chat-send-' . $chat_session['id'];
+		$counter_id = 'psource-chat-char-count-' . $chat_session['id'];
 
-			if ( $use_right_layout ) {
-				// Icon-only square button direkt im Wrapper (rechts)
-				$content .= '<button id="' . $btn_id . '" class="' . $btn_class . '" type="button" title="' . $btn_title . '" aria-label="' . $btn_title . '">'
-					. '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
-					. '<path d="M2 21l21-9-21-9v7l15 2-15 2v7z"></path>'
-					. '</svg>'
-					. '</button>';
-				// Wrapper schließen bei rechter Position
-				$content .= '</div>';
-			} else {
-				// Original: Text-Button unterhalb des Eingabebereichs
-				$content .= '<button id="' . $btn_id . '" class="' . $btn_class . '" type="button">' . $chat_session['box_send_button_label'] . '</button>';
-			}
+		$content .= '<form class="psource-chat-input-form" action="#" method="post" novalidate role="group" aria-label="' . esc_attr__( 'Nachricht senden', 'psource-chat' ) . '">';
+		$content .= '<div class="psource-chat-input-wrapper">';
+		$content .= '<textarea id="' . $textarea_id . '" class="psource-chat-send" ' . $textarea_max_length . ' rows="3" placeholder="' . esc_attr__( 'Tippe Deine Chatnachricht hier', 'psource-chat' ) . '" aria-label="' . esc_attr__( 'Nachricht', 'psource-chat' ) . '" aria-describedby="' . esc_attr( $counter_id ) . '"></textarea>';
+
+		if ( $show_send_button && $use_right_layout ) {
+			$btn_id = 'psource-chat-send-button-' . $chat_session['id'];
+			$btn_title = esc_attr( $chat_session['box_send_button_label'] );
+			$content .= '<button id="' . $btn_id . '" class="psource-chat-send-button" type="button" title="' . $btn_title . '" aria-label="' . $btn_title . '">'
+				. '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+				. '<path d="M2 21l21-9-21-9v7l15 2-15 2v7z"></path>'
+				. '</svg>'
+				. '</button>';
+		}
+		$content .= '</div>';
+
+		if ( $show_send_button && ! $use_right_layout ) {
+			$btn_id = 'psource-chat-send-button-' . $chat_session['id'];
+			$content .= '<button id="' . $btn_id . '" class="psource-chat-send-button" type="button" aria-label="' . esc_attr( $chat_session['box_send_button_label'] ) . '">' . esc_html( $chat_session['box_send_button_label'] ) . '</button>';
 		}
 
 		if ( ( $chat_session['box_emoticons'] == "enabled" ) || ( $chat_session['box_sound'] == "enabled" ) || ( intval( $chat_session['row_message_input_length'] ) > 0 ) || ( $chat_session['file_uploads_enabled'] == "enabled" && $this->get_option( 'file_uploads_enabled', 'global' ) == 'enabled' ) ) {
 
-				$content .= '<ul class="psource-chat-send-meta">';
+				$content .= '<nav class="psource-chat-send-meta-nav" aria-label="' . esc_attr__( 'Nachrichtenoptionen', 'psource-chat' ) . '">';
+				$content .= '<ul class="psource-chat-send-meta" role="toolbar">';
 
 				if ( intval( $chat_session['row_message_input_length'] ) > 0 ) {
-					$content .= '<li class="psource-chat-send-input-length"><span class="psource-chat-character-count">0</span>/' .
+					$content .= '<li class="psource-chat-send-input-length"><span id="' . esc_attr( $counter_id ) . '" class="psource-chat-character-count" aria-live="polite" aria-atomic="true">0</span>/' .
 					            intval( $chat_session['row_message_input_length'] ) . '</li>';
 				}
 
 				if ( $chat_session['box_sound'] == "enabled" ) {
-					$content .= '<li class="psource-chat-action-menu-item-sound-on"><a href="#" class="psource-chat-action-sound" title="' .
+					$content .= '<li class="psource-chat-action-menu-item-sound-on"><a href="#" class="psource-chat-action-sound" role="button" title="' .
 					            __( 'Schalte Chat-Sound aus', 'psource-chat' ) . '"><img height="16" width="16" src="' . $this->get_plugin_url( '/images/sound-on.png' ) . '" alt="' . __( 'Schalte Chat-Sound aus', 'psource-chat' ) . '" class="psource-chat-sound-on" title="' . __( 'Schalte Chat-Sound aus', 'psource-chat' ) . '" /></a></li>';
 
-				$content .= '<li class="psource-chat-action-menu-item-sound-off"><a href="#" class="psource-chat-action-sound" title="' .
+				$content .= '<li class="psource-chat-action-menu-item-sound-off"><a href="#" class="psource-chat-action-sound" role="button" title="' .
 				            __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '"><img height="16" width="16" src="' . $this->get_plugin_url( '/images/sound-off.png' ) . '" alt="' . __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '" class="psource-chat-sound-off" title="' . __( 'Schalte Chat-Sound ein', 'psource-chat' ) . '" /></a></li>';
 			}
 
 			// File upload button
 			if ( $chat_session['file_uploads_enabled'] == "enabled" && $this->get_option( 'file_uploads_enabled', 'global' ) == 'enabled' ) {
 				$content .= '<li class="psource-chat-action-menu-item-file-upload">';
-				$content .= '<a href="#" class="psource-chat-upload-button" title="' . __( 'Datei hochladen', 'psource-chat' ) . '">';
+				$content .= '<a href="#" class="psource-chat-upload-button" role="button" title="' . __( 'Datei hochladen', 'psource-chat' ) . '" aria-label="' . esc_attr__( 'Datei hochladen', 'psource-chat' ) . '">';
 				$content .= '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">';
 				$content .= '<path d="M16.5,6V17.5A4,4 0 0,1 12.5,21.5A4,4 0 0,1 8.5,17.5V5A2.5,2.5 0 0,1 11,2.5A2.5,2.5 0 0,1 13.5,5V15.5A1,1 0 0,1 12.5,16.5A1,1 0 0,1 11.5,15.5V6H10V15.5A2.5,2.5 0 0,0 12.5,18A2.5,2.5 0 0,0 15,15.5V5A4,4 0 0,0 11,1A4,4 0 0,0 7,5V17.5A5.5,5.5 0 0,0 12.5,23A5.5,5.5 0 0,0 18,17.5V6H16.5Z"/>';
 				$content .= '</svg>';
@@ -4275,6 +4277,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			}
 
 			$content .= '</ul>';
+			$content .= '</nav>';
 			
 			// Emoji picker modal added after message-area module closes
 			if ( $chat_session['box_emoticons'] == "enabled" ) {
@@ -4286,6 +4289,8 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				$content .= $this->emoji_system->generate_emoji_picker_modal( $chat_session );
 			}
 		}
+
+		$content .= '</form>';
 
 		$container_style = '';
 			$content         = $this->chat_session_module_wrap( $chat_session, $content, 'psource-chat-module-message-area', $container_style );
@@ -4380,6 +4385,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 		function chat_box_container( $chat_session, $content = '' ) {
 			$chat_box_style = 'display:none;';
 			$chat_box_class = "psource-chat-box";
+			$chat_box_aria_label = sprintf( __( 'Chatfenster %s', 'psource-chat' ), $chat_session['session_type'] );
 
 			$chat_box_class .= " psource-chat-box-" . $chat_session['session_type'];
 
@@ -4447,9 +4453,9 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			}
 
 			if ( $chat_session['session_type'] == "log" ) {
-				$content = '<div id="psource-chat-box-' . $chat_session['id'] . '" style="' . $chat_box_style . '" class="' . $chat_box_class . '">' . $content . '</div>';
+				$content = '<div id="psource-chat-box-' . $chat_session['id'] . '" style="' . $chat_box_style . '" class="' . $chat_box_class . ' psource-chat-ui-compact" role="complementary" aria-label="' . esc_attr( $chat_box_aria_label ) . '" data-psource-ui="modern" data-psource-density="compact">' . $content . '</div>';
 			} else {
-				$content = '<div id="psource-chat-box-' . $chat_session['id'] . '" style="' . $chat_box_style . '" class="' . $chat_box_class . '">' . $content . '</div>';
+				$content = '<div id="psource-chat-box-' . $chat_session['id'] . '" style="' . $chat_box_style . '" class="' . $chat_box_class . ' psource-chat-ui-compact" role="complementary" aria-label="' . esc_attr( $chat_box_aria_label ) . '" data-psource-ui="modern" data-psource-density="compact">' . $content . '</div>';
 			}
 
 			return $content;
@@ -4651,12 +4657,12 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 			$chat_action_menu = $this->chat_session_settings_action_menu( $chat_session );
 
-			$chat_header_actions = '<div class="psource-chat-module-header-actions"><ul class="psource-chat-actions-menu">';
+			$chat_header_actions = '<div class="psource-chat-module-header-actions"><ul class="psource-chat-actions-menu" role="toolbar" aria-label="' . esc_attr__( 'Chat-Aktionen', 'psource-chat' ) . '">';
 
 			if ( $chat_session['session_type'] != "bp-group" ) {
 				$chat_header_images .= '<span class="psource-chat-min psource-chat-icon-minimize" style="' . $chat_style_min . '" title="' . __( 'Minimiere Chat', 'psource-chat' ) . '"></span>';
 				$chat_header_images .= '<span class="psource-chat-max psource-chat-icon-maximize" style="' . $chat_style_max . '" title="' . __( 'Maximiere Chat', 'psource-chat' ) . '"></span>';
-				$chat_header_actions .= '<li class="psource-chat-action-item psource-chat-min-max"><a href="#">' . $chat_header_images . '</a></li>';
+				$chat_header_actions .= '<li class="psource-chat-action-item psource-chat-min-max"><a href="#" role="button" aria-label="' . esc_attr__( 'Chat minimieren oder maximieren', 'psource-chat' ) . '">' . $chat_header_images . '</a></li>';
 			}
 			if ( $this->chat_user[ $chat_session['id'] ]['status_max_min'] == "max" ) {
 				$chat_style_settings = '';
@@ -4664,15 +4670,15 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				$chat_style_settings = "display:none;";
 			}
 
-			$chat_header_actions .= '<li class="psource-chat-action-item psource-chat-actions-settings" style="' . $chat_style_settings . '"><a href="#" class="psource-chat-actions-settings-button"><span class="psource-chat-icon-settings"></span></a>' . $chat_action_menu . '</li>';
+			$chat_header_actions .= '<li class="psource-chat-action-item psource-chat-actions-settings" style="' . $chat_style_settings . '"><a href="#" class="psource-chat-actions-settings-button" role="button" aria-label="' . esc_attr__( 'Chat-Einstellungen', 'psource-chat' ) . '"><span class="psource-chat-icon-settings"></span></a>' . $chat_action_menu . '</li>';
 
 			//$transient_key = "chat-session-". $chat_session['blog_id'] ."-". $chat_session['id'] .'-'. $chat_session['session_type'];
 			$transient_key = "chat-session-" . $chat_session['id'] . '-' . $chat_session['session_type'];            if ( $chat_session['box_popout'] == "enabled" ) {
-                $chat_header_actions .= '<li class="psource-chat-action-item psource-chat-actions-settings-pop-out"><a title="' . __( 'Eigenes Fenster', 'psource-chat' ) . '" href="' . add_query_arg( array(
+				$chat_header_actions .= '<li class="psource-chat-action-item psource-chat-actions-settings-pop-out"><a title="' . __( 'Eigenes Fenster', 'psource-chat' ) . '" aria-label="' . esc_attr__( 'Chat in eigenem Fenster', 'psource-chat' ) . '" href="' . add_query_arg( array(
                     'psource-chat-action' => 'pop-out',
                     'psource-chat-key'    => base64_encode( $transient_key )
                 ), get_option( 'siteurl' ) ) . '" class="psource-chat-action-pop-out"><span class="psource-chat-icon-popout"></span></a></li>';
-                $chat_header_actions .= '<li class="psource-chat-action-item psource-chat-actions-settings-pop-in"><a title="' . __( 'Original-Chat', 'psource-chat' ) . '" href="' . add_query_arg( array(
+				$chat_header_actions .= '<li class="psource-chat-action-item psource-chat-actions-settings-pop-in"><a title="' . __( 'Original-Chat', 'psource-chat' ) . '" aria-label="' . esc_attr__( 'Chat zurück in Seite', 'psource-chat' ) . '" href="' . add_query_arg( array(
                     'psource-chat-action' => 'pop-in',
                     'psource-chat-id'     => base64_encode( $chat_session['id'] )
                 ), get_option( 'siteurl' ) ) . '" class="psource-chat-action-pop-out"><span class="psource-chat-icon-popin"></span></a></li>';
@@ -4889,12 +4895,15 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				}
 			}
 
+			$row_timestamp = strtotime( $row->timestamp );
+			$row_id = 'psource-chat-row-' . $row_timestamp . '-' . $row->id;
 			$row_text = '';
-			$row_text .= '<div id="psource-chat-row-' . strtotime( $row->timestamp ) . '-' . $row->id . '" class="' . $row_class . '">';
+			$row_text .= '<div id="' . esc_attr( $row_id ) . '" class="' . esc_attr( $row_class ) . '" role="article" aria-label="' . esc_attr( sprintf( __( 'Nachricht von %s', 'psource-chat' ), $row->name ) ) . '">';
 			$row_name_attr = esc_attr( $row->name );
 			$row_name_html = esc_html( $row->name );
 
-			$row_avatar_name = '';
+			$row_avatar_html = '';
+			$row_name_link = '';
 			if ( empty( $row->avatar ) ) {
 				$row->avatar = "http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=96";
 			}
@@ -4903,23 +4912,27 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				if ( ( isset( $row->avatar ) ) && ( ! empty( $row->avatar ) ) ) {
 					$avatar = '<img alt="' . $row_name_attr . '" src="' . $row->avatar . '" class="psource-chat-user psource-chat-user-avatar" height="' .
 					          intval( $chat_session['row_avatar_width'] ) . '" />';
-					$row_avatar_name .= '<a class="psource-chat-user psource-chat-user-avatar" title="@' . $row_name_attr . '" href="#">' . $avatar . '</a>';
+					$row_avatar_html .= '<a class="psource-chat-user psource-chat-user-avatar" title="@' . $row_name_attr . '" href="#">' . $avatar . '</a>';
 				}
 
 			} else if ( $chat_session['row_name_avatar'] == "name" ) {
 
-				$row_avatar_name .= '<a class="psource-chat-user psource-chat-user-name" title="@' . $row_name_attr . '" href="#">' . $row_name_html . '</a>';
+				$row_name_link .= '<a class="psource-chat-user psource-chat-user-name" title="@' . $row_name_attr . '" href="#">' . $row_name_html . '</a>';
 			} else if ( $chat_session['row_name_avatar'] == "name-avatar" ) {
 				if ( ( isset( $row->avatar ) ) && ( ! empty( $row->avatar ) ) ) {
 					$avatar = '<img alt="' . $row_name_attr . '" src="' . $row->avatar . '" class="psource-chat-user psource-chat-user-avatar" height="' .
 					          intval( $chat_session['row_avatar_width'] ) . '" />';
-					$row_avatar_name .= '<a class="psource-chat-user psource-chat-user-avatar" title="@' . $row_name_attr . '" href="#">' . $avatar . '</a>';
+					$row_avatar_html .= '<a class="psource-chat-user psource-chat-user-avatar" title="@' . $row_name_attr . '" href="#">' . $avatar . '</a>';
 				}
-				$row_avatar_name .= '<a class="psource-chat-user psource-chat-user-name" title="@' . $row_name_attr . '" href="#">' . $row_name_html . '</a>';
+				$row_name_link .= '<a class="psource-chat-user psource-chat-user-name" title="@' . $row_name_attr . '" href="#">' . $row_name_html . '</a>';
 			}
 
 
 			$row_date_time = '';
+			$row_time_iso = '';
+			if ( ! empty( $row_timestamp ) ) {
+				$row_time_iso = gmdate( 'c', $row_timestamp );
+			}
 			if ( $chat_session['row_date'] == 'enabled' ) {
 				if ( isset( $chat_session['row_date_format'] ) ) {
 					$row_date_format = $chat_session['row_date_format'];
@@ -4932,7 +4945,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 				//Translate
 				$date = date_i18n( $row_date_format, strtotime( $date ) );
-				$row_date_time .= '<span class="date new">' . $date . '</span>';
+				$row_date_time .= '<span class="date new">' . esc_html( $date ) . '</span>';
 			}
 
 			if ( $chat_session['row_time'] == 'enabled' ) {
@@ -4945,16 +4958,31 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 					$row_time_format = get_option( 'time_format' );
 				}
 
-				$row_date_time .= '<span class="time">' . get_date_from_gmt( $row->timestamp, $row_time_format ) . '</span>';
-			}
-			if ( ! empty( $row_date_time ) ) {
-				$row_date_time = "<br />" . $row_date_time;
+				$row_date_time .= '<span class="time">' . esc_html( get_date_from_gmt( $row->timestamp, $row_time_format ) ) . '</span>';
 			}
 
 			// Apply media content filter for display (cast row to array for media filter)
 			$message = apply_filters( 'psource_chat_display_message', $message, (array) $row );
 			
-			$row_text .= '<p class="psource-chat-message">' . $row_avatar_name . ' ' . convert_smilies( $message ) . $row_date_time . '</p>';
+			$row_text .= '<header class="psource-chat-row-header">';
+			$row_text .= '<div class="psource-chat-row-author">';
+			if ( ! empty( $row_avatar_html ) ) {
+				$row_text .= $row_avatar_html;
+			}
+			$row_text .= '<div class="psource-chat-row-author-meta">';
+			if ( ! empty( $row_name_link ) ) {
+				$row_text .= $row_name_link;
+			}
+			if ( ! empty( $row_date_time ) ) {
+				$row_text .= '<time class="psource-chat-row-timestamp" datetime="' . esc_attr( $row_time_iso ) . '">' . $row_date_time . '</time>';
+			}
+			$row_text .= '</div>';
+			$row_text .= '</div>';
+			$row_text .= '</header>';
+
+			$row_text .= '<section class="psource-chat-row-content">';
+			$row_text .= '<p class="psource-chat-message">' . convert_smilies( $message ) . '</p>';
+			$row_text .= '</section>';
 
 
 //			if (($chat_session['row_date'] == 'enabled')
@@ -4971,9 +4999,9 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				//if (($chat_session['session_type'] != "log") && ($row->moderator != "yes")) {
 				if ( $chat_session['session_type'] != "log" ) {
 
-					$row_text .= '<li class="psource-chat-admin-actions-item psource-chat-user-invite"><a class="psource-chat-user-invite" rel="' . $row->auth_hash . '" title="' . __( 'Zu privaten Chat einladen:', 'psource-chat' ) . ' ' . $row_name_attr . '" href="#"><span class="action"><img height="10" src="' . $this->get_plugin_url( '/images/padlock-icon-th.png' ) . '" alt=""/></span></a></li>';
+					$row_text .= '<li class="psource-chat-admin-actions-item psource-chat-user-invite"><a class="psource-chat-user-invite" rel="' . $row->auth_hash . '" title="' . __( 'Zu privaten Chat einladen:', 'psource-chat' ) . ' ' . $row_name_attr . '" href="#" role="button" aria-label="' . esc_attr( __( 'Zu privaten Chat einladen', 'psource-chat' ) . ': ' . $row->name ) . '"><span class="action"><img height="10" src="' . $this->get_plugin_url( '/images/padlock-icon-th.png' ) . '" alt=""/></span></a></li>';
 
-					$row_text .= '<li class="psource-chat-admin-actions-item psource-chat-admin-actions-item-delete"><a class="psource-chat-admin-actions-item-delete" title="' . __( 'moderiere diese Nachricht', 'psource-chat' ) . '" href="#"><span  class="action">' . $this->chat_localized['settings']["row_delete_text"] . '</span></a></li>';
+					$row_text .= '<li class="psource-chat-admin-actions-item psource-chat-admin-actions-item-delete"><a class="psource-chat-admin-actions-item-delete" title="' . __( 'moderiere diese Nachricht', 'psource-chat' ) . '" href="#" role="button" aria-label="' . esc_attr__( 'Nachricht moderieren', 'psource-chat' ) . '"><span  class="action">' . $this->chat_localized['settings']["row_delete_text"] . '</span></a></li>';
 
 					if ( ( $this->get_option( 'blocked_ip_addresses_active', 'global' ) == "enabled" )
 					     && ( $chat_session['blocked_ip_addresses_active'] == "enabled" )
@@ -4981,7 +5009,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 						$row_text .= '<li class="psource-chat-admin-actions-item psource-chat-admin-actions-item-block-ip"><a
 							 class="psource-chat-admin-actions-item-block-ip" title="' . __( 'moderiere IP-Adresse:', 'psource-chat' ) .
-						             $row->ip_address . '" rel="' . $row->ip_address . '" href="#"><span class="action">' . $row->ip_address . '</span></a></li>';
+						             $row->ip_address . '" rel="' . $row->ip_address . '" href="#" role="button" aria-label="' . esc_attr( __( 'IP-Adresse moderieren', 'psource-chat' ) . ': ' . $row->ip_address ) . '"><span class="action">' . esc_html( $row->ip_address ) . '</span></a></li>';
 					}
 					/*
 						$row_text .= '<li class="psource-chat-admin-actions-item psource-chat-admin-actions-item-block-user"><a
