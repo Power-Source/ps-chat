@@ -2613,7 +2613,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
         // Verhindere dass Klicks innerhalb des Menüs es schließen (außer bei spezifischen Aktionen)
         jQuery('div#psource-chat-box-' + chat_id + ' .psource-chat-actions-settings-menu').on('click', function(event) {
             // Nur bei bestimmten Aktionen nicht stoppen
-            if (!jQuery(event.target).closest('.psource-chat-action-sound, .psource-chat-action-logout, .psource-chat-action-login, .psource-chat-action-exit, .psource-chat-action-session-open, .psource-chat-action-session-closed').length) {
+            if (!jQuery(event.target).closest('.psource-chat-action-sound, .psource-chat-action-logout, .psource-chat-action-login, .psource-chat-action-exit, .psource-chat-action-session-open, .psource-chat-action-session-closed, .psource-chat-action-session-clear, .psource-chat-action-session-archive').length) {
                 event.stopPropagation();
             }
         });
@@ -2998,6 +2998,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                     data: {
                         'action': 'chatProcess',
                         'function': 'chat_messages_clear',
+                        'nonce': psource_chat_localized['settings']['nonce'],
                         'psource-chat-sessions': sessions_data,
                         //'psource-chat-auth': psource_chat.settings['auth'],
                         //'psource-chat-settings': psource_chat_localized['settings']
@@ -3011,6 +3012,9 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                                     if (reply_data['errorText'] != undefined) {
                                         //console.log("Chat: chat_session_moderate_user: reply [%s]", reply_data['errorText']);
                                     }
+                                } else {
+                                    // Nachrichten sofort aus der UI entfernen
+                                    jQuery('div#psource-chat-box-' + chat_id + ' ul.psource-chat-message-list').empty();
                                 }
                             }
                         }

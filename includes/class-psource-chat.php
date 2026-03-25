@@ -4797,9 +4797,9 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 					}
 				}
 
-				$chat_action_menu .= '<li class="psource-chat-action-menu-item-session-clear"><a href="#" title="' . __( 'Alle Chat-Nachrichten unwiderruflich löschen', 'psource-chat' ) . '"
+				$chat_action_menu .= '<li class="psource-chat-action-menu-item-session-clear"><a href="#" title="' . __( 'Chat-Verlauf leeren (Nachrichten werden aus dem Verlauf entfernt)', 'psource-chat' ) . '"
 				class="psource-chat-action-session-clear"><span class="psource-chat-icon-delete"></span>' .
-				__( 'Chat löschen', 'psource-chat' ) . '</a></li>';
+				__( 'Verlauf leeren', 'psource-chat' ) . '</a></li>';
 
 				if ( $chat_session['session_type'] != "private" ) {
 

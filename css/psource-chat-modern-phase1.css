@@ -1,0 +1,486 @@
+/**
+ * PS Chat – Modern Phase 1 CSS
+ * 
+ * Ziel: Top-Priority Modernisierungen ohne Breaking Changes
+ * 
+ * Nutzen:
+ * 1. Kopiere diese Datei nach PSC lädt
+ * 2. Lade in psource-chat.php:
+ *    wp_enqueue_style( 'psource-chat-modern-p1', 
+ *      plugins_url('css/psource-chat-modern-phase1.css', __FILE__)
+ *    );
+ * 
+ * Status: Opt-In, funktioniert mit bestehenden Settings
+ */
+
+/* ============================================================
+   1. CSS Custom Properties (Variables)
+   ============================================================ */
+
+:root {
+  /* SPACING SYSTEM */
+  --psource-spacing-xs: 0.25rem;  /* 4px */
+  --psource-spacing-sm: 0.5rem;   /* 8px */
+  --psource-spacing-md: 1rem;     /* 16px */
+  --psource-spacing-lg: 1.5rem;   /* 24px */
+  --psource-spacing-xl: 2rem;     /* 32px */
+
+  /* TYPOGRAPHY */
+  --psource-font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", 
+                             Roboto, "Helvetica Neue", Arial, sans-serif;
+  --psource-font-size-sm: 0.875rem;  /* 14px */
+  --psource-font-size-base: 1rem;     /* 16px */
+  --psource-font-size-lg: 1.125rem;  /* 18px */
+  --psource-font-size-xl: 1.25rem;   /* 20px */
+  --psource-line-height-tight: 1.4;
+  --psource-line-height-base: 1.6;
+
+  /* COLORS (Light Theme Defaults) */
+  --psource-color-primary: #007bff;
+  --psource-color-success: #28a745;
+  --psource-color-danger: #dc3545;
+  --psource-color-warning: #ffc107;
+  --psource-color-info: #17a2b8;
+  
+  --psource-color-bg-default: #ffffff;
+  --psource-color-bg-secondary: #f8f9fa;
+  --psource-color-bg-tertiary: #e9ecef;
+  
+  --psource-color-text-primary: #212529;
+  --psource-color-text-secondary: #6c757d;
+  --psource-color-text-tertiary: #adb5bd;
+  
+  --psource-color-border: #dee2e6;
+  --psource-color-border-light: #e9ecef;
+  --psource-color-border-dark: #495057;
+
+  /* SHADOWS */
+  --psource-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --psource-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                       0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --psource-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                       0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  /* BORDER RADIUS */
+  --psource-border-radius-sm: 0.25rem;
+  --psource-border-radius-base: 0.5rem;
+  --psource-border-radius-lg: 0.75rem;
+
+  /* TRANSITIONS */
+  --psource-transition-duration: 0.2s;
+  --psource-transition-timing: ease-in-out;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --psource-color-bg-default: #1e1e1e;
+    --psource-color-bg-secondary: #2d2d2d;
+    --psource-color-bg-tertiary: #3a3a3a;
+    
+    --psource-color-text-primary: #e9ecef;
+    --psource-color-text-secondary: #adb5bd;
+    --psource-color-text-tertiary: #6c757d;
+    
+    --psource-color-border: #495057;
+    --psource-color-border-light: #3a3a3a;
+    --psource-color-border-dark: #6c757d;
+  }
+}
+
+/* ============================================================
+   2. Box Container – Flexbox Basis
+   ============================================================ */
+
+div.psource-chat-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: var(--psource-font-family-base);
+  font-size: var(--psource-font-size-base);
+  line-height: var(--psource-line-height-base);
+  color: var(--psource-color-text-primary);
+  background: var(--psource-color-bg-default);
+  border-radius: var(--psource-border-radius-base);
+  overflow: hidden;
+}
+
+/* ============================================================
+   3. Message Row – Flexbox Layout (CRITICAL)
+   ============================================================ */
+
+div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--psource-spacing-sm);
+  padding: var(--psource-spacing-md);
+  margin: 0;
+  border-top: 1px solid var(--psource-color-border-light);
+  border-bottom: 1px solid var(--psource-color-border-light);
+  background: var(--psource-color-bg-default);
+  clear: none;
+  float: none; /* Override old float */
+  width: 100%;
+}
+
+/* Avatar – Fixed Size */
+div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row a.psource-chat-user-avatar {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  margin-right: var(--psource-spacing-sm);
+  overflow: hidden;
+  border-radius: var(--psource-border-radius-base);
+}
+
+div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row a.psource-chat-user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Moderator: Avatar rechts */
+div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row-moderator a.psource-chat-user-avatar {
+  order: 2;
+  margin-right: 0;
+  margin-left: var(--psource-spacing-sm);
+}
+
+/* Content Flex-Grow */
+div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row-content {
+  flex: 1;
+  min-width: 0; /* Wichtig für Text-Overflow */
+  display: flex;
+  flex-direction: column;
+  gap: var(--psource-spacing-xs);
+}
+
+/* Meta (Name + Date) */
+div.psource-chat-box div.psource-chat-module-messages-list span.name {
+  float: none;
+  font-weight: 600;
+  color: var(--psource-color-text-primary);
+  margin: 0;
+}
+
+div.psource-chat-box div.psource-chat-module-messages-list span.date,
+div.psource-chat-box div.psource-chat-module-messages-list span.time {
+  float: none;
+  font-size: var(--psource-font-size-sm);
+  color: var(--psource-color-text-secondary);
+  margin: 0;
+}
+
+/* Message Text */
+div.psource-chat-box div.psource-chat-module-messages-list span.message {
+  line-height: var(--psource-line-height-base);
+  display: block;
+  margin: 0;
+  padding: 0;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  min-height: auto;
+  color: var(--psource-color-text-primary);
+}
+
+/* Admin Actions */
+div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row ul.psource-chat-row-footer {
+  flex-basis: 100%;
+  display: flex;
+  gap: var(--psource-spacing-sm);
+  clear: both;
+  padding: var(--psource-spacing-sm) 0;
+  font-size: var(--psource-font-size-sm);
+  margin: 0;
+}
+
+div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row ul.psource-chat-row-footer li {
+  float: none;
+  list-style: none;
+  margin: 0;
+  padding: var(--psource-spacing-xs);
+  min-height: 44px; /* Touch-friendly */
+  display: flex;
+  align-items: center;
+}
+
+div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row ul.psource-chat-row-footer li a {
+  color: var(--psource-color-primary);
+  text-decoration: none;
+  padding: 0 var(--psource-spacing-sm);
+  border-radius: var(--psource-border-radius-sm);
+  transition: background-color var(--psource-transition-duration) var(--psource-transition-timing);
+}
+
+div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row ul.psource-chat-row-footer li a:hover {
+  background-color: var(--psource-color-bg-secondary);
+}
+
+/* ============================================================
+   4. Textarea + Input Area
+   ============================================================ */
+
+div.psource-chat-box div.psource-chat-module-message-area {
+  margin-top: auto; /* Stellt Input ans Ende */
+  padding: var(--psource-spacing-md);
+  background: var(--psource-color-bg-secondary);
+  border-top: 1px solid var(--psource-color-border);
+}
+
+div.psource-chat-box div.psource-chat-module-message-area textarea.psource-chat-send {
+  float: none;
+  width: 100%;
+  min-height: 60px;
+  max-height: 150px;
+  padding: var(--psource-spacing-sm);
+  border: 1px solid var(--psource-color-border);
+  border-radius: var(--psource-border-radius-sm);
+  font-family: var(--psource-font-family-base);
+  font-size: var(--psource-font-size-base);
+  resize: vertical;
+  transition: border-color var(--psource-transition-duration) var(--psource-transition-timing);
+}
+
+div.psource-chat-box div.psource-chat-module-message-area textarea.psource-chat-send:focus {
+  outline: none;
+  border-color: var(--psource-color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+div.psource-chat-box div.psource-chat-module-message-area textarea.psource-chat-send:disabled {
+  background-color: var(--psource-color-bg-tertiary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Meta Buttons */
+div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta {
+  float: none;
+  display: flex;
+  gap: var(--psource-spacing-sm);
+  list-style: none;
+  margin: var(--psource-spacing-sm) 0 0 0;
+  padding: 0;
+  width: 100%;
+}
+
+div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta li {
+  float: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta li a,
+div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta li button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: var(--psource-spacing-sm);
+  border: 1px solid var(--psource-color-border);
+  border-radius: var(--psource-border-radius-sm);
+  background: var(--psource-color-bg-default);
+  color: var(--psource-color-text-primary);
+  cursor: pointer;
+  transition: all var(--psource-transition-duration) var(--psource-transition-timing);
+}
+
+div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta li a:hover,
+div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta li button:hover {
+  background: var(--psource-color-bg-secondary);
+  border-color: var(--psource-color-primary);
+}
+
+/* ============================================================
+   5. Header
+   ============================================================ */
+
+div.psource-chat-box div.psource-chat-module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--psource-spacing-md);
+  background: linear-gradient(135deg, var(--psource-color-bg-secondary) 0%, 
+                                      var(--psource-color-bg-tertiary) 100%);
+  border-bottom: 1px solid var(--psource-color-border);
+  box-shadow: var(--psource-shadow-sm);
+  flex-shrink: 0;
+}
+
+div.psource-chat-box div.psource-chat-module-header div.psource-chat-module-header-title {
+  font-size: var(--psource-font-size-lg);
+  font-weight: 600;
+  color: var(--psource-color-text-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   6. Messages Container
+   ============================================================ */
+
+div.psource-chat-box div.psource-chat-module-messages-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
+  margin: 0;
+  background: var(--psource-color-bg-default);
+  border: none;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Message Scroll Styling */
+div.psource-chat-box div.psource-chat-module-messages-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+div.psource-chat-box div.psource-chat-module-messages-list::-webkit-scrollbar-track {
+  background: var(--psource-color-bg-secondary);
+}
+
+div.psource-chat-box div.psource-chat-module-messages-list::-webkit-scrollbar-thumb {
+  background: var(--psource-color-border);
+  border-radius: 4px;
+}
+
+div.psource-chat-box div.psource-chat-module-messages-list::-webkit-scrollbar-thumb:hover {
+  background: var(--psource-color-text-secondary);
+}
+
+/* ============================================================
+   7. Mobile Responsive (320px – 768px)
+   ============================================================ */
+
+@media (max-width: 768px) {
+  /* Full Width */
+  div.psource-chat-box {
+    width: 100vw !important;
+    max-width: 100vw;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  /* Reduced Padding on Mobile */
+  div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row {
+    padding: var(--psource-spacing-sm);
+    gap: var(--psource-spacing-xs);
+  }
+
+  div.psource-chat-box div.psource-chat-module-header {
+    padding: var(--psource-spacing-sm);
+  }
+
+  div.psource-chat-box div.psource-chat-module-message-area {
+    padding: var(--psource-spacing-sm);
+  }
+
+  /* Smaller Avatar on Mobile */ 
+  div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row a.psource-chat-user-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Hide Users List on Mobile */
+  div.psource-chat-box div.psource-chat-users-list {
+    display: none !important;
+  }
+
+  /* Buttons Full Width on Small Screens */
+  div.psource-chat-box div.psource-chat-module-message-area ul.psource-chat-send-meta {
+    flex-wrap: wrap;
+  }
+}
+
+/* ============================================================
+   8. Tablet (768px – 1024px)
+   ============================================================ */
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row {
+    padding: var(--psource-spacing-md);
+  }
+
+  div.psource-chat-box div.psource-chat-module-message-area textarea.psource-chat-send {
+    min-height: 80px;
+  }
+}
+
+/* ============================================================
+   9. Desktop (1024px+)
+   ============================================================ */
+
+@media (min-width: 1024px) {
+  div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row {
+    padding: var(--psource-spacing-lg);
+  }
+
+  div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row a.psource-chat-user-avatar {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* ============================================================
+   10. Accessibility & Utility Classes
+   ============================================================ */
+
+/* Focus Visible für Keyboard Navigation */
+div.psource-chat-box a:focus-visible,
+div.psource-chat-box button:focus-visible {
+  outline: 2px solid var(--psource-color-primary);
+  outline-offset: 2px;
+}
+
+/* Reduce Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  div.psource-chat-box div.psource-chat-module-message-area {
+    display: none;
+  }
+
+  div.psource-chat-box div.psource-chat-module-header ul.psource-chat-actions-menu {
+    display: none;
+  }
+}
+
+/* ============================================================
+   11. Utility Classes (Optional)
+   ============================================================ */
+
+.psource-chat-hidden {
+  display: none !important;
+}
+
+.psource-chat-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.psource-chat-opacity-50 {
+  opacity: 0.5;
+}
+
+.psource-chat-opacity-75 {
+  opacity: 0.75;
+}
+
+/* ============================================================
+   ENDE – Modern Phase 1
+   ============================================================ */
