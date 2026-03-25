@@ -3701,6 +3701,21 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 		 */
 		function chat_session_box_styles( $chat_session, $id_override = '' ) {
 			$content = '';
+			$chat_title_size = '1.05rem';
+			if ( ! empty( $chat_session['box_font_size'] ) ) {
+				$chat_title_size = psource_chat_check_size_qualifier( $chat_session['box_font_size'] );
+			}
+
+			$chat_meta_font_size = '0.95rem';
+			if ( ! empty( $chat_session['row_message_input_font_size'] ) ) {
+				$chat_meta_font_size = psource_chat_check_size_qualifier( $chat_session['row_message_input_font_size'] );
+			}
+
+			$chat_density_gap = '0.375rem';
+			if ( ! empty( $chat_session['row_spacing'] ) ) {
+				$chat_density_gap = psource_chat_check_size_qualifier( $chat_session['row_spacing'] );
+			}
+
 			// echo $chat_session;
 			if ( empty( $id_override ) ) {
 				$CSS_prefix = '#psource-chat-box-' . $chat_session['id'];
@@ -3716,7 +3731,15 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				width: ' . $chat_session['box_width'] . ';
 				color: ' . $chat_session['box_text_color'] . ';
 				background-color: ' . $chat_session['box_background_color'] . '; ' . $chat_session['box_font_style'] . ';
-				border: ' . $chat_session['box_border_width'] . ' solid ' . $chat_session['box_border_color'] . '; } ';
+				border: ' . $chat_session['box_border_width'] . ' solid ' . $chat_session['box_border_color'] . ';
+				--psource-chat-title-size: ' . $chat_title_size . ';
+				--psource-chat-meta-font-size: ' . $chat_meta_font_size . ';
+				--psource-chat-density-gap: ' . $chat_density_gap . ';
+				--psource-chat-row-padding-y: ' . $chat_density_gap . ';
+				--psource-chat-row-padding-x: ' . $chat_density_gap . ';
+				--psource-chat-avatar-size: ' . psource_chat_check_size_qualifier( $chat_session['row_avatar_width'] ) . ';
+				--psource-chat-input-min-height: ' . psource_chat_check_size_qualifier( $chat_session['row_message_input_height'] ) . ';
+			} ';
 
 			$content .= $CSS_prefix . ' div.psource-chat-module-header {
 				background-color: ' . $chat_session['box_border_color'] . '; } ';
@@ -4904,6 +4927,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 			$row_avatar_html = '';
 			$row_name_link = '';
+			$row_has_avatar = false;
 			if ( empty( $row->avatar ) ) {
 				$row->avatar = "http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=96";
 			}
@@ -4913,6 +4937,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 					$avatar = '<img alt="' . $row_name_attr . '" src="' . $row->avatar . '" class="psource-chat-user psource-chat-user-avatar" height="' .
 					          intval( $chat_session['row_avatar_width'] ) . '" />';
 					$row_avatar_html .= '<a class="psource-chat-user psource-chat-user-avatar" title="@' . $row_name_attr . '" href="#">' . $avatar . '</a>';
+					$row_has_avatar = true;
 				}
 
 			} else if ( $chat_session['row_name_avatar'] == "name" ) {
@@ -4923,8 +4948,13 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 					$avatar = '<img alt="' . $row_name_attr . '" src="' . $row->avatar . '" class="psource-chat-user psource-chat-user-avatar" height="' .
 					          intval( $chat_session['row_avatar_width'] ) . '" />';
 					$row_avatar_html .= '<a class="psource-chat-user psource-chat-user-avatar" title="@' . $row_name_attr . '" href="#">' . $avatar . '</a>';
+					$row_has_avatar = true;
 				}
 				$row_name_link .= '<a class="psource-chat-user psource-chat-user-name" title="@' . $row_name_attr . '" href="#">' . $row_name_html . '</a>';
+			}
+
+			if ( $row_has_avatar ) {
+				$row_class .= ' psource-chat-row-has-avatar';
 			}
 
 

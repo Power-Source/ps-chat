@@ -79,6 +79,8 @@
   --psource-chat-control-size: 1.95rem;
   --psource-chat-control-icon-size: 0.95rem;
   --psource-chat-control-radius: 0.35rem;
+  --psource-chat-avatar-size: 40px;
+  --psource-chat-avatar-gap: 0.45rem;
   --psource-chat-input-min-height: 2.75rem;
   --psource-chat-input-max-height: 7.5rem;
   --psource-chat-meta-font-size: 0.95rem;
@@ -142,10 +144,10 @@ div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row 
 /* Avatar – Fixed Size */
 div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row a.psource-chat-user-avatar {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  width: var(--psource-chat-avatar-size);
+  height: var(--psource-chat-avatar-size);
   margin: 0;
-  margin-right: var(--psource-spacing-sm);
+  margin-right: var(--psource-chat-avatar-gap);
   overflow: hidden;
   border-radius: var(--psource-border-radius-base);
 }
@@ -254,6 +256,15 @@ div.psource-chat-box div.psource-chat-module-messages-list p.psource-chat-messag
 div.psource-chat-box div.psource-chat-module-messages-list .psource-chat-row-content {
   width: 100%;
   margin-top: 0.1rem;
+}
+
+div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row.psource-chat-row-has-avatar .psource-chat-row-content {
+  padding-left: calc(var(--psource-chat-avatar-size) + var(--psource-chat-avatar-gap));
+}
+
+div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row.psource-chat-row-has-avatar.psource-chat-row-moderator .psource-chat-row-content {
+  padding-left: 0;
+  padding-right: calc(var(--psource-chat-avatar-size) + var(--psource-chat-avatar-gap));
 }
 
 div.psource-chat-box div.psource-chat-module-messages-list .psource-chat-row-content p.psource-chat-message {
@@ -581,6 +592,12 @@ div.psource-chat-box div.psource-chat-module-messages-list::-webkit-scrollbar-th
 }
 
 @media (max-width: 420px) {
+  div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row.psource-chat-row-has-avatar .psource-chat-row-content,
+  div.psource-chat-box div.psource-chat-module-messages-list div.psource-chat-row.psource-chat-row-has-avatar.psource-chat-row-moderator .psource-chat-row-content {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   div.psource-chat-box div.psource-chat-module-messages-list .psource-chat-row-header {
     align-items: flex-start;
     gap: 0.2rem;
