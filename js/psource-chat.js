@@ -2716,12 +2716,13 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
             }
 
             if (modernPicker.length) {
-                jQuery('.psource-chat-emoji-picker').not(modernPicker).removeClass('active');
-                modernPicker.toggleClass('active');
+                // Do not toggle here: the delegated modern handler on
+                // '.psource-chat-emoticons-menu' controls modal position/size.
                 return;
             }
 
             jQuery('ul.psource-chat-emoticons-list', this).slideToggle(400);
+            return false;
         });
         // Emoticons child item. When clicked will close the parent UL
         jQuery('div#psource-chat-box-' + chat_id + ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-emoticons ul.psource-chat-emoticons-list li').on( "click", function (event) {

@@ -283,7 +283,7 @@ class PSource_Chat_Emoji {
      * 
      * @return string
      */
-    public function generate_emoji_picker_modal() {
+    public function generate_emoji_picker_modal( $chat_session = array() ) {
         $categories = $this->get_categories();
         
         if ( empty( $categories ) ) {
