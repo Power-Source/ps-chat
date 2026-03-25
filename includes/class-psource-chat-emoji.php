@@ -245,7 +245,7 @@ class PSource_Chat_Emoji {
      * @return string
      */
     public function generate_emoji_picker( $chat_session = array() ) {
-        return $this->generate_emoji_button();
+        return $this->generate_emoji_button( $chat_session );
     }
     
     /**
@@ -253,7 +253,7 @@ class PSource_Chat_Emoji {
      * 
      * @return string
      */
-    public function generate_emoji_button() {
+    public function generate_emoji_button( $chat_session = array() ) {
         $categories = $this->get_categories();
         
         if ( empty( $categories ) ) {
@@ -264,13 +264,14 @@ class PSource_Chat_Emoji {
         $first_category = reset( $categories );
         $first_emoji = isset( $first_category['emojis'][0] ) ? $first_category['emojis'][0] : '😀';
         
-        // Only the button inside the list
-        $content = '<li class="psource-chat-send-input-emoticons">';
-        $onclick_fallback = '';
-        if ( is_admin() ) {
-            $onclick_fallback = ' onclick="(function(el){try{var msg=el.closest(\'.psource-chat-module-message-area\');var picker=msg?msg.querySelector(\'.psource-chat-emoji-picker\'):null;if(!picker){var box=el.closest(\'.psource-chat-box\');picker=box?box.querySelector(\'.psource-chat-emoji-picker\'):null;}if(!picker){picker=document.querySelector(\'.psource-chat-emoji-picker\');}if(!picker){return false;}var all=document.querySelectorAll(\'.psource-chat-emoji-picker\');for(var i=0;i<all.length;i++){if(all[i]!==picker){all[i].classList.remove(\'active\');all[i].style.display=\'\';}}var active=picker.classList.contains(\'active\');if(active){picker.classList.remove(\'active\');picker.style.display=\'\';}else{picker.classList.add(\'active\');picker.style.display=\'block\';picker.style.zIndex=\'999999\';}}catch(err){}return false;})(this);"';
+        $chat_id_attr = '';
+        if ( isset( $chat_session['id'] ) && $chat_session['id'] !== '' ) {
+            $chat_id_attr = ' data-chat-id="' . esc_attr( $chat_session['id'] ) . '"';
         }
-        $content .= '<a class="psource-chat-emoticons-menu" href="#" title="' . __( 'Emoji auswählen', 'psource-chat' ) . '"' . $onclick_fallback . '>';
+
+        // Only the button inside the list
+        $content = '<li class="psource-chat-send-input-emoticons"' . $chat_id_attr . '>';
+        $content .= '<a class="psource-chat-emoticons-menu" href="#" title="' . __( 'Emoji auswählen', 'psource-chat' ) . '"' . $chat_id_attr . '>';
         $content .= '<span class="psource-chat-emoji-trigger">' . $first_emoji . '</span>';
         $content .= '</a>';
         $content .= '</li>';
@@ -292,8 +293,13 @@ class PSource_Chat_Emoji {
         
         $content = '';
         
+        $chat_id_attr = '';
+        if ( isset( $chat_session['id'] ) && $chat_session['id'] !== '' ) {
+            $chat_id_attr = ' data-chat-id="' . esc_attr( $chat_session['id'] ) . '"';
+        }
+
         // Modern emoji picker container - positioned absolutely over chatbox
-        $content .= '<div class="psource-chat-emoji-picker">';
+        $content .= '<div class="psource-chat-emoji-picker"' . $chat_id_attr . '>';
         $content .= '<div>'; // Inner container for flexbox centering
         
         // Suchfeld und Schließen-Button
@@ -351,6 +357,9 @@ class PSource_Chat_Emoji {
             background: #ffffff;
             display: none;
             z-index: 10000;
+            width: 320px;
+            max-width: calc(100vw - 24px);
+            max-height: min(360px, calc(100vh - 24px));
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
@@ -369,9 +378,9 @@ class PSource_Chat_Emoji {
             border-radius: 0;
             box-shadow: none;
             width: 100%;
-            height: 100%;
+            height: auto;
             max-width: none;
-            max-height: none;
+            max-height: inherit;
             display: flex;
             flex-direction: column;
             overflow: hidden;

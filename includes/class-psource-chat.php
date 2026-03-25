@@ -1415,7 +1415,11 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			wp_register_script( 'psource-chat-admin-js', $this->get_plugin_url( '/js/psource-chat-admin.js' ), array( 'jquery' ), $this->chat_current_version );
 			wp_register_script( 'jquery-cookie', $this->get_plugin_url( '/js/jquery-cookie.js' ), array( 'jquery' ), $this->chat_current_version, true );
 			wp_register_script( 'psource-chat-admin-farbtastic-js', $this->get_plugin_url( '/js/psource-chat-admin-farbtastic.js' ), array( 'wp-color-picker' ), $this->chat_current_version, true );
-			wp_register_script( 'psource-chat-js', $this->get_plugin_url( '/js/psource-chat.js' ), array( 'jquery' ), $this->chat_current_version, true );
+			$chat_js_version = @filemtime( $this->_chat_plugin_settings['plugin_path'] . '/js/psource-chat.js' );
+			if ( false === $chat_js_version ) {
+				$chat_js_version = $this->chat_current_version;
+			}
+			wp_register_script( 'psource-chat-js', $this->get_plugin_url( '/js/psource-chat.js' ), array( 'jquery' ), $chat_js_version, true );
 			wp_register_script( 'psource-chat-upload-js', $this->get_plugin_url( '/js/psource-chat-upload.js' ), array( 'jquery', 'psource-chat-js' ), $this->chat_current_version, true );
 
 			$screen = get_current_screen();
@@ -1571,7 +1575,11 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			}
 
 			//Register scripts
-			wp_register_script( 'psource-chat-js', $this->get_plugin_url( '/js/psource-chat.js' ), array( 'jquery' ), $this->chat_current_version, true );
+			$chat_js_version = @filemtime( $this->_chat_plugin_settings['plugin_path'] . '/js/psource-chat.js' );
+			if ( false === $chat_js_version ) {
+				$chat_js_version = $this->chat_current_version;
+			}
+			wp_register_script( 'psource-chat-js', $this->get_plugin_url( '/js/psource-chat.js' ), array( 'jquery' ), $chat_js_version, true );
 			wp_register_script( 'psource-chat-media-js', $this->get_plugin_url( '/js/psource-chat-media.js' ), array( 'jquery' ), $this->chat_current_version, true );
 		wp_register_script( 'psource-chat-upload-js', $this->get_plugin_url( '/js/psource-chat-upload.js' ), array( 'jquery' ), $this->chat_current_version, true );
 		wp_register_script( 'psource-chat-admin-js', $this->get_plugin_url( '/js/psource-chat-admin.js' ), array( 'jquery' ), $this->chat_current_version, true );

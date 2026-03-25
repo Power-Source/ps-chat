@@ -3661,21 +3661,120 @@ jQuery(document).ready(function () {
     
     // Emoji picker functionality with overlay support
     function initEmojiPicker() {
+        function ensurePickerInBody(picker) {
+            if (!picker || !picker.length) {
+                return picker;
+            }
+
+            if (!picker.parent().is('body')) {
+                picker.appendTo('body');
+            }
+
+            return picker;
+        }
+
+        function positionPickerInChatBox(picker, chatBox) {
+            if (!picker || !picker.length || !chatBox || !chatBox.length) {
+                return false;
+            }
+
+            var boxRect = chatBox[0].getBoundingClientRect();
+            var boxWidth = Math.max(240, Math.round(boxRect.width));
+            var boxHeight = Math.max(220, Math.round(boxRect.height));
+
+            // Legacy-like placement: picker is an overlay within the chat box bounds.
+            picker.css({
+                'position': 'fixed',
+                'left': Math.round(boxRect.left) + 'px',
+                'right': 'auto',
+                'top': Math.round(boxRect.top) + 'px',
+                'bottom': 'auto',
+                'width': boxWidth + 'px',
+                'max-height': boxHeight + 'px',
+                'height': boxHeight + 'px',
+                'z-index': '10000',
+                'display': 'block'
+            });
+
+            return true;
+        }
+
+        function positionPickerToTrigger(picker, trigger) {
+            if (!picker || !picker.length || !trigger || !trigger.length) {
+                return;
+            }
+
+            var rect = trigger[0].getBoundingClientRect();
+            var viewportWidth = window.innerWidth || document.documentElement.clientWidth || 1024;
+            var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 768;
+
+            var pickerWidth = Math.min(320, Math.max(220, viewportWidth - 24));
+            var maxPickerHeight = Math.min(360, Math.max(180, viewportHeight - 24));
+            var desiredHeight = Math.min(360, Math.max(220, viewportHeight * 0.45));
+
+            var left = rect.left;
+            if (left + pickerWidth > viewportWidth - 8) {
+                left = viewportWidth - pickerWidth - 8;
+            }
+            if (left < 8) {
+                left = 8;
+            }
+
+            // Prefer opening below trigger; if there is no room, open above.
+            var top = rect.bottom + 8;
+            if (top + desiredHeight > viewportHeight - 8) {
+                top = rect.top - desiredHeight - 8;
+            }
+            if (top < 8) {
+                top = 8;
+            }
+
+            picker.css({
+                'position': 'fixed',
+                'left': left + 'px',
+                'right': 'auto',
+                'top': top + 'px',
+                'bottom': 'auto',
+                'width': pickerWidth + 'px',
+                'max-height': maxPickerHeight + 'px',
+                'height': 'auto',
+                'z-index': '10000',
+                'display': 'block'
+            });
+        }
+
         // Toggle emoji picker as global overlay
         jQuery(document).off('click.emoji', '.psource-chat-emoticons-menu').on('click.emoji', '.psource-chat-emoticons-menu', function(e) {
             e.preventDefault();
             e.stopPropagation();
 
+            var chatId = jQuery(this).attr('data-chat-id') || '';
+
             // Find the parent chat box container
             var chatBox = jQuery(this).closest('.psource-chat-box');
             var messageArea = jQuery(this).closest('.psource-chat-module-message-area');
-            
-            var picker = chatBox.length ? chatBox.find('.psource-chat-emoji-picker') : messageArea.find('.psource-chat-emoji-picker');
+
+            if (!chatId && chatBox.length) {
+                var boxId = chatBox.attr('id') || '';
+                if (boxId.indexOf('psource-chat-box-') === 0) {
+                    chatId = boxId.replace('psource-chat-box-', '');
+                }
+            }
+
+            var picker = jQuery();
+            if (chatId) {
+                picker = jQuery('.psource-chat-emoji-picker[data-chat-id="' + chatId + '"]').first();
+            }
+            if (!picker.length) {
+                picker = chatBox.length ? chatBox.find('.psource-chat-emoji-picker') : messageArea.find('.psource-chat-emoji-picker');
+            }
             
             // If not found in chat box, search globally
             if (!picker.length) {
                 picker = jQuery('.psource-chat-emoji-picker').first();
             }
+
+            picker = ensurePickerInBody(picker);
             
             // Close all other emoji pickers
             jQuery('.psource-chat-emoji-picker').not(picker).removeClass('active');
@@ -3683,28 +3782,14 @@ jQuery(document).ready(function () {
             // Toggle current picker
             picker.toggleClass('active');
             
-            // Position picker to stay within chat box bounds after toggling
+            // Position picker deterministically near the clicked trigger.
             if (picker.hasClass('active')) {
-                var chatBoxOffset = chatBox.length ? chatBox.offset() : null;
-                var chatBoxWidth = chatBox.length ? chatBox.outerWidth() : null;
-                var chatBoxHeight = chatBox.length ? chatBox.outerHeight() : null;
-
-                // In some admin/dashboard contexts there is no standard chat box wrapper.
-                // Keep default CSS positioning in that case instead of forcing fixed coordinates.
-                if (chatBoxOffset && chatBoxWidth && chatBoxHeight) {
-                    // Set picker position and size to fit within chat box
-                    picker.css({
-                        'position': 'fixed',
-                        'top': chatBoxOffset.top + 'px',
-                        'left': chatBoxOffset.left + 'px',
-                        'width': chatBoxWidth + 'px',
-                        'height': chatBoxHeight + 'px'
-                    });
-                } else {
-                    picker.css({'position': '', 'top': '', 'left': '', 'width': '', 'height': ''});
+                var positionedInBox = positionPickerInChatBox(picker, chatBox);
+                if (!positionedInBox) {
+                    positionPickerToTrigger(picker, jQuery(this));
                 }
             } else {
-                picker.css({'position': '', 'top': '', 'left': '', 'width': '', 'height': ''});
+                picker.css({'position': '', 'top': '', 'left': '', 'right': '', 'bottom': '', 'width': '', 'max-height': '', 'height': '', 'display': ''});
             }
             
             // Focus search field if visible
@@ -3729,7 +3814,7 @@ jQuery(document).ready(function () {
                 jQuery(this)
                     .closest('.psource-chat-emoji-picker')
                     .removeClass('active')
-                    .css({'position': '', 'top': '', 'left': '', 'width': '', 'height': '', 'display': ''});
+                    .css({'position': '', 'top': '', 'left': '', 'right': '', 'bottom': '', 'width': '', 'max-height': '', 'height': '', 'display': ''});
 
                 return false;
             });
@@ -3772,11 +3857,20 @@ jQuery(document).ready(function () {
             e.stopPropagation();
             
             var emoji = jQuery(this).data('emoji');
+            var picker = jQuery(this).closest('.psource-chat-emoji-picker');
+            var chatId = picker.attr('data-chat-id') || '';
             
             // Find the parent chat box container
-            var chatBox = jQuery(this).closest('.psource-chat-box');
-            var messageArea = jQuery(this).closest('.psource-chat-module-message-area');
-            var textarea = chatBox.length ? chatBox.find('textarea.psource-chat-send') : messageArea.find('textarea.psource-chat-send');
+            var textarea = jQuery();
+            if (chatId) {
+                textarea = jQuery('#psource-chat-box-' + chatId + ' textarea.psource-chat-send').first();
+            }
+
+            if (!textarea.length) {
+                var chatBox = jQuery(this).closest('.psource-chat-box');
+                var messageArea = jQuery(this).closest('.psource-chat-module-message-area');
+                textarea = chatBox.length ? chatBox.find('textarea.psource-chat-send') : messageArea.find('textarea.psource-chat-send');
+            }
             
             if (textarea.length) {
                 // Insert emoji at cursor position
@@ -3853,12 +3947,21 @@ jQuery(document).ready(function () {
             return;
         }
 
-        // This hard fallback is only needed in admin/dashboard contexts.
-        if (!document.body || !document.body.classList.contains('wp-admin')) {
+        // Run fallback in all contexts (frontend + admin), because third-party
+        // scripts can swallow delegated jQuery click handlers.
+        if (!document.body) {
             return;
         }
 
         function findPicker(trigger) {
+            var chatId = trigger.getAttribute('data-chat-id');
+            if (chatId) {
+                var byData = document.querySelector('.psource-chat-emoji-picker[data-chat-id="' + chatId + '"]');
+                if (byData) {
+                    return byData;
+                }
+            }
+
             var messageArea = trigger.closest('.psource-chat-module-message-area');
             if (messageArea) {
                 var scopedPicker = messageArea.querySelector('.psource-chat-emoji-picker');
@@ -3876,6 +3979,36 @@ jQuery(document).ready(function () {
             }
 
             return document.querySelector('.psource-chat-emoji-picker');
+        }
+
+        function findChatBox(trigger) {
+            if (!trigger || typeof trigger.closest !== 'function') {
+                return null;
+            }
+
+            return trigger.closest('.psource-chat-box');
+        }
+
+        function positionNativeInChatBox(picker, chatBox) {
+            if (!picker || !chatBox || typeof chatBox.getBoundingClientRect !== 'function') {
+                return false;
+            }
+
+            var boxRect = chatBox.getBoundingClientRect();
+            var boxWidth = Math.max(240, Math.round(boxRect.width));
+            var boxHeight = Math.max(220, Math.round(boxRect.height));
+
+            picker.style.position = 'fixed';
+            picker.style.left = Math.round(boxRect.left) + 'px';
+            picker.style.right = 'auto';
+            picker.style.top = Math.round(boxRect.top) + 'px';
+            picker.style.bottom = 'auto';
+            picker.style.width = boxWidth + 'px';
+            picker.style.maxHeight = boxHeight + 'px';
+            picker.style.height = boxHeight + 'px';
+            picker.style.zIndex = '10000';
+
+            return true;
         }
 
         document.addEventListener('click', function(evt) {
@@ -3900,8 +4033,45 @@ jQuery(document).ready(function () {
             }
 
             if (!wasActive) {
+                if (picker.parentElement !== document.body) {
+                    document.body.appendChild(picker);
+                }
                 picker.classList.add('active');
                 picker.style.display = 'block';
+                var chatBox = findChatBox(trigger);
+                var positionedInBox = positionNativeInChatBox(picker, chatBox);
+                if (positionedInBox) {
+                    return;
+                }
+                var rect = trigger.getBoundingClientRect();
+                var viewportWidth = window.innerWidth || document.documentElement.clientWidth || 1024;
+                var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 768;
+                var pickerWidth = Math.min(320, Math.max(220, viewportWidth - 24));
+                var maxPickerHeight = Math.min(360, Math.max(180, viewportHeight - 24));
+                var desiredHeight = Math.min(360, Math.max(220, viewportHeight * 0.45));
+                var left = rect.left;
+                if (left + pickerWidth > viewportWidth - 8) {
+                    left = viewportWidth - pickerWidth - 8;
+                }
+                if (left < 8) {
+                    left = 8;
+                }
+
+                var top = rect.bottom + 8;
+                if (top + desiredHeight > viewportHeight - 8) {
+                    top = rect.top - desiredHeight - 8;
+                }
+                if (top < 8) {
+                    top = 8;
+                }
+                picker.style.position = 'fixed';
+                picker.style.left = left + 'px';
+                picker.style.right = 'auto';
+                picker.style.top = top + 'px';
+                picker.style.bottom = 'auto';
+                picker.style.width = pickerWidth + 'px';
+                picker.style.maxHeight = maxPickerHeight + 'px';
+                picker.style.height = 'auto';
                 picker.style.zIndex = '10000';
             }
         }, true);

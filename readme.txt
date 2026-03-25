@@ -4,7 +4,7 @@ Tags: multisite, chat, community, messenger, support
 Requires at least: 4.9
 Tested up to: 6.8.1
 ClassicPress: 2.6.0
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -43,6 +43,12 @@ PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für 
 = 1.1.3 =
 
 * Fehler behoben der verhinderte das Chats geleert werden konnten
+* Fix: Globale Einstellungs-Tabs repariert; Tab-Inhalte werden wieder im korrekten Panel angezeigt
+* Fix: Defektes Panel-Markup in den globalen Einstellungen korrigiert (verhinderte leere/falsch verschachtelte Tabs)
+* Fix: Emoji-Picker-Handling zwischen Legacy-Trigger und modernem Modal stabilisiert
+* Fix: Emoji-Picker-Modal-Aufruf PHP-seitig kompatibel zum bestehenden Session-Aufruf gemacht
+* Fix: Emoji-Picker-Positionierung an Trigger gebunden, inkl. robuster Fallback-Groesse (kein unsichtbares 0x0-Overlay mehr)
+* Fix: Cache-Busting fuer Chat-Hauptscript verbessert (Datei-Zeitstempel), damit JS-Updates sofort greifen
 
 
 = 1.1.2 =
