@@ -38,8 +38,8 @@ class PSource_Chat_Avatar {
 	 * Get avatar for a user with intelligent fallback system
 	 * 
 	 * Priority order:
-	 * 1. CP Community avatar (if available)
-	 * 2. WordPress/Gravatar avatar
+	 * 1. WordPress get_avatar() (matches admin bar behavior)
+	 * 2. CP Community avatar (direct fallback)
 	 * 3. Local placeholder
 	 * 
 	 * @param int $user_id User ID
@@ -65,13 +65,7 @@ class PSource_Chat_Avatar {
 		$avatar_url = '';
 		$avatar_html = '';
 
-		// Try CP Community avatar first
-		$cp_avatar = self::get_cp_community_avatar( $user_id, $size );
-		if ( $cp_avatar ) {
-			$avatar_url = $cp_avatar;
-		}
-
-		// Fallback to WordPress/Gravatar
+		// Use WordPress get_avatar() first to mirror wpadminbar behavior.
 		if ( empty( $avatar_url ) ) {
 			$wp_avatar = self::get_wordpress_avatar( $user_id, $size );
 			if ( $wp_avatar ) {
@@ -79,8 +73,21 @@ class PSource_Chat_Avatar {
 			}
 		}
 
+		// Optional fallback to direct CP Community avatar URL.
+		if ( empty( $avatar_url ) ) {
+			$cp_avatar = self::get_cp_community_avatar( $user_id, $size );
+			if ( $cp_avatar ) {
+				$avatar_url = $cp_avatar;
+			}
+		}
+
 		// Final fallback to placeholder
 		if ( empty( $avatar_url ) ) {
+			$avatar_url = self::$default_placeholder;
+		}
+
+		// Ensure we never return a broken local avatar URL.
+		if ( ! self::is_avatar_url_usable( $avatar_url ) ) {
 			$avatar_url = self::$default_placeholder;
 		}
 
@@ -129,21 +136,91 @@ class PSource_Chat_Avatar {
 		}
 
 		try {
+			$avatar_type = $size > 100 ? 'full' : 'thumb';
+
+			// Skip CPC avatar URLs when no avatar exists to avoid broken image requests.
+			$has_avatar = user_avatar_avatar_exists( array(
+				'item_id' => $user_id,
+				'type'    => $avatar_type,
+			) );
+
+			if ( ! $has_avatar ) {
+				return false;
+			}
+
 			// Get avatar without HTML wrapper (URL only)
 			$avatar_url = user_avatar_fetch_avatar( array(
 				'item_id' => $user_id,
 				'width'   => $size,
 				'height'  => $size,
-				'type'    => $size > 100 ? 'full' : 'thumb',
+				'type'    => $avatar_type,
 				'html'    => false // Return URL only
 			) );
 
-			return ! empty( $avatar_url ) ? $avatar_url : false;
+			if ( empty( $avatar_url ) || ! self::is_avatar_url_usable( $avatar_url ) ) {
+				return false;
+			}
+
+			return $avatar_url;
 		} catch ( Exception $e ) {
 			// Log error but don't break functionality
 			error_log( 'PSource Chat Avatar: CP Community avatar error - ' . $e->getMessage() );
 			return false;
 		}
+	}
+
+	/**
+	 * Validate that an avatar URL is safe to use and unlikely to break.
+	 *
+	 * For local wp-content URLs we verify the file exists to avoid recurring 500/404 image requests.
+	 *
+	 * @param string $avatar_url Avatar URL.
+	 * @return bool
+	 */
+	private static function is_avatar_url_usable( $avatar_url ) {
+		if ( empty( $avatar_url ) ) {
+			return false;
+		}
+
+		if ( strpos( $avatar_url, 'data:image/' ) === 0 ) {
+			return true;
+		}
+
+		$avatar_path = wp_parse_url( $avatar_url, PHP_URL_PATH );
+		if ( empty( $avatar_path ) ) {
+			return false;
+		}
+
+		$avatar_host  = wp_parse_url( $avatar_url, PHP_URL_HOST );
+		$current_host = wp_parse_url( home_url(), PHP_URL_HOST );
+
+		// We only perform local file checks for current-site media URLs.
+		if ( ! empty( $avatar_host ) && ! empty( $current_host ) && strtolower( $avatar_host ) !== strtolower( $current_host ) ) {
+			return true;
+		}
+
+		if ( strpos( $avatar_path, '/wp-content/' ) === false ) {
+			return true;
+		}
+
+		$candidate_file = wp_normalize_path( trailingslashit( ABSPATH ) . ltrim( $avatar_path, '/' ) );
+
+		return file_exists( $candidate_file ) && is_readable( $candidate_file );
+	}
+
+	/**
+	 * Normalize arbitrary avatar URLs and return a safe avatar URL.
+	 *
+	 * @param string $avatar_url Avatar URL candidate.
+	 * @param int    $size Optional size for placeholder rendering.
+	 * @return string
+	 */
+	public static function get_safe_avatar_url( $avatar_url, $size = 96 ) {
+		if ( ! empty( $avatar_url ) && self::is_avatar_url_usable( $avatar_url ) ) {
+			return $avatar_url;
+		}
+
+		return self::get_placeholder_avatar( $size, false );
 	}
 
 	/**
@@ -159,8 +236,14 @@ class PSource_Chat_Avatar {
 			return false;
 		}
 
-		// Get avatar HTML from WordPress
-		$avatar_html = get_avatar( $user->user_email, $size, '', $user->display_name );
+		// Use user ID like wpadminbar integration does.
+		$avatar_html = get_avatar( $user_id, $size, get_option( 'avatar_default' ), $user->display_name );
+
+		// Fallback for environments where ID-based resolution is filtered differently.
+		if ( empty( $avatar_html ) ) {
+			$avatar_html = get_avatar( $user->user_email, $size, get_option( 'avatar_default' ), $user->display_name );
+		}
+
 		if ( empty( $avatar_html ) ) {
 			return false;
 		}

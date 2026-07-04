@@ -4420,11 +4420,16 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 		 */
 		function chat_session_invite_prompt_module( $chat_session ) {
 			$content = '';
+			$avatar = '';
 
 			if ( ( $chat_session['session_type'] == "private" ) && ( ! psource_chat_is_moderator( $chat_session ) ) ) {
 				if ( isset( $chat_session['invite-info']['message']['host'] ) ) {
 					if ( ( isset( $chat_session['invite-info']['message']['host']['avatar'] ) ) && ( ! empty( $chat_session['invite-info']['message']['host']['avatar'] ) ) ) {
-						$avatar = '<img alt="' . $chat_session['invite-info']['message']['host']['name'] . '" height="' . intval( $chat_session['row_avatar_width'] ) . '" src="' . $chat_session['invite-info']['message']['host']['avatar'] . '" class="psource-chat-avatar photo" />';
+						$host_avatar = PSource_Chat_Avatar::get_safe_avatar_url(
+							$chat_session['invite-info']['message']['host']['avatar'],
+							intval( $chat_session['row_avatar_width'] )
+						);
+						$avatar = '<img alt="' . esc_attr( $chat_session['invite-info']['message']['host']['name'] ) . '" height="' . intval( $chat_session['row_avatar_width'] ) . '" src="' . esc_url( $host_avatar ) . '" class="psource-chat-avatar photo" />';
 					}
 
 					$content .= '<p class="invite-avatar-wrapper">' . $avatar . '</p>';
@@ -4970,14 +4975,15 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			$row_avatar_html = '';
 			$row_name_link = '';
 			$row_has_avatar = false;
-			if ( empty( $row->avatar ) ) {
-				$row->avatar = "http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=96";
+			$row_avatar_size = isset( $chat_session['row_avatar_width'] ) ? intval( $chat_session['row_avatar_width'] ) : 96;
+			if ( $row_avatar_size < 1 ) {
+				$row_avatar_size = 96;
 			}
-			$row->avatar = esc_url( $row->avatar );
+			$row->avatar = esc_url( PSource_Chat_Avatar::get_safe_avatar_url( $row->avatar, $row_avatar_size ) );
 			if ( $chat_session['row_name_avatar'] == 'avatar' ) {
 				if ( ( isset( $row->avatar ) ) && ( ! empty( $row->avatar ) ) ) {
 					$avatar = '<img alt="' . $row_name_attr . '" src="' . $row->avatar . '" class="psource-chat-user psource-chat-user-avatar" height="' .
-					          intval( $chat_session['row_avatar_width'] ) . '" />';
+					          $row_avatar_size . '" />';
 					$row_avatar_html .= '<a class="psource-chat-user psource-chat-user-avatar" title="@' . $row_name_attr . '" href="#">' . $avatar . '</a>';
 					$row_has_avatar = true;
 				}
@@ -4988,7 +4994,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			} else if ( $chat_session['row_name_avatar'] == "name-avatar" ) {
 				if ( ( isset( $row->avatar ) ) && ( ! empty( $row->avatar ) ) ) {
 					$avatar = '<img alt="' . $row_name_attr . '" src="' . $row->avatar . '" class="psource-chat-user psource-chat-user-avatar" height="' .
-					          intval( $chat_session['row_avatar_width'] ) . '" />';
+					          $row_avatar_size . '" />';
 					$row_avatar_html .= '<a class="psource-chat-user psource-chat-user-avatar" title="@' . $row_name_attr . '" href="#">' . $avatar . '</a>';
 					$row_has_avatar = true;
 				}
@@ -6807,7 +6813,8 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 						$_tmp['connect_status'] = 'accepted';
 
 						if ( ( isset( $user->avatar ) ) && ( strlen( $user->avatar ) ) ) {
-							$avatar         = '<img alt="' . $user->name . '" style="width: ' . $avatar_size . '; height: ' . $avatar_size . ';" width="' . $avatar_size . '" src="' . $user->avatar . '" class="avatar photo" />';
+							$user_avatar_url = PSource_Chat_Avatar::get_safe_avatar_url( $user->avatar, $avatar_size );
+							$avatar         = '<img alt="' . esc_attr( $user->name ) . '" style="width: ' . $avatar_size . '; height: ' . $avatar_size . ';" width="' . $avatar_size . '" src="' . esc_url( $user_avatar_url ) . '" class="avatar photo" />';
 							$_tmp['avatar'] = $avatar;
 						}
 						if ( $_tmp['moderator'] == "yes" ) {
