@@ -858,8 +858,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				//'box_padding'							   => '3px',
 				'box_emoticons'                            => defined( 'PSOURCE_CHAT_PAGE_BOX_EMOTICONS' ) ? PSOURCE_CHAT_PAGE_BOX_EMOTICONS : 'disabled',
 				'file_uploads_enabled' 					   => defined( 'PSOURCE_CHAT_PAGE_FILE_UPLOADS_ENABLED' ) ? PSOURCE_CHAT_PAGE_FILE_UPLOADS_ENABLED : 'disabled',
-				//Buttonbar testweise
-				//'buttonbar'							       => 'disabled',
+				'buttonbar'                               => 'plain',
 				'row_name_avatar'                          => defined( 'PSOURCE_CHAT_PAGE_ROW_NAME_AVATAR' ) ? PSOURCE_CHAT_PAGE_ROW_NAME_AVATAR : 'avatar',
 				'row_avatar_width'                         => defined( 'PSOURCE_CHAT_PAGE_ROW_AVATAR_WIDTH' ) ? PSOURCE_CHAT_PAGE_ROW_AVATAR_WIDTH : '40px',
 				'row_date'                                 => defined( 'PSOURCE_CHAT_PAGE_ROW_DATE' ) ? PSOURCE_CHAT_PAGE_ROW_DATE : 'disabled',
@@ -1902,7 +1901,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			$this->chat_localized['settings']['is_admin']    = is_admin() ? true : false;
 
 			//$this->chat_localized['settings']['soundManager-js'] 	= plugins_url('/js/soundmanager2-nodebug-jsmin.js', __FILE__);
-			$this->chat_localized['settings']['soundManager-js'] = $this->get_plugin_url( '/js/buzz.min.js' );
+			$this->chat_localized['settings']['soundManager-js'] = $this->get_plugin_url( '/js/buzz.js' );
 			//$this->chat_localized['settings']['cookie-js'] 			= plugins_url('/js/jquery-cookie.js', __FILE__);
 
 			$this->chat_localized['settings']['box_resizable'] = $this->is_box_resizable_enabled();
@@ -4021,7 +4020,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 
 			$content .= $CSS_prefix . ' div.psource-chat-module-message-area ul.psource-chat-send-meta {
-				background-color: ' . $chat_session['box_border_color'] . '; }';
+				background-color: transparent; }';
 
 			$content .= $CSS_prefix . ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-action-menu-item-file-upload {
 				cursor: pointer;
@@ -4035,8 +4034,8 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				display: inline-flex !important;
 				align-items: center !important;
 				justify-content: center !important;
-				width: 1.95rem !important;
-				height: 1.95rem !important;
+				width: var(--psource-chat-control-size) !important;
+				height: var(--psource-chat-control-size) !important;
 				padding: 0.2rem !important;
 				background: #ffffff !important;
 				border: 1px solid #cfd4da !important;
@@ -4186,13 +4185,19 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 		}
 
 
-	function chat_session_buttonbar_module($chat_session) {
-		$content = '';
-
-		if ($chat_session['buttonbar'] == 'enabled') {
-			$content .= '<script type="text/javascript">edToolbar("psource-chat-send-'. $chat_session['id']. '");</script>';
-			$content = $this->chat_session_module_wrap($chat_session, $content);
+	function chat_session_buttonbar_module( $chat_session ) {
+		$input_mode = isset( $chat_session['buttonbar'] ) ? $chat_session['buttonbar'] : 'plain';
+		if ( $input_mode !== 'markup' && $input_mode !== 'enabled' ) {
+			return '';
 		}
+
+		$content = '<div class="psource-chat-markup-toolbar" role="toolbar" aria-label="' . esc_attr__( 'Text formatieren', 'psource-chat' ) . '">';
+		$content .= '<button type="button" class="psource-chat-markup-button" data-markup-open="[b]" data-markup-close="[/b]" title="' . esc_attr__( 'Fett', 'psource-chat' ) . '" aria-label="' . esc_attr__( 'Fett', 'psource-chat' ) . '"><strong aria-hidden="true">B</strong></button>';
+		$content .= '<button type="button" class="psource-chat-markup-button" data-markup-open="[i]" data-markup-close="[/i]" title="' . esc_attr__( 'Kursiv', 'psource-chat' ) . '" aria-label="' . esc_attr__( 'Kursiv', 'psource-chat' ) . '"><em aria-hidden="true">I</em></button>';
+		$content .= '<button type="button" class="psource-chat-markup-button" data-markup-open="`" data-markup-close="`" title="' . esc_attr__( 'Code', 'psource-chat' ) . '" aria-label="' . esc_attr__( 'Code', 'psource-chat' ) . '"><code aria-hidden="true">&lt;/&gt;</code></button>';
+		$content .= '<button type="button" class="psource-chat-markup-button" data-markup-action="link" data-markup-prompt="' . esc_attr__( 'Link-Adresse', 'psource-chat' ) . '" title="' . esc_attr__( 'Link einfügen', 'psource-chat' ) . '" aria-label="' . esc_attr__( 'Link einfügen', 'psource-chat' ) . '"><span aria-hidden="true">&#8599;</span></button>';
+		$content .= '</div>';
+
 		return $content;
 	}
 
@@ -4274,6 +4279,8 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 		}
 
 		$use_right_layout = ( isset( $chat_session['box_send_button_position'] ) && $chat_session['box_send_button_position'] === 'right' );
+		$input_mode = isset( $chat_session['buttonbar'] ) ? $chat_session['buttonbar'] : 'plain';
+		$markup_toolbar_enabled = ( $input_mode === 'markup' || $input_mode === 'enabled' );
 		$show_send_button = ( ( $chat_session['box_send_button_enable'] == "enabled" )
 			 || ( ( $chat_session['box_send_button_enable'] == "mobile_only" ) && ( $this->chat_localized['settings']['wp_is_mobile'] == true ) )
 		);
@@ -4282,7 +4289,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 
 		$content .= '<form class="psource-chat-input-form" action="#" method="post" novalidate role="group" aria-label="' . esc_attr__( 'Nachricht senden', 'psource-chat' ) . '">';
 		$content .= '<div class="psource-chat-input-wrapper">';
-		$content .= '<textarea id="' . $textarea_id . '" class="psource-chat-send" ' . $textarea_max_length . ' rows="3" placeholder="' . esc_attr__( 'Tippe Deine Chatnachricht hier', 'psource-chat' ) . '" aria-label="' . esc_attr__( 'Nachricht', 'psource-chat' ) . '" aria-describedby="' . esc_attr( $counter_id ) . '"></textarea>';
+		$content .= '<textarea id="' . $textarea_id . '" class="psource-chat-send" ' . $textarea_max_length . ' rows="2" placeholder="' . esc_attr__( 'Nachricht...', 'psource-chat' ) . '" aria-label="' . esc_attr__( 'Nachricht', 'psource-chat' ) . '" aria-describedby="' . esc_attr( $counter_id ) . '"></textarea>';
 
 		if ( $show_send_button && $use_right_layout ) {
 			$btn_id = 'psource-chat-send-button-' . $chat_session['id'];
@@ -4299,6 +4306,10 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			$btn_id = 'psource-chat-send-button-' . $chat_session['id'];
 			$content .= '<button id="' . $btn_id . '" class="psource-chat-send-button" type="button" aria-label="' . esc_attr( $chat_session['box_send_button_label'] ) . '">' . esc_html( $chat_session['box_send_button_label'] ) . '</button>';
 		}
+		if ( $markup_toolbar_enabled ) {
+			$content .= '<div class="psource-chat-toolbar-row">';
+		}
+		$content .= $this->chat_session_buttonbar_module( $chat_session );
 
 		if ( ( $chat_session['box_emoticons'] == "enabled" ) || ( $chat_session['box_sound'] == "enabled" ) || ( intval( $chat_session['row_message_input_length'] ) > 0 ) || ( $chat_session['file_uploads_enabled'] == "enabled" && $this->get_option( 'file_uploads_enabled', 'global' ) == 'enabled' ) ) {
 
@@ -4353,6 +4364,9 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				
 				$content .= $this->emoji_system->generate_emoji_picker_modal( $chat_session );
 			}
+		}
+		if ( $markup_toolbar_enabled ) {
+			$content .= '</div>';
 		}
 
 		$content .= '</form>';
@@ -4968,7 +4982,6 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			$row_timestamp = strtotime( $row->timestamp );
 			$row_id = 'psource-chat-row-' . $row_timestamp . '-' . $row->id;
 			$row_text = '';
-			$row_text .= '<div id="' . esc_attr( $row_id ) . '" class="' . esc_attr( $row_class ) . '" role="article" aria-label="' . esc_attr( sprintf( __( 'Nachricht von %s', 'psource-chat' ), $row->name ) ) . '">';
 			$row_name_attr = esc_attr( $row->name );
 			$row_name_html = esc_html( $row->name );
 
@@ -5004,6 +5017,8 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			if ( $row_has_avatar ) {
 				$row_class .= ' psource-chat-row-has-avatar';
 			}
+
+			$row_text .= '<div id="' . esc_attr( $row_id ) . '" class="' . esc_attr( $row_class ) . '" role="article" aria-label="' . esc_attr( sprintf( __( 'Nachricht von %s', 'psource-chat' ), $row->name ) ) . '">';
 
 
 			$row_date_time = '';
@@ -5294,6 +5309,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 					$allowed_protocols = array();
 					$allowed_html      = array();
 					$chat_message      = wp_kses( $chat_message, $allowed_html, $allowed_protocols );
+					$chat_message      = $this->format_message_markup( $chat_message, $chat_session );
 
 					// Not needed since we remove all HTML from the message. For now.
 					//$chat_message = balanceTags($chat_message);
@@ -5358,6 +5374,32 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			}
 			wp_send_json( $reply_data );
 			die();
+		}
+
+		function format_message_markup( $message, $chat_session = array() ) {
+			$message = preg_replace( '~`([^`\r\n]+)`~', '<code>$1</code>', $message );
+			$input_mode = isset( $chat_session['buttonbar'] ) ? $chat_session['buttonbar'] : 'plain';
+			if ( $input_mode !== 'markup' && $input_mode !== 'enabled' ) {
+				return $message;
+			}
+
+			$message = preg_replace( '~\[b\](.*?)\[/b\]~si', '<strong>$1</strong>', $message );
+			$message = preg_replace( '~\[i\](.*?)\[/i\]~si', '<em>$1</em>', $message );
+
+			$message = preg_replace_callback(
+				'~\[url=(https?://[^\]\s]+)\](.*?)\[/url\]~si',
+				function ( $matches ) {
+					$url = esc_url( $matches[1], array( 'http', 'https' ) );
+					if ( empty( $url ) ) {
+						return esc_html( $matches[2] );
+					}
+
+					return '<a href="' . $url . '" target="_blank" rel="noopener noreferrer">' . esc_html( $matches[2] ) . '</a>';
+				},
+				$message
+			);
+
+			return $message;
 		}
 
 		function chat_user_login() {

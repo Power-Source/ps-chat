@@ -610,7 +610,7 @@ class PSource_Chat_Emoji {
                         var cursorPos = textarea[0].selectionStart || currentText.length;
                         var newText = currentText.slice(0, cursorPos) + emoji + currentText.slice(cursorPos);
                         
-                        textarea.val(newText);
+                        textarea.val(newText).trigger('input');
                         
                         // Set cursor position after emoji
                         var newCursorPos = cursorPos + emoji.length;
@@ -628,7 +628,7 @@ class PSource_Chat_Emoji {
                             var cursorPos = fallbackTextarea[0].selectionStart || currentText.length;
                             var newText = currentText.slice(0, cursorPos) + emoji + currentText.slice(cursorPos);
                             
-                            fallbackTextarea.val(newText);
+                            fallbackTextarea.val(newText).trigger('input');
                             
                             var newCursorPos = cursorPos + emoji.length;
                             if (fallbackTextarea[0].setSelectionRange) {

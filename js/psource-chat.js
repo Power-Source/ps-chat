@@ -1502,7 +1502,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                             if (finalMessage.trim() !== '') {
                                 console.log('Sending final message via Enter:', finalMessage);
                                 psource_chat.chat_session_enqueue_message(finalMessage, chat_session);
-                                jQuery($chatBox.find('textarea.psource-chat-send')).val('');
+                                jQuery($chatBox.find('textarea.psource-chat-send')).val('').trigger('input');
                                 jQuery('#' + chat_box_id + ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-length span.psource-chat-character-count').html('0');
                             } else {
                                 console.log('Final message is empty, not sending');
@@ -1512,7 +1512,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                         // Fallback: normales Verhalten
                         if (message_text != '') {
                             psource_chat.chat_session_enqueue_message(message_text, chat_session);
-                            jQuery(this).val('');
+                            jQuery(this).val('').trigger('input');
                             jQuery('#' + chat_box_id + ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-length span.psource-chat-character-count').html('0');
                         }
                     }
@@ -1521,6 +1521,79 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                 }
             }
         }
+    },
+    chat_session_handle_markup_toolbar: function (chat_id) {
+        var chatBox = jQuery('#psource-chat-box-' + chat_id);
+        var textarea = chatBox.find('textarea.psource-chat-send').first();
+
+        if (!textarea.length) {
+            return;
+        }
+
+        chatBox.find('button.psource-chat-markup-button')
+            .off('click.psourceChatMarkup')
+            .on('click.psourceChatMarkup', function (event) {
+                event.preventDefault();
+
+                var textareaElement = textarea.get(0);
+                var start = textareaElement.selectionStart || 0;
+                var end = textareaElement.selectionEnd || start;
+                var selectedText = textarea.val().substring(start, end);
+                var openMarkup = jQuery(this).attr('data-markup-open') || '';
+                var closeMarkup = jQuery(this).attr('data-markup-close') || '';
+
+                if (jQuery(this).attr('data-markup-action') === 'link') {
+                    var linkUrl = window.prompt(jQuery(this).attr('data-markup-prompt'), 'https://');
+                    if (!linkUrl) {
+                        textarea.trigger('focus');
+                        return;
+                    }
+
+                    linkUrl = jQuery.trim(linkUrl);
+                    if (!/^https?:\/\//i.test(linkUrl)) {
+                        linkUrl = 'https://' + linkUrl;
+                    }
+
+                    openMarkup = '[url=' + linkUrl + ']';
+                    closeMarkup = '[/url]';
+                    if (!selectedText) {
+                        selectedText = linkUrl;
+                    }
+                }
+
+                var replacement = openMarkup + selectedText + closeMarkup;
+                var newValue = textarea.val().substring(0, start) + replacement + textarea.val().substring(end);
+                textarea.val(newValue).trigger('input').trigger('focus');
+
+                var selectionStart = start + openMarkup.length;
+                var selectionEnd = selectionStart + selectedText.length;
+                textareaElement.setSelectionRange(selectionStart, selectionEnd);
+            });
+    },
+    chat_session_update_character_count: function (textarea) {
+        var input = jQuery(textarea);
+        var chatBox = input.closest('div.psource-chat-box');
+        var counter = chatBox.find('li.psource-chat-send-input-length').first();
+
+        if (!counter.length) {
+            return;
+        }
+
+        var currentLength = input.val().length;
+        var maximumLength = parseInt(input.attr('maxlength'), 10) || 0;
+        var warningLength = maximumLength > 0 ? Math.ceil(maximumLength * 0.9) : 0;
+
+        counter.find('.psource-chat-character-count').text(currentLength);
+        counter.toggleClass('psource-chat-character-warning', warningLength > 0 && currentLength >= warningLength);
+        counter.toggleClass('psource-chat-character-limit', maximumLength > 0 && currentLength >= maximumLength);
+    },
+    chat_session_handle_character_count: function (chat_id) {
+        var textarea = jQuery('#psource-chat-box-' + chat_id + ' textarea.psource-chat-send').first();
+
+        textarea.off('input.psourceChatCounter').on('input.psourceChatCounter', function () {
+            psource_chat.chat_session_update_character_count(this);
+        });
+        psource_chat.chat_session_update_character_count(textarea);
     },
     chat_session_handle_send_button: function (chat_id) {
         var chat_session = psource_chat.chat_session_get_session_by_id(chat_id);
@@ -1565,7 +1638,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                         // Nachricht senden
                         if (finalMessage.trim() !== '') {
                             psource_chat.chat_session_enqueue_message(finalMessage, chat_session);
-                            chat_textarea.val('');
+                            chat_textarea.val('').trigger('input');
                             jQuery('#psource-chat-box-' + chat_id + ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-length span.psource-chat-character-count').html('0');
                         }
                         
@@ -1576,7 +1649,7 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                     // Fallback: normales Verhalten ohne Upload-System
                     if (message_text != '') {
                         psource_chat.chat_session_enqueue_message(message_text, chat_session);
-                        jQuery(chat_textarea).val('');
+                        jQuery(chat_textarea).val('').trigger('input');
                         jQuery('#psource-chat-box-' + chat_id + ' div.psource-chat-module-message-area ul.psource-chat-send-meta li.psource-chat-send-input-length span.psource-chat-character-count').html('0');
                     }
                 }
@@ -2806,6 +2879,8 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
         });
         
         psource_chat.chat_session_handle_send_button(chat_id);
+        psource_chat.chat_session_handle_markup_toolbar(chat_id);
+        psource_chat.chat_session_handle_character_count(chat_id);
 
 
         if (psource_chat.isPlaceholderSupported == false) {

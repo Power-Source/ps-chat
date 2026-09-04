@@ -594,7 +594,12 @@ class PSource_Chat_AJAX {
 			return new WP_Error( 'invalid_session', __( 'Invalid chat session.', 'psource-chat' ) );
 		}
 
-		return $psource_chat->chat_session_send_message( wp_kses_post( $message ), $chat_session );
+		$message = wp_kses_post( $message );
+		if ( method_exists( $psource_chat, 'format_message_markup' ) ) {
+			$message = $psource_chat->format_message_markup( $message, $chat_session );
+		}
+
+		return $psource_chat->chat_session_send_message( $message, $chat_session );
 	}
 
 	/**

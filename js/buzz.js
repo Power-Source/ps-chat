@@ -12,8 +12,6 @@
     "use strict";
     if (typeof module !== "undefined" && module.exports) {
         module.exports = factory();
-    } else if (typeof define === "function" && define.amd) {
-        define([], factory);
     } else {
         context.buzz = factory();
     }

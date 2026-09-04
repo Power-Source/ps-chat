@@ -1016,6 +1016,12 @@ function psource_chat_form_section_messages_rows( $form_section = 'page' ) {
 
 function psource_chat_form_section_messages_input( $form_section = 'page' ) {
 	global $psource_chat;
+	$input_mode = $psource_chat->get_option( 'buttonbar', $form_section );
+	if ( $input_mode === 'enabled' ) {
+		$input_mode = 'markup';
+	} elseif ( $input_mode === 'disabled' || empty( $input_mode ) ) {
+		$input_mode = 'plain';
+	}
 
 	//echo "row_message_input_lock[". $psource_chat->get_option('row_message_input_lock', $form_section) ."]<br />";
 	?>
@@ -1164,21 +1170,16 @@ function psource_chat_form_section_messages_input( $form_section = 'page' ) {
                 <td class="chat-help-column"><?php echo psource_chat_get_help_item( 'file_uploads_enabled', 'tip' ); ?></td>
             </tr>
 
-			<?php  ?>
 		<tr>
-			<td class="chat-label-column"><label for="chat_buttonbar"><?php _e("Buttonleiste", 'psource-chat'); ?></label></td>
+			<td class="chat-label-column"><label for="chat_buttonbar"><?php _e( 'Eingabemodus', 'psource-chat' ); ?></label></td>
 			<td class="chat-value-column">
-				<select id="chat_buttonbar" name="chat[buttonbar]" >
-					<option value="enabled" <?php print ($psource_chat->get_option('buttonbar', $form_section) == 'enabled')?'selected="selected"':''; ?>><?php
-					 	_e("Aktiviert", 'psource-chat'); ?></option>
-					<option value="disabled" <?php print ($psource_chat->get_option('buttonbar', $form_section) == 'disabled')?'selected="selected"':''; ?>><?php
-					 _e("Deaktiviert", 'psource-chat'); ?></option>
+				<select id="chat_buttonbar" name="chat[buttonbar]">
+					<option value="plain" <?php selected( $input_mode, 'plain' ); ?>><?php _e( 'Klartext', 'psource-chat' ); ?></option>
+					<option value="markup" <?php selected( $input_mode, 'markup' ); ?>><?php _e( 'Markup-Leiste', 'psource-chat' ); ?></option>
 				</select>
 			</td>
-			<td class="chat-help-column"><?php echo psource_chat_get_help_item('buttonbar', 'tip'); ?></td>
+			<td class="chat-help-column"><?php echo psource_chat_get_help_item( 'buttonbar', 'tip' ); ?></td>
 		</tr>
-<?php 
-			?>
 
 		</table>
 	</fieldset>

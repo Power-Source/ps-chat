@@ -246,7 +246,7 @@ function psource_chat_get_help_item( $key, $type = 'full', $form_section = "page
 	);
 
 	$psource_chat_help_items['buttonbar'] = array(
-		'full' => __( 'Schaltflächenleiste über dem Nachrichteneintrag anzeigen', 'psource-chat' ),
+		'full' => __( 'Klartext zeigt nur das Eingabefeld. Die Markup-Leiste ergänzt kompakte Schaltflächen für Fett, Kursiv, Code und Links, ohne einen WYSIWYG-Editor zu laden.', 'psource-chat' ),
 	);
 
 	$psource_chat_help_items['row_area_background_color'] = array(
