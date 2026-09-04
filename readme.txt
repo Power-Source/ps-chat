@@ -1,11 +1,12 @@
 === PS Chat ===
 Contributors: DerNerd (PSOURCE)
 Tags: multisite, chat, community, messenger, support
-Requires at least: 4.9
-Tested up to: 6.8.1
-ClassicPress: 2.6.0
-Stable tag: 1.1.3
-Requires PHP: 7.0
+Requires at least: 5.0
+Requires CP: 1.4
+Tested up to: 7.1.0
+ClassicPress: 2.7.2
+Stable tag: 1.1.4
+Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +40,19 @@ PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für 
 - Performance: Transienten, leichtgewichtige Polling‑Endpunkte
 
 == ChangeLog ==
+
+= 1.1.4 =
+
+* Feature: Eingabemodus pro Chat-Instanz zwischen Klartext und kompakter Markup-Leiste waehlen
+* Feature: Markup-Schaltflaechen fuer Fett, Kursiv, Code und Links ohne TinyMCE-Abhaengigkeit im Chat
+* Kompatibilitaet: Markup-Nachrichten werden ueber Legacy-AJAX und moderne REST-Endpunkte einheitlich verarbeitet
+* UI: Emoji, Dateiupload und Ton bei aktiver Markup-Leiste in einer gemeinsamen kompakten Werkzeugzeile gebuendelt
+* UI: Zeichenzaehler verkleinert, rechtsbuendig angeordnet und ab 90 Prozent des jeweiligen Limits rot hervorgehoben
+* UI: Namen sowie Datum/Uhrzeit in Nachrichten kompakter dargestellt und Moderator-Aktionen modernisiert
+* Fix: Konfigurierte Chatbreiten werden auf kleinen Viewports wieder respektiert; schmale 200-Pixel-Chatboxen laufen nicht mehr aus dem Bildschirm
+* Fix: Avatar-Klasse wird korrekt im Nachrichten-Markup gesetzt, damit Abstaende und Ausrichtung greifen
+* Fix: Avatar-Aufloesung an die Adminbar angeglichen und um sichere CP-Community- sowie lokale Platzhalter-Fallbacks erweitert
+* Fix: Zeichenzaehler aktualisiert sich auch bei Markup-, Emoji- und Upload-Eingaben sowie nach dem Senden zuverlaessig
 
 = 1.1.3 =
 
