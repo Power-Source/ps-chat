@@ -42,6 +42,19 @@ PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für 
 == ChangeLog ==
 
 = 1.1.5 =
+* Support-Bot: Optionale Themen-Selbsthilfe aus PS Support vor dem privaten Chat; Kategorie und Zusammenfassung bei ausdruecklicher Uebergabe uebernehmen, keine Benachrichtigung fuer reine Bot-Nutzung
+* Supportchat: Empfaenger fuer neue Chats anhand vorhandener PS-Support-Mitarbeiterzuordnung pruefen; keine automatische Freigabe gewoehnlicher Website-Benutzer
+* Feature: Privater Gast-Supportchat mit PS Support, getrennt von oeffentlichen Chatraeumen und ohne Benutzerkonto
+* Integration: Pro Site deaktivierbar, eigener Support oder zentraler Netzwerk-Support; Kategorie-Bearbeiter und Teams erhalten einen authentifizierten Uebernahme-Link per E-Mail nach der ersten Nachricht
+* Support: Exklusive, gegen gleichzeitige Uebernahmen abgesicherte Zuweisung; nur der zugewiesene Mitarbeiter antwortet oder schliesst den Chat
+* UI: Eigenstaendiges schwebendes Support-Icon, Shortcode [ps_chat_support], Widget und responsiver Mitarbeiter-Posteingang
+* Administration: Optionale Pflichtangaben fuer Name/E-Mail, konfigurierbare Browser-Zugangsfrist und automatische Datenloeschung sowie Ersatz-Ansprechpartner
+* UI: Frei formulierbarer Besucher-Hinweis pro Support-Ebene statt fest eingeblendeter technischer Erklaerungen; standardmaessig leer
+* Bedienung: Supportchat als Tab in den vorhandenen Support-Einstellungen; klare Aktivierung und Mitarbeiterauswahl nach Namen mit Suche statt Benutzer-IDs
+* Mobil: Aktiver Chattitel und Aktionen in einer kompakten Headerzeile unterhalb der Tabs, damit mehr Platz fuer Nachrichten bleibt
+* Integration: Posteingang und Einstellungen unter Support statt eigenem Hauptmenue; Netzwerkchat automatisch auf der konfigurierten Support-Site, Subsites nur mit Netzwerkfreigabe, aktivem PS Chat und lokaler Aktivierung
+* Fix: Schnelles Minimieren/Wiederoeffnen erhaelt Entwuerfe und Kategorien; veraltete Polling-Antworten ueberschreiben keine neueren Chat-Aktionen
+* Datenschutz: Zufallsbasierter HttpOnly-/SameSite-Gastzugang, sitzungsbezogene Rechtepruefung, Origin-Pruefung, Ratenbegrenzung und keine vertraulichen Chat-Inhalte in Benachrichtigungs-Mails
 * Feature: Optionale mobile Gruppierung von Site-, Netzwerk- und privaten Floating-Chats in einem gemeinsamen Fenster mit Tabs im Frontend und Admin
 * Einstellungen: Mobile Gruppierung standardmaessig aktiviert, auch fuer bestehende Installationen; Breakpoint standardmaessig 768 Pixel, konfigurierbar zwischen 320 und 1024 Pixeln
 * UI: Horizontal scrollbare Tabs mit Chat-Titeln und Ungelesen-Zaehlern; dynamisch hinzugefuegte private Chats werden automatisch registriert
@@ -102,4 +115,3 @@ PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für 
 
 = 1.0.0 =
 * Veröffentlichung
-

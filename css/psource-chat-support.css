@@ -1,0 +1,126 @@
+.ps-chat-support {
+    --ps-support-accent: #075985;
+    color: #17212b;
+    font: 16px/1.5 system-ui, sans-serif;
+    box-sizing: border-box;
+    text-align: left;
+}
+.ps-chat-support *, .ps-chat-support *::before, .ps-chat-support *::after { box-sizing: border-box; }
+.ps-chat-support [hidden] { display: none !important; }
+.ps-chat-support-floating {
+    position: fixed;
+    right: 16px;
+    bottom: 64px;
+    z-index: 10020;
+    max-width: calc(100vw - 32px);
+}
+.ps-chat-support button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px 12px;
+    margin: 0;
+    border: 1px solid #b6c4cf;
+    border-radius: 6px;
+    background: #fff;
+    color: #17212b;
+    font: inherit;
+    cursor: pointer;
+    white-space: normal;
+}
+.ps-chat-support button:disabled { opacity: .6; cursor: wait; }
+.ps-chat-support .ps-support-launcher, .ps-chat-support button[type="submit"] {
+    color: #fff;
+    background: var(--ps-support-accent);
+    border-color: var(--ps-support-accent);
+}
+.ps-chat-support .ps-support-launcher { border-radius: 24px; box-shadow: 0 2px 12px #0003; float: right; }
+.ps-chat-support :focus-visible { outline: 3px solid #b45309; outline-offset: 2px; }
+.ps-support-panel {
+    width: 100%;
+    max-width: 560px;
+    border: 1px solid #b6c4cf;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 4px 20px #0003;
+    overflow: auto;
+}
+.ps-chat-support-floating .ps-support-panel {
+    position: absolute;
+    right: 0;
+    bottom: 56px;
+    width: min(390px, calc(100vw - 32px));
+    max-height: calc(100vh - 190px);
+    max-height: calc(100dvh - 190px);
+    overscroll-behavior: contain;
+}
+.ps-support-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid #d5dfe6;
+}
+.ps-support-header strong { font-size: 18px; }
+.ps-support-notice, .ps-support-error, .ps-support-intro { margin: 8px 12px; }
+.ps-support-error { color: #9f1239; }
+.ps-support-error:empty, .ps-support-notice:empty, .ps-support-intro:empty { display: none; }
+.ps-support-intro { white-space: pre-wrap; overflow-wrap: anywhere; }
+.ps-support-bot { padding: 12px; }
+.ps-support-bot p { margin: 8px 0; }
+.ps-support-bot h3 { margin: 8px 0; font-size: 16px; }
+.ps-support-bot-answer { white-space: pre-wrap; overflow-wrap: anywhere; }
+.ps-support-bot-actions { display: flex; flex-direction: column; gap: 8px; }
+.ps-support-bot-actions button { text-align: left; }
+.ps-support-log {
+    max-height: 280px;
+    min-height: 40px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 8px 12px;
+}
+.ps-support-log:empty { display: none; }
+.ps-support-message {
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    background: #eef4f8;
+    border-radius: 6px;
+    overflow-wrap: anywhere;
+}
+.ps-support-message-staff { background: #e2f3e8; }
+.ps-support-message time { display: block; font-size: 12px; color: #455566; }
+.ps-support-message p { margin: 4px 0 0; white-space: pre-wrap; }
+.ps-support-form { display: grid; gap: 6px; padding: 12px; margin: 0; }
+.ps-support-contact { display: grid; gap: 6px; }
+.ps-chat-support input, .ps-chat-support select, .ps-chat-support textarea {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-height: 44px;
+    margin: 0;
+    padding: 8px;
+    border: 1px solid #9aabb8;
+    border-radius: 4px;
+    color: #17212b;
+    background: #fff;
+    font: inherit;
+}
+.ps-chat-support textarea { resize: vertical; }
+.ps-support-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 12px; }
+.ps-support-inbox {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 220px;
+    overflow: auto;
+    padding: 12px;
+}
+.ps-support-inbox button { text-align: left; }
+.ps-support-inbox button[aria-current="true"] { border: 2px solid var(--ps-support-accent); }
+.ps-chat-support-agent .ps-support-panel { max-width: 1000px; }
+.ps-chat-support-agent .ps-support-log { max-height: 400px; }
+.ps-chat-support-agent-page { background: #f0f3f5; margin: 0; padding: 16px; }
+.ps-chat-support-agent-page main { max-width: 1100px; margin: auto; }
+@media (max-width: 480px) {
+    .ps-chat-support-floating { right: 8px; bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+    .ps-chat-support-floating .ps-support-panel { width: calc(100vw - 16px); }
+}

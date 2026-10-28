@@ -36,6 +36,8 @@ angezeigt – im Frontend ebenso wie im ClassicPress-/WordPress-Admin.
 Nur der aktive Chat ist sichtbar. Neue private Sitzungen erscheinen automatisch
 als weitere Tabs; ungelesene Nachrichten werden am jeweiligen Tab gezählt und
 beim Öffnen zurückgesetzt.
+Der aktive Chattitel bleibt im kompakten mobilen Header unterhalb der Tabs
+sichtbar; die Chat-Aktionen stehen rechts daneben.
 
 Unter **Frontendchat → Position** lässt sich die mobile Gruppierung abschalten
 (`mobile_chat_grouping`: `tabs` oder `disabled`) oder der Breakpoint ändern
@@ -49,6 +51,123 @@ für die separaten Desktopfenster erhalten. Oberhalb des Breakpoints werden die
 ursprünglichen Chat-Elemente an ihre Position zurückverschoben, nicht kopiert.
 In der Tab-Leiste bewegen **Links/Rechts** und **Home/End** den Fokus;
 **Enter/Leertaste** öffnet den gewählten Chat.
+
+## Privater Gast-Support mit PS Support
+
+Der neue Supportchat ist **vollständig von öffentlichen Räumen und normalen
+privaten Mitglieder-Chats getrennt**. Besucher brauchen kein Benutzerkonto.
+Jeder Browser erhält eine eigene Unterhaltung; andere Besucher sehen weder
+Nachrichten noch Kontaktangaben.
+
+1. **PS Support aktivieren** und dort Kategorien mit einem Bearbeiter oder einem
+   Team konfigurieren.
+2. Unter **Netzwerkverwaltung → Support → Einstellungen → Supportchat** den
+   Netzwerk-Supportchat aktivieren und den Chatnamen festlegen.
+   Auf der in PS Support eingestellten zentralen Support-Seite erscheint er
+   automatisch, sofern PS Chat dort aktiv ist.
+3. Optional **Subsites dürfen Supportchats nutzen** freigeben.
+   Auf einer Subsite muss zusätzlich PS Chat aktiv sein und unter
+   **Support → Einstellungen → Supportchat** eigener oder Netzwerk-Support
+   gewählt werden. Ohne Freigabe oder bei lokaler Deaktivierung bleibt er aus.
+   Eigener Chat-Support benötigt keine aktivierte Ticketfunktion.
+   Beim Netzwerk-Support werden Pflichtangaben, Besucher-Hinweis, Fristen und
+   Ansprechpartner zentral übernommen; Chatname und Platzierung bleiben lokal.
+4. Unter **Wer erhält Anfragen ohne zuständigen Bearbeiter?** mindestens einen
+   Support-Mitarbeiter mit Namen auswählen. Die Suche nach Name oder
+   Benutzername zeigt höchstens 20 Treffer; ausgewählte Personen bleiben sichtbar.
+   Berechtigt sind Mitarbeiter der konfigurierten Support-Rollen, Administratoren
+   und ausdrücklich zugewiesene Kategorie-Teams der jeweiligen Support-Ebene.
+   Bei CRM-Anbindung gilt ausschließlich der bestehende CRM-Agentenpool.
+   Normale Website-Benutzer werden nicht automatisch angeboten. Die Prüfung gilt
+   auch beim Speichern und bei der Empfängerermittlung für neue Chats.
+5. Ein schwebendes Support-Icon, den Shortcode `[ps_chat_support]` oder das
+   Widget **PS Chat: Privater Support** verwenden. Eine Einbettung unterdrückt
+   auf derselben Seite weitere Instanzen und das schwebende Icon.
+
+Unter **Hinweis für Besucher** kann der Administrator einen eigenen kurzen Text
+zum Ablauf oder zu Antwortzeiten verfassen. Das Feld ist standardmäßig leer:
+Es werden keine vorgegebenen Erklärungen zu Cookies, Fristen oder internen
+Abläufen in das Besucherfenster eingeblendet. Beim Netzwerk-Support gilt der
+Hinweis der Netzwerkverwaltung, beim eigenen Support der lokale Text.
+Der Hinweis erscheint nur vor Beginn einer Unterhaltung.
+
+Ein optionaler **Support-Bot** wird in PS Support unter **Einstellungen →
+Support-Bot** gepflegt. Im Chat können Besucher ein Thema auswählen und dessen
+Hilfe lesen, ohne bereits eine Sitzung oder E-Mail auszulösen. Bei Übergabe
+werden Kategorie und eine bearbeitbare Zusammenfassung ins Anfrageformular
+übernommen. Erst das ausdrückliche Absenden erstellt den privaten Chat.
+Der direkte Weg zum Support bleibt erreichbar; laufende Chats werden nicht
+durch den Bot unterbrochen.
+
+Erst die **erste Nachricht** erzeugt eine Sitzung und benachrichtigt alle
+zuständigen Kategorie-Bearbeiter einzeln per E-Mail. Die E-Mail enthält einen
+Link, aber keine vertraulichen Nachrichten oder Gast-Kontaktangaben.
+Mitarbeiter müssen sich regulär anmelden und **Chat übernehmen** anklicken.
+Bei gleichzeitiger Übernahme gewinnt genau ein Mitarbeiter; nur dieser kann
+antworten oder abschließen. Ein Linkaufruf allein übernimmt nichts.
+Site-Administratoren können die Gespräche ihres eigenen Supports einsehen,
+Superadministratoren alle Gespräche ihres Netzwerks. Sonst gelten die beim
+Start gespeicherten Kategorie-/Ersatz-Empfänger und der zugewiesene Bearbeiter;
+lokale Mitarbeiter müssen weiterhin Mitglied der zuständigen Site sein.
+Eine spätere Kategorieänderung verteilt laufende Chats nicht neu.
+
+Der Posteingang **Support → Supportchats** ist außerdem ohne E-Mail-Link verfügbar.
+Es gibt keinen eigenen Supportchat-Hauptmenüpunkt. Einstellungen werden in
+PS Support verwaltet und bleiben auch bei inaktivem PS Chat erreichbar;
+der Posteingang weist dann auf das fehlende Plugin hin.
+Fehlgeschlagene E-Mail-Benachrichtigungen werden angezeigt und können durch
+berechtigte Mitarbeiter erneut gesendet werden. Erfolgreicher Mailversand ist
+keine Zustellgarantie und keine Online-Anzeige; eine sofortige Antwort wird
+nicht versprochen. Es erfolgt **keine automatische Ticketanlage**.
+
+### Gastzugang und Aufbewahrung
+
+- Name und E-Mail sind standardmäßig freiwillig; der Administrator kann beides
+  unabhängig verpflichtend machen. Eine E-Mail-Adresse wird nicht verifiziert.
+- Ein zufälliges **HttpOnly-/SameSite-Strict-Cookie** gewährt Zugriff auf die
+  Sitzung, standardmäßig **168 Stunden** (1–2160 konfigurierbar).
+  HTTPS ist im Produktivbetrieb erforderlich. Gelöschte Cookies, ein anderer
+  Browser oder das Ablaufdatum verhindern die Wiederaufnahme; ein öffentlicher
+  Sitzungs-Identifier allein gewährt keinen Zugriff.
+- Nachrichten und Kontaktangaben werden standardmäßig **30 Tage ab Beginn**
+  aufbewahrt (1–365 Tage, mindestens so lang wie der Browser-Zugang).
+  Die stündliche WP-Cron-Bereinigung entfernt danach Sitzung und Nachrichten.
+  Für verlässliche Ausführung einen System-Cron einrichten. Fristen gelten
+  jeweils ab Beginn und werden durch Nachrichten nicht verlängert; geänderte
+  Einstellungen gelten nur für neue Sitzungen.
+- Geschlossene Chats können bis zum Ablauf im ursprünglichen Browser gelesen
+  werden. Der Gast kann anschließend eine neue, getrennte Anfrage beginnen.
+- Gesprächsinhalte werden als Klartext gespeichert und sicher als Text
+  dargestellt, ohne öffentliche Chat-Filter oder Medien-/Upload-Verarbeitung.
+  Ein Gast ist eine Browser-Identität, kein verifiziertes Benutzerkonto.
+- Startversuche sind auf fünf pro IP und Netzwerk pro Stunde, Nachrichten auf
+  30 pro Sitzung/Autor und Minute begrenzt. Die Ratenbegrenzung speichert
+  zeitlich begrenzte HMAC-Schlüssel, keine Klartext-IP-Adressen.
+
+Die REST-Routen liegen unter `/psource-chat/v1/support/`. Gastzugriff wird
+über das Browser-Cookie geschützt, schreibende Gastzugriffe zusätzlich durch
+Origin-Prüfung. Mitarbeiter verwenden normale Anmeldung und REST-Nonce;
+jede Unterhaltung wird zusätzlich nach Support-Ebene und Zuständigkeit geprüft.
+Private Antworten sind nicht cachebar. Tabellen:
+`{base_prefix}ps_chat_support_sessions`, `ps_chat_support_messages` und
+`ps_chat_support_limits`. Die Daten sind nicht Ende-zu-Ende-verschlüsselt:
+berechtigte Administratoren und Betreiber mit Datenbankzugriff können sie lesen.
+Datenschutzhinweise und serverseitige Backups entsprechend berücksichtigen;
+Backups werden durch die Chat-Bereinigung nicht verändert.
+
+### Integration testen
+
+Auf einer **wegwerfbaren Testinstallation** mit aktiven Plugins:
+
+```sh
+PS_CHAT_SUPPORT_TEST=1 wp eval-file tests/support-chat-integration.php
+wp eval-file ../ps-support/tests/category-teams.php
+```
+
+Der Supportchat-Test prüft echte REST-Berechtigungen und Datenbankzugriffe,
+unter anderem Browser-Isolation, gefälschte Tokens, Origin, Team-Übernahme,
+Antwortrechte, Wiederholungen, Mailfehler und Bereinigung. Test-Mails werden
+abgefangen; Benutzer, Sitzungen und geänderte Einstellungen werden zurückgebaut.
 
 ## Passt sich Deiner Website an
 

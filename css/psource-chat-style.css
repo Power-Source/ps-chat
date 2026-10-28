@@ -2759,6 +2759,55 @@ div.psource-chat-box a.psource-chat-user-avatar:hover img.avatar {
     min-height: 44px;
 }
 
+#psource-chat-mobile-group .psource-chat-module-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 44px;
+    padding: 0 !important;
+}
+
+#psource-chat-mobile-group .psource-chat-module-header-title {
+    display: flex !important;
+    flex: 1 1 0;
+    align-items: center;
+    min-width: 0;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 8px !important;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+#psource-chat-mobile-group .psource-chat-module-header-title > a {
+    justify-content: flex-start;
+    min-width: 0 !important;
+    max-width: 100%;
+}
+
+#psource-chat-mobile-group .psource-chat-module-header .psource-chat-title-text {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#psource-chat-mobile-group .psource-chat-module-header-actions,
+#psource-chat-mobile-group .psource-chat-module-header ul.psource-chat-actions-menu {
+    display: flex;
+    align-items: center;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#psource-chat-mobile-group .psource-chat-module-header li.psource-chat-action-item {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0;
+}
+
 #psource-chat-mobile-group .psource-chat-actions-settings-menu {
     max-height: 45vh;
     max-height: 45dvh;

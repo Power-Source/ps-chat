@@ -34,3 +34,9 @@ include_once( dirname( __FILE__ ) . '/includes/class-psource-chat.php' );
 
 // Lets get things started
 $psource_chat = new PSOURCE_Chat();
+
+if ( ! defined( 'PSOURCE_CHAT_SHORTINIT' ) || ! PSOURCE_CHAT_SHORTINIT ) {
+	include_once __DIR__ . '/includes/class-psource-chat-support.php';
+	PSource_Chat_Support::boot();
+	register_deactivation_hook( __FILE__, array( 'PSource_Chat_Support', 'deactivate' ) );
+}
