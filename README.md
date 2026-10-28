@@ -2,7 +2,7 @@
 
 **Deutsch** | [English](README.en.md)
 
-[![Version](https://img.shields.io/badge/Version-1.1.4-2271b1?style=flat-square)](readme.txt)
+[![Version](https://img.shields.io/badge/Version-1.1.5-2271b1?style=flat-square)](readme.txt)
 ![PHP](https://img.shields.io/badge/PHP-8.0%2B-777bb4?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-bis%207.1.0-21759b?style=flat-square&logo=wordpress&logoColor=white)
 ![ClassicPress](https://img.shields.io/badge/ClassicPress-2.7.4-03768e?style=flat-square)
@@ -74,7 +74,8 @@ Nachrichten noch Kontaktangaben.
    Ansprechpartner zentral übernommen; Chatname und Platzierung bleiben lokal.
 4. Unter **Wer erhält Anfragen ohne zuständigen Bearbeiter?** mindestens einen
    Support-Mitarbeiter mit Namen auswählen. Die Suche nach Name oder
-   Benutzername zeigt höchstens 20 Treffer; ausgewählte Personen bleiben sichtbar.
+   Benutzername liefert ab zwei Zeichen höchstens 20 Vorschläge. Ein Klick fügt
+   die Person dem sichtbaren Team hinzu; „Entfernen“ nimmt sie wieder heraus.
    Berechtigt sind Mitarbeiter der konfigurierten Support-Rollen, Administratoren
    und ausdrücklich zugewiesene Kategorie-Teams der jeweiligen Support-Ebene.
    Bei CRM-Anbindung gilt ausschließlich der bestehende CRM-Agentenpool.
