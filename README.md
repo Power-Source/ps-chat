@@ -1,9 +1,11 @@
 # PS Chat
 
+**Deutsch** | [English](README.en.md)
+
 [![Version](https://img.shields.io/badge/Version-1.1.4-2271b1?style=flat-square)](readme.txt)
 ![PHP](https://img.shields.io/badge/PHP-8.0%2B-777bb4?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-bis%207.1.0-21759b?style=flat-square&logo=wordpress&logoColor=white)
-![ClassicPress](https://img.shields.io/badge/ClassicPress-2.7.2-03768e?style=flat-square)
+![ClassicPress](https://img.shields.io/badge/ClassicPress-2.7.4-03768e?style=flat-square)
 [![Lizenz](https://img.shields.io/badge/Lizenz-GPL--2.0--or--later-2ea44f?style=flat-square)](https://www.gnu.org/licenses/gpl-2.0.html)
 
 **Bring Deine Community ins Gespräch.**
@@ -25,6 +27,28 @@ PS Chat bietet verschiedene Möglichkeiten, Chats auf Deiner Website bereitzuste
 * 🔒 **Private Chats** – direkte Gespräche zwischen verbundenen Nutzern
 
 Du kannst mehrere Chat-Instanzen gleichzeitig betreiben – auch auf derselben Seite.
+
+### Mobile Floating-Chats
+
+Bis einschließlich **768 Pixel** werden Corner-, Netzwerk- und private Chats
+standardmäßig in einem gemeinsamen Fenster mit horizontal scrollbaren Tabs
+angezeigt – im Frontend ebenso wie im ClassicPress-/WordPress-Admin.
+Nur der aktive Chat ist sichtbar. Neue private Sitzungen erscheinen automatisch
+als weitere Tabs; ungelesene Nachrichten werden am jeweiligen Tab gezählt und
+beim Öffnen zurückgesetzt.
+
+Unter **Frontendchat → Position** lässt sich die mobile Gruppierung abschalten
+(`mobile_chat_grouping`: `tabs` oder `disabled`) oder der Breakpoint ändern
+(`mobile_chat_grouping_breakpoint`: 320–1024 Pixel, Standard 768).
+Die Defaults gelten auch für bestehende Installationen. Wird ein Netzwerk-Chat
+angezeigt, gelten die entsprechenden Einstellungen des Netzwerk-Chats.
+
+Der gemeinsame Minimieren-Button merkt sich den zuletzt aktiven Tab.
+Die individuellen Min/Max-Einstellungen und vorhandenen Benutzer-Cookies bleiben
+für die separaten Desktopfenster erhalten. Oberhalb des Breakpoints werden die
+ursprünglichen Chat-Elemente an ihre Position zurückverschoben, nicht kopiert.
+In der Tab-Leiste bewegen **Links/Rechts** und **Home/End** den Fokus;
+**Enter/Leertaste** öffnet den gewählten Chat.
 
 ## Passt sich Deiner Website an
 

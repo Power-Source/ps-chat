@@ -932,3 +932,22 @@ div.psource-chat-box button:focus-visible {
 /* ============================================================
    ENDE – Modern Phase 1
    ============================================================ */
+
+#psource-chat-mobile-group {
+  color: var(--psource-color-text-primary);
+  background: var(--psource-color-bg-default);
+}
+
+#psource-chat-mobile-group .psource-chat-mobile-tab,
+#psource-chat-mobile-group .psource-chat-mobile-toggle {
+  color: var(--psource-color-text-primary);
+  background: var(--psource-color-bg-secondary);
+}
+
+#psource-chat-mobile-group .psource-chat-mobile-tab[aria-selected="true"] {
+  background: var(--psource-color-bg-default);
+}
+
+#psource-chat-mobile-group .psource-chat-mobile-panel {
+  --psource-chat-control-size: 44px;
+}

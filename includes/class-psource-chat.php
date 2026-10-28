@@ -935,6 +935,8 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				'box_position_h'             => defined( 'PSOURCE_CHAT_SITE_BOX_POSITION_H' ) ? PSOURCE_CHAT_SITE_BOX_POSITION_H : 'right',
 				'box_position_v'             => defined( 'PSOURCE_CHAT_SITE_BOX_POSITION_V' ) ? PSOURCE_CHAT_SITE_BOX_POSITION_V : 'bottom',
 				'box_position_adjust_mobile' => defined( 'PSOURCE_CHAT_SITE_BOX_POSITION_ADJUST_MOBILE' ) ? PSOURCE_CHAT_SITE_BOX_POSITION_ADJUST_MOBILE : 'enabled',
+				'mobile_chat_grouping'       => 'tabs',
+				'mobile_chat_grouping_breakpoint' => 768,
 				'box_width_mobile_adjust'    => defined( 'PSOURCE_CHAT_SITE_BOX_WIDTH_MOBILE_ADJUST' ) ? PSOURCE_CHAT_SITE_BOX_WIDTH_MOBILE_ADJUST : 'window',
 				'box_height_mobile_adjust'   => defined( 'PSOURCE_CHAT_SITE_BOX_HEIGHT_MOBILE_ADJUST' ) ? PSOURCE_CHAT_SITE_BOX_HEIGHT_MOBILE_ADJUST : 'window',
 				'box_offset_h'               => defined( 'PSOURCE_CHAT_SITE_BOX_OFFSET_H' ) ? PSOURCE_CHAT_SITE_BOX_OFFSET_H : '0px',
@@ -1396,10 +1398,10 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			$is_classicpress = ( defined( 'CLASSICPRESS_VERSION' ) || function_exists( '_cp_deprecate_wp_enqueue_scripts' ) );
 
 			//Register All the styles
-			wp_register_style( 'psource-chat-style', $this->get_plugin_url( '/css/psource-chat-style.css' ), array(), $this->chat_current_version );
+			wp_register_style( 'psource-chat-style', $this->get_plugin_url( '/css/psource-chat-style.css' ), array(), filemtime( $this->_chat_plugin_settings['plugin_path'] . '/css/psource-chat-style.css' ) );
 			
 			// Register modern Phase1 CSS (Opt-In)
-			wp_register_style( 'psource-chat-modern-phase1', $this->get_plugin_url( '/css/psource-chat-modern-phase1.css' ), array(), $this->chat_current_version );
+			wp_register_style( 'psource-chat-modern-phase1', $this->get_plugin_url( '/css/psource-chat-modern-phase1.css' ), array(), filemtime( $this->_chat_plugin_settings['plugin_path'] . '/css/psource-chat-modern-phase1.css' ) );
 
 			//Admin Styles
 			wp_register_style( 'psource-chat-wpadminbar-style', $this->get_plugin_url( '/css/psource-chat-wpadminbar.css' ), array(), $this->chat_current_version );
@@ -1566,8 +1568,8 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			}
 
 			//Register Styles And Scripts
-			wp_register_style( 'psource-chat-style', $this->get_plugin_url( '/css/psource-chat-style.css' ), array(), $this->chat_current_version );
-		wp_register_style( 'psource-chat-modern-phase1', $this->get_plugin_url( '/css/psource-chat-modern-phase1.css' ), array(), $this->chat_current_version );
+			wp_register_style( 'psource-chat-style', $this->get_plugin_url( '/css/psource-chat-style.css' ), array(), filemtime( $this->_chat_plugin_settings['plugin_path'] . '/css/psource-chat-style.css' ) );
+		wp_register_style( 'psource-chat-modern-phase1', $this->get_plugin_url( '/css/psource-chat-modern-phase1.css' ), array(), filemtime( $this->_chat_plugin_settings['plugin_path'] . '/css/psource-chat-modern-phase1.css' ) );
 
 			if ( ! version_compare( $wp_version, '3.7.1', '>' ) ) {
 				wp_register_style( 'psource-chat-wpadminbar-style-pre-38', $this->get_plugin_url( '/css/psource-chat-wpadminbar-pre-38.css' ), array(), $this->chat_current_version );
@@ -1782,7 +1784,7 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				     && ( ! empty( $this->_admin_notice_messages[ $this->_admin_notice_messages_key ] ) )
 				) {
 					?>
-					<div id="psource-chat-updated" class="updated below-h2"><p><?php
+					<div id="psource-chat-updated" class="<?php echo $this->_admin_notice_messages_key === 'invalid-mobile-grouping' ? 'error' : 'updated'; ?> below-h2"><p><?php
 						echo $this->_admin_notice_messages[ $this->_admin_notice_messages_key ]; ?></p></div><?php
 				}
 			}
@@ -1905,6 +1907,19 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 			//$this->chat_localized['settings']['cookie-js'] 			= plugins_url('/js/jquery-cookie.js', __FILE__);
 
 			$this->chat_localized['settings']['box_resizable'] = $this->is_box_resizable_enabled();
+			$mobile_options_section = 'site';
+			foreach ( $this->chat_sessions as $mobile_session ) {
+				if ( $mobile_session['session_type'] === 'network-site' ) {
+					$mobile_options_section = 'network-site';
+					break;
+				}
+			}
+			$this->chat_localized['settings']['mobile_chat_grouping'] = $this->get_option( 'mobile_chat_grouping', $mobile_options_section );
+			$this->chat_localized['settings']['mobile_chat_grouping_breakpoint'] = max( 320, min( 1024, (int) $this->get_option( 'mobile_chat_grouping_breakpoint', $mobile_options_section ) ) );
+			$this->chat_localized['settings']['mobile_chat_tabs_label'] = __( 'Chat-Sitzungen', 'psource-chat' );
+			$this->chat_localized['settings']['mobile_chat_minimize_label'] = __( 'Chats minimieren', 'psource-chat' );
+			$this->chat_localized['settings']['mobile_chat_restore_label'] = __( 'Chats öffnen', 'psource-chat' );
+			$this->chat_localized['settings']['mobile_chat_unread_label'] = __( 'Ungelesene Nachrichten', 'psource-chat' );
 
 			$this->chat_localized['sessions']               = $this->chat_sessions;
 			$this->chat_localized['user']                   = $this->chat_user;
@@ -2462,6 +2477,23 @@ if ( ! class_exists( 'PSOURCE_Chat' ) ) {
 				if ( isset( $chat_settings['section'] ) ) {
 					$chat_section = $chat_settings['section'];
 					unset( $chat_settings['section'] );
+
+					if ( in_array( $chat_section, array( 'site', 'network-site' ), true ) ) {
+						$mobile_grouping = isset( $chat_settings['mobile_chat_grouping'] ) ? $chat_settings['mobile_chat_grouping'] : 'tabs';
+						$mobile_breakpoint = isset( $chat_settings['mobile_chat_grouping_breakpoint'] ) ? $chat_settings['mobile_chat_grouping_breakpoint'] : '768';
+						if ( ! in_array( $mobile_grouping, array( 'tabs', 'disabled' ), true )
+							|| ! is_scalar( $mobile_breakpoint )
+							|| ! preg_match( '/^-?\d+$/D', (string) $mobile_breakpoint ) ) {
+							$this->_admin_notice_messages['invalid-mobile-grouping'] = __( 'Die Chat-Einstellungen wurden nicht gespeichert. Bitte wähle Tabs oder Deaktiviert und einen ganzzahligen mobilen Breakpoint zwischen 320 und 1024 Pixeln.', 'psource-chat' );
+							$this->_admin_notice_messages_key = 'invalid-mobile-grouping';
+							return;
+						}
+						$chat_settings['mobile_chat_grouping'] = $mobile_grouping;
+						$chat_settings['mobile_chat_grouping_breakpoint'] = max( 320, min( 1024, (int) $mobile_breakpoint ) );
+						if ( (int) $mobile_breakpoint !== $chat_settings['mobile_chat_grouping_breakpoint'] ) {
+							$this->_admin_notice_messages['success-settings'] .= ' ' . __( 'Der mobile Breakpoint wurde auf den Bereich 320 bis 1024 Pixel begrenzt.', 'psource-chat' );
+						}
+					}
 
 					// Split off the Banned section since it goes into its own options key
 					if ( $chat_section == "global" ) {

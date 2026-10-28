@@ -321,6 +321,27 @@ function psource_chat_form_section_site_position( $form_section = 'site' ) {
 				</td>
 				<td class="chat-help-column"><?php echo psource_chat_get_help_item( 'box_position_adjust_mobile', 'tip' ); ?></td>
 			</tr>
+			<tr>
+				<td class="chat-label-column">
+					<label for="chat_mobile_chat_grouping"><?php _e( 'Mobile Chat-Gruppierung', 'psource-chat' ); ?></label>
+				</td>
+				<td class="chat-value-column">
+					<select id="chat_mobile_chat_grouping" name="chat[mobile_chat_grouping]">
+						<option value="tabs" <?php selected( $psource_chat->get_option( 'mobile_chat_grouping', $form_section ), 'tabs' ); ?>><?php _e( 'Gemeinsames Fenster mit Tabs', 'psource-chat' ); ?></option>
+						<option value="disabled" <?php selected( $psource_chat->get_option( 'mobile_chat_grouping', $form_section ), 'disabled' ); ?>><?php _e( 'Deaktiviert', 'psource-chat' ); ?></option>
+					</select>
+					<p class="description"><?php _e( 'Gruppiert alle schwebenden Chats, auch private Chats, im Frontend und Admin. Wenn ein Netzwerk-Chat angezeigt wird, gelten dessen Gruppierungseinstellungen.', 'psource-chat' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<td class="chat-label-column">
+					<label for="chat_mobile_chat_grouping_breakpoint"><?php _e( 'Mobile Gruppierung bis (Pixel)', 'psource-chat' ); ?></label>
+				</td>
+				<td class="chat-value-column">
+					<input type="number" id="chat_mobile_chat_grouping_breakpoint" name="chat[mobile_chat_grouping_breakpoint]" min="320" max="1024" step="1" value="<?php echo esc_attr( $psource_chat->get_option( 'mobile_chat_grouping_breakpoint', $form_section ) ); ?>"/>
+					<p class="description"><?php _e( 'Standard: 768. Bereich: 320 bis 1024 Pixel, einschließlich der gewählten Breite.', 'psource-chat' ); ?></p>
+				</td>
+			</tr>
 		</table>
 	</fieldset>
 

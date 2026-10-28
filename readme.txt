@@ -2,9 +2,9 @@
 Contributors: DerNerd (PSOURCE)
 Tags: multisite, chat, community, messenger, support
 Requires at least: 5.0
-Requires CP: 1.4
+Requires CP: 2.7
 Tested up to: 7.1.0
-ClassicPress: 2.7.2
+ClassicPress: 2.7.4
 Stable tag: 1.1.4
 Requires PHP: 8.0
 License: GPLv2 or later
@@ -41,8 +41,16 @@ PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für 
 
 == ChangeLog ==
 
-= 1.1.4 =
+= 1.1.5 =
+* Feature: Optionale mobile Gruppierung von Site-, Netzwerk- und privaten Floating-Chats in einem gemeinsamen Fenster mit Tabs im Frontend und Admin
+* Einstellungen: Mobile Gruppierung standardmaessig aktiviert, auch fuer bestehende Installationen; Breakpoint standardmaessig 768 Pixel, konfigurierbar zwischen 320 und 1024 Pixeln
+* UI: Horizontal scrollbare Tabs mit Chat-Titeln und Ungelesen-Zaehlern; dynamisch hinzugefuegte private Chats werden automatisch registriert
+* UI: Gemeinsames Minimieren und Wiederherstellen des zuletzt aktiven Tabs mit separaten mobilen Cookies; individuelle Desktop-Min/Max-Einstellungen bleiben erhalten
+* Barrierefreiheit: Tab-/Panel-Zuordnung per ARIA, Tastaturbedienung mit Pfeiltasten, Home/End und Enter/Leertaste, sichtbarer Fokus und Touch-Ziele ab 44 Pixeln
+* Fix: Wechsel zwischen Mobil- und Desktopbreite stellt die urspruenglichen Chat-Elemente ohne duplizierte Inhalte wieder her
+* Wartung: Validierung der neuen Site-/Netzwerk-Optionen und Cache-Busting fuer die Chat-Stylesheets
 
+= 1.1.4 =
 * Feature: Eingabemodus pro Chat-Instanz zwischen Klartext und kompakter Markup-Leiste waehlen
 * Feature: Markup-Schaltflaechen fuer Fett, Kursiv, Code und Links ohne TinyMCE-Abhaengigkeit im Chat
 * Kompatibilitaet: Markup-Nachrichten werden ueber Legacy-AJAX und moderne REST-Endpunkte einheitlich verarbeitet
@@ -55,7 +63,6 @@ PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für 
 * Fix: Zeichenzaehler aktualisiert sich auch bei Markup-, Emoji- und Upload-Eingaben sowie nach dem Senden zuverlaessig
 
 = 1.1.3 =
-
 * Fehler behoben der verhinderte das Chats geleert werden konnten
 * Fix: Globale Einstellungs-Tabs repariert; Tab-Inhalte werden wieder im korrekten Panel angezeigt
 * Fix: Defektes Panel-Markup in den globalen Einstellungen korrigiert (verhinderte leere/falsch verschachtelte Tabs)
@@ -66,7 +73,6 @@ PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für 
 
 
 = 1.1.2 =
-
 * Fix: PHP-Warnung behoben (`Undefined variable $filter_session_type`) in Session-Logs (`PSOURCEChat_Session_Logs_Table::prepare_items()`)
 * Fix: Filter-Variablen in Session-Logs vor Verwendung konsistent initialisiert (`search`, `chat_id`, `session_type`, `start`, `end`, `status`)
 * Hardening: Eingehende Filterwerte in der Session-Log-Abfrage weiterhin explizit sanitisiert verarbeitet
@@ -79,7 +85,6 @@ PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für 
 * UI: Statusfarben vereinheitlicht (`available`=gruen, `unavailable`=gelb, `away`=rot), inkl. CSS-Fallback wenn gelbe Icon-Datei fehlt
 
 = 1.1.1 =
-
 * ClassicPress-sicher: jQuery UI Tabs/Datepicker entfernt, native Tabs & Datumsfelder
 * Admin-UI: Tabs neu gestylt, Farbwähler standardmäßig als Swatch, Session-Logs mit native date
 * Editor: Chat-Button in die Medienleiste verschoben, TinyMCE-Abhängigkeit entfernt, Modal-Tabs repariert
@@ -90,14 +95,11 @@ PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für 
 * Hardening: Ausgaben in Pop-out-Template und Admin-Log-Spalten konsequent escaped
 
 = 1.1.0 =
-
 * Emoji-Picker: Modal im Chatfenster, kompaktere Emojis, Suchfeld, Tabs
 * Sendebutton: Option rechts als Icon, unten weiterhin Text, DOM-Logik korrigiert
 * Fehlerbehebung: 500er im Poll behoben (Filter-Parameter angepasst)
 * Cleanup: Debug-Logs im JS entfernt; Produktions-Logging wieder deaktiviert
 
 = 1.0.0 =
-
 * Veröffentlichung
-
 
