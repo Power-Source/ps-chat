@@ -42,7 +42,7 @@
         constructor(root) {
             this.root = root;
             this.staff = root.dataset.psSupport === 'staff';
-            this.open = this.staff || !root.classList.contains('ps-chat-support-floating');
+            this.open = this.staff;
             this.session = null;
             this.lastId = 0;
             this.rendered = new Set();
@@ -65,7 +65,13 @@
             this.root.append(this.panel);
             const heading = element('header', 'ps-support-header');
             heading.append(element('strong', '', root.dataset.label || 'Support'));
-            if (!this.staff) heading.append(button(text.hide, () => this.toggle()));
+            if (!this.staff) {
+                this.minimizeButton = button('\u00d7', () => this.toggle());
+                this.minimizeButton.className = 'ps-support-minimize';
+                this.minimizeButton.setAttribute('aria-label', text.hide);
+                this.minimizeButton.title = text.hide;
+                heading.append(this.minimizeButton);
+            }
             this.panel.append(heading);
             this.notice = element('p', 'ps-support-notice');
             this.notice.setAttribute('role', 'status');
@@ -242,12 +248,15 @@
             if (reset) {
                 this.botStep = null;
                 this.botTopic = null;
+                this.botTranscript = [];
             }
             this.renderBot();
         }
 
         renderBot() {
             const policy = this.botPolicy;
+            const topicSteps = topic => Array.isArray(topic.steps) && topic.steps.length ? topic.steps :
+                (topic.answer ? [{ id: 'legacy-answer', type: 'message', text: topic.answer }] : []);
             this.bot.hidden = true;
             if (this.staff || this.session || !policy || !policy.enabled_chat || !policy.topics.length) return;
             this.bot.hidden = false;
@@ -262,7 +271,7 @@
             const handoff = () => {
                 if (this.botTopic) {
                     const summary = text.botSummary + ': ' + this.botTopic.title + '\n' +
-                        this.botTopic.answer + '\n\n' + text.botDetails + '\n';
+                        (this.botTranscript || []).join('\n') + '\n\n' + text.botDetails + '\n';
                     this.message.value = summary + this.message.value;
                     this.category.value = String(this.botTopic.category_id);
                 }
@@ -280,18 +289,67 @@
             if (this.botStep === 'solved') {
                 content.append(element('p', '', text.botDone));
             } else if (this.botTopic) {
-                content.append(element('h3', '', this.botTopic.title), element('p', 'ps-support-bot-answer', this.botTopic.answer),
-                    element('p', '', text.botHelp));
-                actions.append(button(text.botSolved, () => {
-                    this.botStep = 'solved';
-                    this.renderBot();
-                    this.bot.querySelector('.ps-support-bot-body').focus();
-                }), button(text.botHuman, handoff));
+                const step = topicSteps(this.botTopic).find(item => item.id === this.botStep) || topicSteps(this.botTopic)[0];
+                if (!step) {
+                    actions.append(button(text.botHuman, handoff));
+                } else {
+                    if (step.text) {
+                        content.append(element('h3', '', this.botTopic.title), element('p', 'ps-support-bot-answer', step.text));
+                        if (!this.botTranscript.includes(step.text)) this.botTranscript.push(step.text);
+                    }
+                    const advance = next => {
+                        this.botStep = next || '';
+                        this.renderBot();
+                        this.bot.querySelector('.ps-support-bot-body').focus();
+                    };
+                    if (step.type === 'choice') {
+                        (step.options || []).forEach(option => actions.append(button(option.label, () => {
+                            this.botTranscript.push(option.label);
+                            advance(option.next_step);
+                        })));
+                    } else if (step.type === 'input') {
+                        const input = element('textarea');
+                        input.rows = 3;
+                        input.maxLength = 1000;
+                        input.setAttribute('aria-label', step.label || step.text);
+                        content.append(element('label', '', step.label || step.text), input);
+                        actions.append(button(text.send, () => {
+                            if (!input.value.trim()) { input.focus(); return; }
+                            this.botTranscript.push((step.label || text.message) + ': ' + input.value.trim());
+                            advance(step.next_step);
+                        }));
+                    } else if (step.type === 'link') {
+                        const link = element('a', '', step.label);
+                        link.href = step.url;
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+                        content.append(link);
+                        this.botTranscript.push(step.label + ': ' + step.url);
+                        if (step.next_step) actions.append(button(text.botBack, () => advance(step.next_step)));
+                    } else if (step.type === 'handoff') {
+                        handoff();
+                        return;
+                    } else if (step.type === 'end') {
+                        this.botStep = 'solved';
+                        this.renderBot();
+                        return;
+                    } else if (step.next_step) {
+                        actions.append(button(text.botBack, () => advance(step.next_step)));
+                    } else {
+                        content.append(element('p', '', text.botHelp));
+                        actions.append(button(text.botSolved, () => {
+                            this.botStep = 'solved';
+                            this.renderBot();
+                        }), button(text.botHuman, handoff));
+                    }
+                }
             } else {
                 content.append(element('p', '', policy.greeting));
                 policy.topics.forEach(topic => {
                     actions.append(button(topic.title, () => {
                         this.botTopic = topic;
+                        this.botStep = topicSteps(topic)[0] ? topicSteps(topic)[0].id : null;
+                        this.botTranscript = [topic.title];
                         this.renderBot();
                         this.bot.querySelector('.ps-support-bot-body').focus();
                     }));

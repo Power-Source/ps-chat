@@ -14,6 +14,15 @@
     z-index: 10020;
     max-width: calc(100vw - 32px);
 }
+.ps-chat-support-floating[data-position="bottom-left"] { right: auto; left: 16px; }
+.ps-chat-support-floating[data-position="top-right"] { top: 16px; bottom: auto; }
+.ps-chat-support-floating[data-position="top-left"] { top: 16px; right: auto; bottom: auto; left: 16px; }
+.ps-chat-support-embedded {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.ps-chat-support-embedded[data-position$="left"] { align-items: flex-start; }
 .ps-chat-support button {
     min-width: 44px;
     min-height: 44px;
@@ -33,7 +42,17 @@
     background: var(--ps-support-accent);
     border-color: var(--ps-support-accent);
 }
-.ps-chat-support .ps-support-launcher { border-radius: 24px; box-shadow: 0 2px 12px #0003; float: right; }
+.ps-chat-support .ps-support-launcher { border-radius: 24px; box-shadow: 0 2px 12px #0003; }
+.ps-chat-support .ps-support-minimize {
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 24px;
+    line-height: 1;
+}
 .ps-chat-support :focus-visible { outline: 3px solid #b45309; outline-offset: 2px; }
 .ps-support-panel {
     width: 100%;
@@ -53,6 +72,8 @@
     max-height: calc(100dvh - 190px);
     overscroll-behavior: contain;
 }
+.ps-chat-support-floating[data-position^="top"] .ps-support-panel { top: 56px; bottom: auto; }
+.ps-chat-support-embedded .ps-support-panel { align-self: stretch; margin-top: 8px; }
 .ps-support-header {
     display: flex;
     align-items: center;
@@ -122,5 +143,8 @@
 .ps-chat-support-agent-page main { max-width: 1100px; margin: auto; }
 @media (max-width: 480px) {
     .ps-chat-support-floating { right: 8px; bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+    .ps-chat-support-floating[data-position="bottom-left"],
+    .ps-chat-support-floating[data-position="top-left"] { right: auto; left: 8px; }
+    .ps-chat-support-floating[data-position^="top"] { top: 8px; bottom: auto; }
     .ps-chat-support-floating .ps-support-panel { width: calc(100vw - 16px); }
 }

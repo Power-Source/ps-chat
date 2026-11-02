@@ -63,7 +63,7 @@ try {
 	}
 	$settings = array_merge( PSource_Chat_Support::settings(), array(
 		'mode' => is_multisite() ? 'network' : 'local', 'fallback_users' => array( $users[0], $users[1] ),
-		'require_name' => false, 'require_email' => false, 'intro_text' => '',
+		'require_name' => false, 'require_email' => false, 'intro_text' => '', 'button_position' => 'bottom-right',
 	) );
 	update_option( PSource_Chat_Support::OPTION, $settings );
 	if ( is_multisite() ) {
@@ -71,6 +71,8 @@ try {
 	}
 	$input_settings = array_merge( $settings, array( 'fallback_users' => implode( ',', $settings['fallback_users'] ) ) );
 	$check( ! is_wp_error( PSource_Chat_Support::validate_settings( $input_settings, is_multisite() ) ), 'Valid team and policy settings accepted' );
+	$positioned = PSource_Chat_Support::validate_settings( array_merge( $input_settings, array( 'button_position' => 'top-left' ) ), is_multisite() );
+	$check( ! is_wp_error( $positioned ) && $positioned['button_position'] === 'top-left', 'Configured chat button position is accepted and retained' );
 	$check( is_wp_error( PSource_Chat_Support::validate_settings( array_merge( $input_settings, array( 'fallback_users' => array( $users[2] ) ) ), is_multisite() ) ), 'Frontend-only user cannot be selected as fallback staff' );
 	$pool = PSource_Support_Chat_Settings::staff_ids();
 	$check( in_array( $users[0], $pool, true ) && ! in_array( $users[2], $pool, true ), 'Support roles included and ordinary frontend users excluded from staff pool' );
@@ -96,6 +98,7 @@ try {
 		array( 'retention_days' => '366' ), array( 'retention_days' => '1' ),
 		array( 'fallback_users' => '1,invalid' ), array( 'require_email' => array( 1 ) ),
 		array( 'label' => '<b></b>' ), array( 'mode' => 'public' ),
+		array( 'button_position' => 'middle' ),
 		array( 'intro_text' => array( 'invalid' ) ), array( 'intro_text' => str_repeat( 'a', 2001 ) ),
 		array( 'allow_subsite_chat' => array( 'invalid' ) ),
 	) as $invalid ) {

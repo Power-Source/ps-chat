@@ -210,7 +210,13 @@ var psource_chat = jQuery.extend(psource_chat || {}, {
                 var item = group.items[chat_id];
                 item.marker.parentNode.insertBefore(item.box[0], item.marker);
                 item.marker.remove();
-                item.box.removeClass('psource-chat-mobile-panel').removeAttr('hidden aria-labelledby tabindex');
+                item.box.removeClass('psource-chat-mobile-panel');
+                // Native removal avoids jQuery Migrate's boolean-attribute warning for "hidden".
+                item.box.each(function () {
+                    this.hidden = false;
+                    this.removeAttribute('aria-labelledby');
+                    this.removeAttribute('tabindex');
+                });
                 item.box.attr('role', item.role);
                 item.box.attr('style', item.style === undefined ? null : item.style);
                 delete group.items[chat_id];

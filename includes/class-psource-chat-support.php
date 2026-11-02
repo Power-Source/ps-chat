@@ -102,6 +102,7 @@ class PSource_Chat_Support {
 		$value = $network ? get_site_option( self::OPTION, array() ) : get_option( self::OPTION, array() );
 		return wp_parse_args( is_array( $value ) ? $value : array(), array(
 			'mode' => 'disabled', 'placement' => 'floating', 'label' => __( 'Support', 'psource-chat' ),
+			'button_position' => 'bottom-right',
 			'require_name' => false, 'require_email' => false, 'session_hours' => 168,
 			'retention_days' => 30, 'fallback_users' => array(), 'intro_text' => '', 'allow_subsite_chat' => false,
 		) );
@@ -800,7 +801,21 @@ class PSource_Chat_Support {
 		}
 	}
 
-	public static function shortcode() {
+	private static function button_position( $position ) {
+		$positions = array( 'bottom-right', 'bottom-left', 'top-right', 'top-left' );
+		return in_array( $position, $positions, true ) ? $position : 'bottom-right';
+	}
+
+	private static function guest_markup( $context, $floating = false, $position = null ) {
+		$default_position = self::button_position( $context['site']['button_position'] );
+		$positions = array( 'bottom-right', 'bottom-left', 'top-right', 'top-left' );
+		$position = in_array( $position, $positions, true ) ? $position : $default_position;
+		$classes = 'ps-chat-support' . ( $floating ? ' ps-chat-support-floating' : ' ps-chat-support-embedded' );
+		return '<div class="' . esc_attr( $classes ) . '" data-ps-support="guest" data-label="' .
+			esc_attr( $context['site']['label'] ) . '" data-position="' . esc_attr( $position ) . '"></div>';
+	}
+
+	public static function shortcode( $atts = array() ) {
 		$context = self::context();
 		if ( is_wp_error( $context ) ) {
 			return '';
@@ -810,7 +825,8 @@ class PSource_Chat_Support {
 		}
 		self::$embedded = true;
 		self::assets();
-		return '<div class="ps-chat-support" data-ps-support="guest" data-label="' . esc_attr( $context['site']['label'] ) . '"></div>';
+		$atts = shortcode_atts( array( 'position' => $context['site']['button_position'] ), $atts, 'ps_chat_support' );
+		return self::guest_markup( $context, false, $atts['position'] );
 	}
 
 	public static function floating_widget() {
@@ -819,7 +835,7 @@ class PSource_Chat_Support {
 		}
 		$context = self::context();
 		if ( ! self::$embedded && ! is_wp_error( $context ) && $context['site']['placement'] === 'floating' ) {
-			echo '<div class="ps-chat-support ps-chat-support-floating" data-ps-support="guest" data-label="' . esc_attr( $context['site']['label'] ) . '"></div>';
+			echo self::guest_markup( $context, true );
 		}
 	}
 

@@ -5,7 +5,7 @@ Requires at least: 5.0
 Requires CP: 2.7
 Tested up to: 7.1.0
 ClassicPress: 2.7.4
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -40,6 +40,9 @@ PS Chat ist ein leistungsfähiges, komplett selbstgehostetes Chat‑Plugin für 
 - Performance: Transienten, leichtgewichtige Polling‑Endpunkte
 
 == ChangeLog ==
+
+= 1.1.6 =
+* Fix: jQuery-Migrate-Warnungen (removeAttr bei boolschen Attributen wie hidden) beim Aufheben der mobilen Chat-Gruppierung behoben
 
 = 1.1.5 =
 * Support-Bot: Optionale Themen-Selbsthilfe aus PS Support vor dem privaten Chat; Kategorie und Zusammenfassung bei ausdruecklicher Uebergabe uebernehmen, keine Benachrichtigung fuer reine Bot-Nutzung
